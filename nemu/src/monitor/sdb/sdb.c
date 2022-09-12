@@ -116,6 +116,7 @@ static int cmd_info(char *args) {
     case 'w':
       break;
     default:
+      printf("Unknown command '%s'\n", arg);
       break; 
   }
   return 0;
