@@ -58,6 +58,8 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
+static int cmd_x(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -68,6 +70,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Pause the program after stepping through n steps (n defaluts to 1)", cmd_si},
   { "info", "Print register status or watchpoint information", cmd_info},
+  { "x", "Scan memory", cmd_x},
 
   /* TODO: Add more commands */
 
@@ -134,6 +137,14 @@ static int cmd_info(char *args) {
       printf("Unknown command '%s'\n", arg);
       break; 
   }
+  return 0;
+}
+
+static int cmd_x(char *args)
+{
+  char *arg1 = strtok(NULL, " ");
+  char *arg2 = strtok(NULL, " ");
+  printf("%s %s\n", arg1, arg2);
   return 0;
 }
 
