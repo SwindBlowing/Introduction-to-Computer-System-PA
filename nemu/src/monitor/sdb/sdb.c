@@ -101,8 +101,21 @@ static int cmd_help(char *args) {
 static int cmd_si(char *args) {
   char *arg = strtok(NULL, " ");
   uint64_t n = 1;
-  if (arg != NULL) sscanf(arg, "%lu", &n);
-  cpu_exec(n);
+  bool flag = 1;
+  char *now = arg;
+  while (now != NULL) {
+    if (*now < '0' || *now > '9') {
+      flag = 0; break;
+    }
+    now++;
+  }
+  if (arg == NULL) 
+    cpu_exec(n);
+  else if (flag) {
+    sscanf(arg, "%lu", &n);
+    cpu_exec(n);
+  }
+  else printf("Unknown command '%s'\n", arg);
   return 0;
 }
 
