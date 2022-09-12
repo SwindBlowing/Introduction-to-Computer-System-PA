@@ -152,7 +152,7 @@ static int cmd_x(char *args)
   for (int i = 0; i < N; i++) {
     printf("0x%x    ", EXPR);
     for (int j = 1; j <= 4; j++) {
-      printf("%x", paddr_read(EXPR, 1));
+      printf("%02x", paddr_read(EXPR, 1));
       EXPR++;
     }
     printf("\n");
