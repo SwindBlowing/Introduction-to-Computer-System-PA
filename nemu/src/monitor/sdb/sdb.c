@@ -67,7 +67,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Pause the program after stepping through n steps (n defaluts to 1)", cmd_si},
-  { "info", "print register status or watchpoint information", cmd_info},
+  { "info", "Print register status or watchpoint information", cmd_info},
 
   /* TODO: Add more commands */
 
@@ -105,11 +105,11 @@ static int cmd_si(char *args) {
     cpu_exec(n);
     return 0;
   }
-  /*bool flag = 1;
+  bool flag = 1;
   char *now = arg;
-  while (now != NULL) {
+  while (*now) {
     printf("%d\n", *now);
-    if ((*now < '0' || *now > '9') && *now != 0) {
+    if (*now < '0' || *now > '9') {
       flag = 0; break;
     }
     now++;
@@ -118,9 +118,7 @@ static int cmd_si(char *args) {
     sscanf(arg, "%lu", &n);
     cpu_exec(n);
   }
-  else printf("Unknown command '%s'\n", arg);*/
-  sscanf(arg, "%lu", &n);
-  cpu_exec(n);
+  else printf("Unknown command '%s'\n", arg);
   return 0;
 }
 
