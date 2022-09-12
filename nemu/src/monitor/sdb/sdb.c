@@ -107,7 +107,8 @@ static int cmd_si(char *args) {
   }
   bool flag = 1;
   char *now = arg;
-  while (now != NULL && *now != ' ') {
+  while (now != NULL) {
+    printf("%d\n", *now);
     if ((*now < '0' || *now > '9') && *now != 0) {
       flag = 0; break;
     }
