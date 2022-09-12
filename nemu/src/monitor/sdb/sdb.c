@@ -150,7 +150,7 @@ static int cmd_x(char *args)
   paddr_t EXPR = 0;
   sscanf(arg2, "%x", &EXPR);
   for (int i = 0; i < N; i++)
-    printf("%u %u\n", EXPR, paddr_read(EXPR, 8));
+    printf("%u %u\n", EXPR, paddr_read(EXPR, 1));
   return 0;
 }
 
