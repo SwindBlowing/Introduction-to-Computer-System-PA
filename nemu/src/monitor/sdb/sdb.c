@@ -54,13 +54,7 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
-static int cmd_si(char *args) {
-  //char *arg = strtok(NULL, " ");
-  //uint64_t n = 1;
-  //if (arg != NULL) ;//sscanf(arg, n);
-  cpu_exec(1);
-  return 0;
-}
+static int cmd_si(char *args);
 
 static struct {
   const char *name;
@@ -98,6 +92,14 @@ static int cmd_help(char *args) {
     }
     printf("Unknown command '%s'\n", arg);
   }
+  return 0;
+}
+
+static int cmd_si(char *args) {
+  char *arg = strtok(NULL, " ");
+  uint64_t n = 1;
+  if (arg != NULL) sscanf(arg, "%lu", &n);
+  cpu_exec(n);
   return 0;
 }
 
