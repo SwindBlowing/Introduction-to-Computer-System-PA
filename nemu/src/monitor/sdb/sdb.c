@@ -106,9 +106,9 @@ static int cmd_si(char *args) {
     return 0;
   }
   bool flag = 1;
-  char *now = arg;
+  char *now = arg;putchar('\n');
   while (now != NULL && *now != ' ') {
-    putchar('\n');
+    
     putchar(*now);
     if (*now < '0' || *now > '9') {
       flag = 0; break;
