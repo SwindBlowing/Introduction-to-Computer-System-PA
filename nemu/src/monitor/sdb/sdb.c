@@ -151,10 +151,9 @@ static int cmd_x(char *args)
   sscanf(arg2, "%x", &EXPR);
   for (int i = 0; i < N; i++) {
     printf("0x%x    ", EXPR);
-    for (int j = 1; j <= 4; j++) {
-      printf("%02x", paddr_read(EXPR, 1));
-      EXPR++;
-    }
+    for (int j = 3; j >= 0; j--) 
+      printf("%02x", paddr_read(EXPR + j, 1));
+    EXPR += 4;
     printf("\n");
   }
   return 0;
