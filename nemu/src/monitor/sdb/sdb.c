@@ -56,6 +56,8 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args);
 
+static int cmd_info(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -65,6 +67,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Pause the program after stepping through n steps (n defaluts to 1)", cmd_si},
+  { "info", "print register status or watchpoint information", cmd_info},
 
   /* TODO: Add more commands */
 
@@ -100,6 +103,12 @@ static int cmd_si(char *args) {
   uint64_t n = 1;
   if (arg != NULL) sscanf(arg, "%lu", &n);
   cpu_exec(n);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  char *arg = strtok(NULL, " ");
+  printf("%c\n", *arg);
   return 0;
 }
 
