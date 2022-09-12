@@ -105,7 +105,7 @@ static int cmd_si(char *args) {
     cpu_exec(n);
     return 0;
   }
-  bool flag = 1;
+  /*bool flag = 1;
   char *now = arg;
   while (now != NULL) {
     printf("%d\n", *now);
@@ -118,7 +118,9 @@ static int cmd_si(char *args) {
     sscanf(arg, "%lu", &n);
     cpu_exec(n);
   }
-  else printf("Unknown command '%s'\n", arg);
+  else printf("Unknown command '%s'\n", arg);*/
+  sscanf(arg, "%lu", &n);
+  cpu_exec(n);
   return 0;
 }
 
