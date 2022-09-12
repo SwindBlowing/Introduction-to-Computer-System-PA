@@ -101,19 +101,21 @@ static int cmd_help(char *args) {
 static int cmd_si(char *args) {
   char *arg = strtok(NULL, " ");
   uint64_t n = 1;
+  if (arg == NULL) {
+    cpu_exec(n);
+    return 0;
+  }
   bool flag = 1;
-  char *now = arg;
+  char *now = arg; now++;
   while (now != NULL) {
-    putchar('\n');
-    putchar(*now);
+    //putchar('\n');
+    //putchar(*now);
     if (*now < '0' || *now > '9') {
       flag = 0; break;
     }
     now++;
   }
-  if (arg == NULL) 
-    cpu_exec(n);
-  else if (flag) {
+  if (flag) {
     sscanf(arg, "%lu", &n);
     cpu_exec(n);
   }
