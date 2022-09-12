@@ -106,10 +106,10 @@ static int cmd_si(char *args) {
     return 0;
   }
   bool flag = 1;
-  char *now = arg;putchar('\n');
+  char *now = arg;
   while (now != NULL && *now != ' ') {
     
-    putchar(*now);
+    printf("Now char is %c \n", *now);
     if (*now < '0' || *now > '9') {
       flag = 0; break;
     }
