@@ -30,13 +30,26 @@ int main(int argc, char *argv[]) {
 #endif
 
   /* Start engine. */
-  engine_start();
+  /*engine_start();
 
-  return is_exit_status_bad();
+  return is_exit_status_bad();*/
   
   /*bool flag = 1;
   word_t now = expr("1/0", &flag);
   if (!flag) printf("Bad!\n");
   else printf("%u\n", now);
   return 0;*/
+  FILE *fp = fopen("data.txt", "r");
+  uint32_t nowu;
+  char *arg = NULL;
+  assert(fp != NULL);
+  for (int i = 1; i <= 1000; i++) {
+    bool p = fscanf(fp, "%u %s", &nowu, arg);
+    p = 1;
+    assert(p);
+    bool flag = 1;
+    word_t now = expr(arg, &flag);
+    if (flag) assert(now == nowu);
+  }
+  return 0;
 }
