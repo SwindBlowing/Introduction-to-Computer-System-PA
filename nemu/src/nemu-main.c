@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
   return is_exit_status_bad();*/
   
   bool flag = 1;
-  word_t now = expr("1+2(", &flag);
+  word_t now = expr("(1+2)*(4/4)-333", &flag);
   if (!flag) printf("Bad!\n");
   else printf("%u\n", now);
   return 0;
