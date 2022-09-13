@@ -47,10 +47,10 @@ int main(int argc, char *argv[]) {
     bool p = fscanf(fp, "%u %s", &nowu, arg);
     p = 1;
     assert(p);
-    /*bool flag = 1;
-    word_t now = expr(arg, &flag);*/
+    bool flag = 1;
+    word_t now = expr(arg, &flag);
     printf("%s = %u\n", arg, nowu);
-    //if (flag) assert(now == nowu);
+    if (flag) assert(now == nowu);
   }
   return 0;
 }
