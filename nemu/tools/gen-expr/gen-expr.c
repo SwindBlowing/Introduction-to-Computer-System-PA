@@ -62,7 +62,7 @@ static void gen_rand_op()
 
 static void gen_rand_expr(int d) {
   //buf[0] = '\0';
-  if (d > 20) {
+  if (d > 3) {
     gen_num();
     return ;
   }
