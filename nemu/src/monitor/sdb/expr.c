@@ -20,6 +20,8 @@
  */
 #include <regex.h>
 
+bool check_number(char *arg);
+
 enum {
   TK_NOTYPE = 256, TK_EQ = 257,
   TK_NUM = 258,
@@ -102,23 +104,8 @@ static bool make_token(char *e) {
         
         switch (rules[i].token_type) {
           case TK_NOTYPE: break;
-          case '+':
-            tokens[nr_token++] = (Token){'+', "+"};
-            break;
-          case '-':
-            tokens[nr_token++] = (Token){'-', "-"};
-            break;
-          case '*':
-            tokens[nr_token++] = (Token){'*', "*"};
-            break;
-          case '/':
-            tokens[nr_token++] = (Token){'/', "/"};
-            break;
-          case '(':
-            tokens[nr_token++] = (Token){'(', "("};
-            break;
-          case ')':
-            tokens[nr_token++] = (Token){')', ")"};
+          case ('+' || '-' || '*' || '/' || '(' || ')'):
+            tokens[nr_token++] = (Token){rules[i].token_type, ""};
             break;
           case TK_NUM:
             tokens[nr_token++] = (Token){TK_NUM, ""};
@@ -139,16 +126,51 @@ static bool make_token(char *e) {
   return true;
 }
 
+word_t eval(int p, int q, bool *legal) {
+  if (p > q) {
+    /* Bad expression */
+    legal = 0;
+    return 0;
+  }
+  else if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+
+  }
+ // else if (check_parentheses(p, q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+  //  return eval(p + 1, q - 1);
+  //}
+  else {
+ ///   op = the position of 主运算符 in the token expression;
+  //  val1 = eval(p, op - 1);
+  //  val2 = eval(op + 1, q);
+//
+   // switch (op_type) {
+   //   case '+': return val1 + val2;
+   //   case '-': /* ... */
+    //  case '*': /* ... */
+    //  case '/': /* ... */
+   //   default: assert(0);
+   // }
+  }
+  return 0;
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
-  for (int i = 0; i < nr_token; i++)
-    printf("%s\n", tokens[i].str);
+  //for (int i = 0; i < nr_token; i++)
+  //  printf("%s\n", tokens[i].str);
   /* TODO: Insert codes to evaluate the expression. */
   //TODO();
 
+  //return eval(0, nr_token - 1, success);
   return 0;
 }
