@@ -151,7 +151,7 @@ static bool check_parentheses(int p, int q, bool *legal)
       lef--;
     }
   if (lef == 0) return flag;
-  legal = 0;
+  *legal = 0;
   return false;
 }
 
@@ -175,10 +175,10 @@ static int find_main_calc(int p, int q)
 }
 
 static word_t eval(int p, int q, bool *legal) {
-  if (!legal) return 1;
+  if (!(*legal)) return 1;
   if (p > q) {
     /* Bad expression */
-    legal = 0;
+    *legal = 0;
     return 1;
   }
   else if (p == q) {
@@ -187,7 +187,7 @@ static word_t eval(int p, int q, bool *legal) {
      * Return the value of the number.
      */
     if (!check_number(tokens[p].str)) {
-      legal = 0;
+      *legal = 0;
       return 1;
     }
     word_t N = 0;
@@ -203,7 +203,7 @@ static word_t eval(int p, int q, bool *legal) {
   else {
     int op = find_main_calc(p, q);
     if (!op) {
-      legal = 0;
+      *legal = 0;
       return 1;
     }
     word_t val1 = eval(p, op - 1, legal);
@@ -214,7 +214,7 @@ static word_t eval(int p, int q, bool *legal) {
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
-      default: legal = 0; return 1;
+      default: *legal = 0; return 1;
     }
   }
   return 1;
