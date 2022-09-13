@@ -21,8 +21,9 @@
 #include <string.h>
 
 // this should be enough
-static int num = 0;
+static int num = 0 ,num2 = 0;
 static char buf[65536] = {};
+static char ubuf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
@@ -40,29 +41,33 @@ static int choose(int Mod)
 static void gen_num()
 {
   int len = choose(6) + 1;
-  for (int i = 1; i <= len; i++)
+  for (int i = 1; i <= len; i++) {
     buf[num++] = choose(9) + 1 + '0';
+    ubuf[num2++] = buf[num - 1];
+  }
+  buf[num++] = 'u';
 }
 
 static void gen(char ch)
 {
   buf[num++] = ch;
+  ubuf[num2++] = ch;
 }
 
 static void gen_rand_op()
 {
   int flag = choose(4);
   switch(flag) {
-    case 0: buf[num++] = '+'; break;
-    case 1: buf[num++] = '-'; break;
-    case 2: buf[num++] = '*'; break;
-    case 3: buf[num++] = '/'; break;
+    case 0: buf[num++] = '+'; ubuf[num2++] = '+'; break;
+    case 1: buf[num++] = '-'; ubuf[num2++] = '-'; break;
+    case 2: buf[num++] = '*'; ubuf[num2++] = '*'; break;
+    case 3: buf[num++] = '/'; ubuf[num2++] = '/'; break;
   }
 }
 
 static void gen_rand_expr(int d) {
   //buf[0] = '\0';
-  if (d > 3) {
+  if (d > 10) {
     gen_num();
     return ;
   }
@@ -84,7 +89,7 @@ int main(int argc, char *argv[]) {
   FILE *newfp = fopen("data.txt", "w");
   assert(newfp != NULL);
   for (i = 0; i < loop; i ++) {
-    num = 0;
+    num = 0; num2 = 0;
     gen_rand_expr(0);
     buf[num] = '\0';
 
@@ -106,7 +111,7 @@ int main(int argc, char *argv[]) {
     p=1;
     assert(p);
     pclose(fp);
-    fprintf(newfp, "%u %s\r\n", result, buf);
+    fprintf(newfp, "%u %s\r\n", result, ubuf);
   }
   fclose(newfp);
   return 0;
