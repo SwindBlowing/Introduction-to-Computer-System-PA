@@ -99,8 +99,30 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+        
         switch (rules[i].token_type) {
+          case TK_NOTYPE: break;
+          case '+':
+            tokens[nr_token++] = (Token){'+', "+"};
+            break;
+          case '-':
+            tokens[nr_token++] = (Token){'-', "-"};
+            break;
+          case '*':
+            tokens[nr_token++] = (Token){'*', "*"};
+            break;
+          case '/':
+            tokens[nr_token++] = (Token){'/', "/"};
+            break;
+          case '(':
+            tokens[nr_token++] = (Token){'(', "("};
+            break;
+          case ')':
+            tokens[nr_token++] = (Token){')', ")"};
+            break;
+          case TK_NUM:
+            tokens[nr_token++] = (Token){TK_NUM, ""};
+            strncpy(tokens[nr_token - 1].str, substr_start, substr_len);
           default: TODO();
         }
 
