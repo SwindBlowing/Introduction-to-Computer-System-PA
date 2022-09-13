@@ -33,11 +33,9 @@ int main(int argc, char *argv[]) {
   /*engine_start();
 
   return is_exit_status_bad();*/
-  char *args = "";
   
-  bool flag = scanf("%s", args);
-  flag = 1;
-  word_t now = expr(args, &flag);
+  bool flag = 1;
+  word_t now = expr("1+2", &flag);
   if (!flag) printf("Bad!\n");
   else printf("%u\n", now);
   return 0;
