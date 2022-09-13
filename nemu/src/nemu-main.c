@@ -45,12 +45,19 @@ int main(int argc, char *argv[]) {
   for (int i = 1; i <= 500; i++) {
     char arg[] = {};
     bool p = fscanf(fp, "%u %s", &nowu, arg);
+    printf("%s", arg);
     p = 1;
     assert(p);
     bool flag = 1;
     word_t now = expr(arg, &flag);
     printf("%u = %u\n", now, nowu);
-    if (flag) assert(now == nowu);
+    if (flag) {
+      if (now != nowu) {
+        //printf("%s\n", arg);
+        return 0;
+        //assert(now == nowu);
+      }
+    }
   }
   return 0;
 }
