@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
   if (!flag) printf("Bad!\n");
   else printf("%u\n", now);
   return 0;*/
-  FILE *fp = popen("data.txt", "r");
+  FILE *fp = fopen("input.txt", "r");
   uint32_t nowu;
   char *arg = NULL;
   assert(fp != NULL);
