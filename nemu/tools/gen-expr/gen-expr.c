@@ -21,6 +21,7 @@
 #include <string.h>
 
 // this should be enough
+static int num = 0;
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
@@ -31,25 +32,61 @@ static char *code_format =
 "  return 0; "
 "}";
 
-static void gen_rand_expr() {
-  buf[0] = '\0';
+static int choose(int Mod)
+{
+  return rand() % Mod;
+}
+
+static void gen_num()
+{
+  int len = choose(6) + 1;
+  for (int i = 1; i <= len; i++)
+    buf[num++] = choose(9) + 1 + '0';
+}
+
+static void gen(char ch)
+{
+  buf[num++] = ch;
+}
+
+static void gen_rand_op()
+{
+  int flag = choose(4);
+  switch(flag) {
+    case 0: buf[num++] = '+'; break;
+    case 1: buf[num++] = '-'; break;
+    case 2: buf[num++] = '*'; break;
+    case 3: buf[num++] = '/'; break;
+  }
+}
+
+static void gen_rand_expr(int d) {
+  //buf[0] = '\0';
+  if (d > 20) {
+    gen_num();
+    return ;
+  }
   switch (choose(3)) {
     case 0: gen_num(); break;
-    case 1: gen('('); gen_rand_expr(); gen(')'); break;
-    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+    case 1: gen('('); gen_rand_expr(d + 1); gen(')'); break;
+    default: gen_rand_expr(d + 1); gen_rand_op(); gen_rand_expr(d + 1); break;
   }
 }
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
   srand(seed);
-  int loop = 1;
+  int loop = 10;
   if (argc > 1) {
     sscanf(argv[1], "%d", &loop);
   }
   int i;
+  FILE *newfp = fopen("data.txt", "w");
+  assert(newfp != NULL);
   for (i = 0; i < loop; i ++) {
-    gen_rand_expr();
+    num = 0;
+    gen_rand_expr(0);
+    buf[num] = '\0';
 
     sprintf(code_buf, code_format, buf);
 
@@ -65,10 +102,12 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
 
     int result;
-    fscanf(fp, "%d", &result);
+    int p = fscanf(fp, "%d", &result);
+    p=1;
+    assert(p);
     pclose(fp);
-
-    printf("%u %s\n", result, buf);
+    fprintf(newfp, "%u %s\r\n", result, buf);
   }
+  fclose(newfp);
   return 0;
 }

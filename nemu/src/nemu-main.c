@@ -30,13 +30,13 @@ int main(int argc, char *argv[]) {
 #endif
 
   /* Start engine. */
-  /*engine_start();
+  engine_start();
 
-  return is_exit_status_bad();*/
+  return is_exit_status_bad();
   
-  bool flag = 1;
+  /*bool flag = 1;
   word_t now = expr("1/0", &flag);
   if (!flag) printf("Bad!\n");
   else printf("%u\n", now);
-  return 0;
+  return 0;*/
 }
