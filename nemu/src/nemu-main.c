@@ -30,16 +30,16 @@ int main(int argc, char *argv[]) {
 #endif
 
   /* Start engine. */
-  /*engine_start();
+  engine_start();
 
-  return is_exit_status_bad();*/
+  return is_exit_status_bad();
   
   /*bool flag = 1;
   word_t now = expr("(97896+((((((367395-4199)+114683/(2445-((85+(((((154419)))))))))+((((585*63))-25+((89/516232*849669+(((2))))))))*((((86))+(((7669)-94437)/(7+845-468795/9+(6))-68548-(91)*((5-83*4*645+186187-(891/619))+(34999)*9))/(9)-(141874))+(71*15834)*(17582)-2-((3144))*((((37865)-(3993*57)+68)))-(481994)/((31863+((134319)))+(5)*742173*6437))))))", &flag);
   if (!flag) printf("Bad!\n");
   else printf("%u\n", now);
   return 0;*/
-  FILE *fp = fopen("src/input.txt", "r");
+  /*FILE *fp = fopen("src/input.txt", "r");
   assert(fp != NULL);
   uint32_t nowu;
   for (int i = 1; i <= 500; i++) {
@@ -56,5 +56,5 @@ int main(int argc, char *argv[]) {
       assert(now == nowu);
     }
   }
-  return 0;
+  return 0;*/
 }
