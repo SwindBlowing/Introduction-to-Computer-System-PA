@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
   assert(fp != NULL);
   uint32_t nowu;
   char arg[] = {};
-  for (int i = 1; i <= 1000; i++) {
+  for (int i = 1; i <= 500; i++) {
     bool p = fscanf(fp, "%u %s", &nowu, arg);
     p = 1;
     assert(p);
