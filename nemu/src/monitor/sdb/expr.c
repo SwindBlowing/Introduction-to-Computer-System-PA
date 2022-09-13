@@ -112,7 +112,12 @@ static bool make_token(char *e) {
         
         switch (rules[i].token_type) {
           case TK_NOTYPE: break;
-          case ('+' || '-' || '*' || '/' || '(' || ')'):
+          case '+':
+          case '-':
+          case '*':
+          case '/':
+          case '(':
+          case ')':
             tokens[nr_token++] = (Token){rules[i].token_type, ""};
             break;
           case TK_NUM:
