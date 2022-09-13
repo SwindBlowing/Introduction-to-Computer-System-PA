@@ -19,6 +19,7 @@ void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
 int is_exit_status_bad();
+word_t expr(char *e, bool *success);
 
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
@@ -29,7 +30,10 @@ int main(int argc, char *argv[]) {
 #endif
 
   /* Start engine. */
-  engine_start();
+  /*engine_start();
 
-  return is_exit_status_bad();
+  return is_exit_status_bad();*/
+  bool flag = 1;
+  printf("%u", expr("", &flag));
+  return 0;
 }
