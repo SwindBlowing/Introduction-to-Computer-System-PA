@@ -42,14 +42,14 @@ int main(int argc, char *argv[]) {
   FILE *fp = fopen("src/input.txt", "r");
   assert(fp != NULL);
   uint32_t nowu;
-  char *arg = NULL;
+  char *arg = "s";
   for (int i = 1; i <= 1000; i++) {
     bool p = fscanf(fp, "%u %s", &nowu, arg);
     p = 1;
     assert(p);
     /*bool flag = 1;
     word_t now = expr(arg, &flag);*/
-    printf("%u %u\n", 1, nowu);
+    printf("%s = %u\n", arg, nowu);
     //if (flag) assert(now == nowu);
   }
   return 0;
