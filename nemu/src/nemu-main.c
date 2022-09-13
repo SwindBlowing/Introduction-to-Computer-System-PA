@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     word_t now = expr(arg, &flag);
     
     if (flag) {
-      if(now != nowu) printf("%u = %u\n", now, nowu);;
+      if(now != nowu) printf("**********%u = %u**********\n", now, nowu);;
     }
   }
   return 0;
