@@ -126,7 +126,17 @@ static bool make_token(char *e) {
   return true;
 }
 
-word_t eval(int p, int q, bool *legal) {
+static bool check_parentheses(int p, int q)
+{
+  return 0;
+}
+
+static int find_main_calc(int p, int q)
+{
+  return 0;
+}
+
+static word_t eval(int p, int q, bool *legal) {
   if (p > q) {
     /* Bad expression */
     legal = 0;
@@ -137,26 +147,32 @@ word_t eval(int p, int q, bool *legal) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-
+    if (!check_number(tokens[p].str)) {
+      legal = 0;
+      return 0;
+    }
+    word_t N = 0;
+    sscanf(tokens[p].str, "%u", &N);
+    return N;
   }
- // else if (check_parentheses(p, q) == true) {
+  else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-  //  return eval(p + 1, q - 1);
-  //}
+    return eval(p + 1, q - 1, legal);
+  }
   else {
- ///   op = the position of 主运算符 in the token expression;
-  //  val1 = eval(p, op - 1);
-  //  val2 = eval(op + 1, q);
-//
-   // switch (op_type) {
-   //   case '+': return val1 + val2;
-   //   case '-': /* ... */
-    //  case '*': /* ... */
-    //  case '/': /* ... */
-   //   default: assert(0);
-   // }
+    int op = find_main_calc(p, q);
+    word_t val1 = eval(p, op - 1, legal);
+    word_t val2 = eval(op + 1, q, legal);
+
+    switch (tokens[op].type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: legal = 0; return 0;
+    }
   }
   return 0;
 }
@@ -171,6 +187,6 @@ word_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
   //TODO();
 
-  //return eval(0, nr_token - 1, success);
+  return eval(0, nr_token - 1, success);
   return 0;
 }
