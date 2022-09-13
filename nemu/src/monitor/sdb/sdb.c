@@ -24,6 +24,7 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+bool make_token(char *e);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -61,6 +62,8 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_p(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -72,6 +75,7 @@ static struct {
   { "si", "Pause the program after stepping through n steps (n defaluts to 1)", cmd_si},
   { "info", "Print register status or watchpoint information", cmd_info},
   { "x", "Scan memory", cmd_x},
+  { "p", "Calculate the expression", cmd_p},
 
   /* TODO: Add more commands */
 
@@ -156,6 +160,12 @@ static int cmd_x(char *args)
     EXPR += 4;
     printf("\n");
   }
+  return 0;
+}
+
+static int cmd_p(char *args)
+{
+  make_token(args);
   return 0;
 }
 
