@@ -41,16 +41,16 @@ int main(int argc, char *argv[]) {
   return 0;*/
   FILE *fp = fopen("src/input.txt", "r");
   assert(fp != NULL);
-  /*uint32_t nowu;
+  uint32_t nowu;
   char *arg = NULL;
   for (int i = 1; i <= 1000; i++) {
     bool p = fscanf(fp, "%u %s", &nowu, arg);
     p = 1;
     assert(p);
-    bool flag = 1;
-    word_t now = expr(arg, &flag);
-    printf("%u %u\n", now, nowu);
-    if (flag) assert(now == nowu);
-  }*/
+    /*bool flag = 1;
+    word_t now = expr(arg, &flag);*/
+    printf("%u %u\n", 1, nowu);
+    //if (flag) assert(now == nowu);
+  }
   return 0;
 }
