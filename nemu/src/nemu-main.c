@@ -40,9 +40,9 @@ int main(int argc, char *argv[]) {
   else printf("%u\n", now);
   return 0;*/
   FILE *fp = fopen("src/input.txt", "r");
-  uint32_t nowu;
-  char *arg = NULL;
   assert(fp != NULL);
+  /*uint32_t nowu;
+  char *arg = NULL;
   for (int i = 1; i <= 1000; i++) {
     bool p = fscanf(fp, "%u %s", &nowu, arg);
     p = 1;
@@ -51,6 +51,6 @@ int main(int argc, char *argv[]) {
     word_t now = expr(arg, &flag);
     printf("%u %u\n", now, nowu);
     if (flag) assert(now == nowu);
-  }
+  }*/
   return 0;
 }
