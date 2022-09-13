@@ -42,8 +42,8 @@ int main(int argc, char *argv[]) {
   FILE *fp = fopen("src/input.txt", "r");
   assert(fp != NULL);
   uint32_t nowu;
-  char arg[] = {};
   for (int i = 1; i <= 500; i++) {
+    char arg[] = {};
     bool p = fscanf(fp, "%u %s", &nowu, arg);
     p = 1;
     assert(p);
