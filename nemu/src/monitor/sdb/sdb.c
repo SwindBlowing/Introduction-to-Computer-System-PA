@@ -173,7 +173,7 @@ static int cmd_p(char *args)
   bool success = 1;
   word_t ans = 0;
   ans = expr(args, &success);
-  if (!success) printf("Unknown command '%s'\n", arg);
+  if (!success) printf("Bad expression '%s'\n", arg);
   else printf("%u\n", ans);
   return 0;
 }
