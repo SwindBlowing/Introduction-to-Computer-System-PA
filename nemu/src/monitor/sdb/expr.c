@@ -164,7 +164,7 @@ static int find_main_calc(int p, int q)
     else if (tokens[i].type == ')') lef--;
     else if (is_calc_bool(tokens[i].type)) {
       if (lef) continue;
-      else if (pty[tokens[i].type] <= pty[tokens[pos].type]) pos = i;
+      else if (!pos || pty[tokens[i].type] <= pty[tokens[pos].type]) pos = i;
     }
   return pos;
 }
@@ -197,6 +197,10 @@ static word_t eval(int p, int q, bool *legal) {
   }
   else {
     int op = find_main_calc(p, q);
+    if (!op) {
+      legal = 0;
+      return 1;
+    }
     word_t val1 = eval(p, op - 1, legal);
     word_t val2 = eval(op + 1, q, legal);
 

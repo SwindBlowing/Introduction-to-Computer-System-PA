@@ -34,6 +34,8 @@ int main(int argc, char *argv[]) {
 
   return is_exit_status_bad();*/
   bool flag = 1;
-  printf("%u", expr("10", &flag));
+  word_t now = expr("10", &flag);
+  if (!flag) printf("Bad!\n");
+  else printf("%u\n", now);
   return 0;
 }
