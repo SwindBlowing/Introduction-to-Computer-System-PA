@@ -52,11 +52,19 @@ static struct rule {
 #define NR_REGEX ARRLEN(rules)
 
 static regex_t re[NR_REGEX] = {};
+static word_t pty[512] = {};
+
+static void init_pty()
+{
+  pty['+'] = pty['-'] = 2;
+  pty['*'] = pty['/'] = 3;
+}
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
  */
 void init_regex() {
+  init_pty();
   int i;
   char error_msg[128];
   int ret;
@@ -126,21 +134,47 @@ static bool make_token(char *e) {
   return true;
 }
 
-static bool check_parentheses(int p, int q)
+static bool check_parentheses(int p, int q, bool *legal)
 {
-  return 0;
+  if (tokens[p].type != '(' || tokens[q].type != ')') return false;
+  bool flag = 1;
+  int lef = 0;
+  for (int i = p + 1; i < q; i++)
+    if (tokens[i].type == '(') lef++;
+    else if (tokens[i].type == ')') {
+      if (!lef) flag = 0;
+      lef--;
+    }
+  if (lef == 0) return flag;
+  legal = 0;
+  return false;
+}
+
+static bool is_calc_bool(word_t type)
+{
+  return type == '+' || type == '-' || type == '*' || type == '/';
 }
 
 static int find_main_calc(int p, int q)
 {
-  return 0;
+  int pos = 0;
+  int lef = 0;
+  for (int i = p; i <= q; i++)
+    if (tokens[i].type == '(') lef++;
+    else if (tokens[i].type == ')') lef--;
+    else if (is_calc_bool(tokens[i].type)) {
+      if (lef) continue;
+      else if (pty[tokens[i].type] <= pty[tokens[pos].type]) pos = i;
+    }
+  return pos;
 }
 
 static word_t eval(int p, int q, bool *legal) {
+  if (!legal) return 1;
   if (p > q) {
     /* Bad expression */
     legal = 0;
-    return 0;
+    return 1;
   }
   else if (p == q) {
     /* Single token.
@@ -149,13 +183,13 @@ static word_t eval(int p, int q, bool *legal) {
      */
     if (!check_number(tokens[p].str)) {
       legal = 0;
-      return 0;
+      return 1;
     }
     word_t N = 0;
     sscanf(tokens[p].str, "%u", &N);
     return N;
   }
-  else if (check_parentheses(p, q) == true) {
+  else if (check_parentheses(p, q, legal) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
@@ -171,10 +205,10 @@ static word_t eval(int p, int q, bool *legal) {
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
-      default: legal = 0; return 0;
+      default: legal = 0; return 1;
     }
   }
-  return 0;
+  return 1;
 }
 
 word_t expr(char *e, bool *success) {
