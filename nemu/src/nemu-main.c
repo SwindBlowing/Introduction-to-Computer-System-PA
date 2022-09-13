@@ -49,6 +49,7 @@ int main(int argc, char *argv[]) {
     assert(p);
     bool flag = 1;
     word_t now = expr(arg, &flag);
+    printf("%u %u\n", now, nowu);
     if (flag) assert(now == nowu);
   }
   return 0;
