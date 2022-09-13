@@ -169,8 +169,12 @@ static int cmd_x(char *args)
 
 static int cmd_p(char *args)
 {
+  char *arg = strtok(NULL, " ");
   bool success = 1;
-  expr(args, &success);
+  word_t ans = 0;
+  ans = expr(args, &success);
+  if (!success) printf("Unknown command '%s'\n", arg);
+  else printf("%u\n", ans);
   return 0;
 }
 
