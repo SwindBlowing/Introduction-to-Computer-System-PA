@@ -86,7 +86,7 @@ bool wp_pause()
   WP *now = head;
   while (now != NULL) {
     bool success = 1;
-    printf("%s\n", now->args);
+    printf("%s=%d\n", now->args, now->pre_val);
     word_t now_val = expr(now->args, &success);
     if (!success) {
       if (now->Divided0) ;
