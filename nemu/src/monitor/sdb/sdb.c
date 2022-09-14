@@ -170,11 +170,10 @@ static int cmd_x(char *args)
 
 static int cmd_p(char *args)
 {
-  char *arg = strtok(NULL, " ");
   bool success = 1;
   word_t ans = 0;
   ans = expr(args, &success);
-  if (!success) printf("Bad expression '%s'\n", arg);
+  if (!success) printf("Bad expression '%s'\n", args);
   else printf("%u\n", ans);
   return 0;
 }
