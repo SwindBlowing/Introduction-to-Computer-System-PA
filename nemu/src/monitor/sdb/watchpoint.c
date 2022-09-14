@@ -56,9 +56,10 @@ WP* new_wp()
     *now = (WP){++totId, NULL, NULL, 1, 0};
     now->next = head;
     head = now;
-    //now->args = "1+1";
+    now->args = "1+1";
     //printf("%s\n", head->args);
-    printf("%p", now);
+    //printf("%p", now);
+    printf("%s=%d\n", now->args, now->pre_val);
     return now;
   }
   return NULL;
@@ -87,7 +88,7 @@ bool wp_pause()
   WP *now = head;
   while (now != NULL) {
     bool success = 1;
-    printf("%p", now);
+    //printf("%p", now);
     //printf("%s=%d\n", now->args, now->pre_val);
     word_t now_val = expr(now->args, &success);
     if (!success) {
