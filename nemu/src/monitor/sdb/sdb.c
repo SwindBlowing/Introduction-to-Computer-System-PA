@@ -86,6 +86,7 @@ static struct {
 bool check_number(char *arg)
 {
   char *now = arg;
+  if (now == NULL) return 0;
   while (*now) {
     if (*now < '0' || *now > '9') 
       return 0;

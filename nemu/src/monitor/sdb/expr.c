@@ -21,11 +21,13 @@
 #include <regex.h>
 
 bool check_number(char *arg);
+word_t isa_reg_str2val(const char *s, bool *success);
 
 enum {
   TK_NOTYPE = 256, TK_EQ = 257,
-  TK_DNUM = 258, TK_HNUM = 259,
-  TK_NEQ = 260, TK_AND = 261,
+  TK_DNUM = 258, TK_HNUM = 259, 
+  TK_NEQ = 260, TK_AND = 261, 
+  TK_REG = 262, TK_PDF = 263, 
 
   /* TODO: Add more token types */
 
@@ -47,6 +49,7 @@ static struct rule {
   {"\\/", '/'},          // divide
   {"\\(", '('},          // left bracket
   {"\\)", ')'},          // right bracket
+  {"\\$+[a-z]*[0-9]*", TK_REG}, // get reg value
   {"==", TK_EQ},         // equal
   {"!=", TK_NEQ},        // not equal
   {"&&", TK_AND},        // and
@@ -126,11 +129,23 @@ static bool make_token(char *e) {
           case '/':
           case '(':
           case ')':
+          case TK_EQ:
+          case TK_NEQ:
+          case TK_AND:
             tokens[nr_token++] = (Token){rules[i].token_type, ""};
             break;
           case TK_DNUM:
             tokens[nr_token++] = (Token){TK_DNUM, ""};
             strncpy(tokens[nr_token - 1].str, substr_start, substr_len);
+            break;
+          case TK_HNUM:
+            tokens[nr_token++] = (Token){TK_HNUM, ""};
+            strncpy(tokens[nr_token - 1].str, substr_start + 2, substr_len - 2);
+            break;
+          case TK_REG:
+            tokens[nr_token++] = (Token){TK_HNUM, ""};
+            strncpy(tokens[nr_token - 1].str, substr_start + 1, substr_len - 1);
+            break;
           default: break;
         }
 
@@ -165,7 +180,7 @@ static bool check_parentheses(int p, int q, bool *legal)
 
 static bool is_calc_bool(word_t type)
 {
-  return type == '+' || type == '-' || type == '*' || type == '/';
+  return type == '+' || type == '-' || type == '*' || type == '/' || type == TK_AND || type == TK_EQ || type == TK_NEQ;
 }
 
 static int find_main_calc(int p, int q)
@@ -194,13 +209,22 @@ static word_t eval(int p, int q, bool *legal) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-    if (!check_number(tokens[p].str)) {
-      *legal = 0;
-      return 1;
+    if (tokens[p].type == TK_REG) {
+      word_t N = isa_reg_str2val(tokens[p].str, legal);
+      if (!*legal) return 1;
+      return N;
     }
-    word_t N = 0;
-    sscanf(tokens[p].str, "%u", &N);
-    return N;
+    else {
+      if (!check_number(tokens[p].str)) {
+        *legal = 0;
+        return 1;
+      }
+      word_t N = 0;
+      if (tokens[p].type == TK_DNUM) sscanf(tokens[p].str, "%u", &N);
+      else sscanf(tokens[p].str, "%x", &N);
+      return N;
+    }
+    
   }
   else if (check_parentheses(p, q, legal) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
@@ -228,6 +252,9 @@ static word_t eval(int p, int q, bool *legal) {
           return 1;
         }
         else return val1 / val2;
+      case TK_AND: return val1 && val2;
+      case TK_EQ: return val1 == val2;
+      case TK_NEQ: return val1 != val2;
       default: *legal = 0; return 1;
     }
   }
