@@ -29,9 +29,9 @@ typedef struct watchpoint {
 
 } WP;
 
-int WP_num = 0, totId = 0;
-static WP wp_pool[NR_WP] = {};
-static WP *head = NULL, *free_ = NULL;
+static int totId = 0;
+WP wp_pool[NR_WP] = {};
+WP *head = NULL, *free_ = NULL;
 
 void init_wp_pool() {
   int i;

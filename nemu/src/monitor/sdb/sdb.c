@@ -24,12 +24,13 @@ static int is_batch_mode = false;
 
 word_t expr(char *e, bool *success);
 
+
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
   char *args;
   word_t pre_val;
-  //bool Divided0;
+  bool Divided0;
   /* TODO: Add more members if necessary */
 
 } WP;
