@@ -245,6 +245,7 @@ static word_t eval(int p, int q, bool *legal) {
       return 1;
     }
     if (pty[tokens[op].type] == 2) {
+      printf("arrived!\n");
       word_t val2 = eval(op + 1, q, legal);
       switch(tokens[op].type) {
         case TK_DEREF:
