@@ -242,6 +242,7 @@ static word_t eval(int p, int q, bool *legal) {
     int op = find_main_calc(p, q);
     printf("arrived!\n");
     if (op == -1) {
+      printf("ERROR!\n");
       *legal = 0;
       return 1;
     }
