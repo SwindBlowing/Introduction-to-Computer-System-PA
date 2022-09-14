@@ -24,7 +24,9 @@ bool check_number(char *arg);
 
 enum {
   TK_NOTYPE = 256, TK_EQ = 257,
-  TK_NUM = 258,
+  TK_DNUM = 258, TK_HNUM = 259,
+  TK_NEQ = 260, TK_AND = 261,
+
   /* TODO: Add more token types */
 
 };
@@ -38,15 +40,18 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"\\-", '-'},         // subtract
-  {"\\*", '*'},         // multiply
-  {"\\/", '/'},         // divide
-  {"\\(", '('},         // left bracket
-  {"\\)", ')'},         // right bracket
-  {"==", TK_EQ},        // equal
-  {"[0-9]+", TK_NUM},   // numbers
+  {" +", TK_NOTYPE},     // spaces
+  {"\\+", '+'},          // plus
+  {"\\-", '-'},          // subtract
+  {"\\*", '*'},          // multiply
+  {"\\/", '/'},          // divide
+  {"\\(", '('},          // left bracket
+  {"\\)", ')'},          // right bracket
+  {"==", TK_EQ},         // equal
+  {"!=", TK_NEQ},        // not equal
+  {"&&", TK_AND},        // and
+  {"[0-9]+", TK_DNUM},   // decimal numbers
+  {"0x[0-9]+", TK_HNUM}, // hexadecimal numbers
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -56,8 +61,11 @@ static word_t pty[512] = {};
 
 static void init_pty()
 {
-  pty['+'] = pty['-'] = 2;
-  pty['*'] = pty['/'] = 3;
+
+  pty['*'] = pty['/'] = 4; 
+  pty['+'] = pty['-'] = 5;
+  pty[TK_EQ] = pty[TK_NEQ] = 8;
+  pty[TK_AND] = 12;
 }
 
 /* Rules are used for many times.
@@ -120,8 +128,8 @@ static bool make_token(char *e) {
           case ')':
             tokens[nr_token++] = (Token){rules[i].token_type, ""};
             break;
-          case TK_NUM:
-            tokens[nr_token++] = (Token){TK_NUM, ""};
+          case TK_DNUM:
+            tokens[nr_token++] = (Token){TK_DNUM, ""};
             strncpy(tokens[nr_token - 1].str, substr_start, substr_len);
           default: break;
         }
@@ -169,7 +177,7 @@ static int find_main_calc(int p, int q)
     else if (tokens[i].type == ')') lef--;
     else if (is_calc_bool(tokens[i].type)) {
       if (lef) continue;
-      else if (!pos || pty[tokens[i].type] <= pty[tokens[pos].type]) pos = i;
+      else if (!pos || pty[tokens[i].type] >= pty[tokens[pos].type]) pos = i;
     }
   return pos;
 }
