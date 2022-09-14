@@ -228,6 +228,7 @@ static int cmd_w(char *args)
     if (!success) {
       //now->Divided0 = 1;
       free_wp(now->NO);
+      printf("Bad expression '%s'\n", args);
     }
     else printf("Added new watchpoint NO.%d.\n", now->NO);
   }
