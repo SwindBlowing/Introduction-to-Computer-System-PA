@@ -222,6 +222,7 @@ static int cmd_w(char *args)
 {
   WP *now = new_wp();
   if (now != NULL) {
+    printf("arrived!");
     strcpy(now->args, args);
     printf("arrived!");
     //printf("%d\n", now->pre_val);
