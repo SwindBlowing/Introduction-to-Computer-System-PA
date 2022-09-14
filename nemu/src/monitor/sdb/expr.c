@@ -54,7 +54,7 @@ static struct rule {
   {"==", TK_EQ},         // equal
   {"!=", TK_NEQ},        // not equal
   {"&&", TK_AND},        // and
-  {"0x[0-9]+", TK_HNUM}, // hexadecimal numbers
+  {"0x[0-9,a-f]+", TK_HNUM}, // hexadecimal numbers
   {"[0-9]+", TK_DNUM},   // decimal numbers
   
 };
