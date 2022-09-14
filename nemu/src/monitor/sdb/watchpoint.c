@@ -73,7 +73,7 @@ void free_wp(word_t N)
     printf("No target point. Free Failed!\n");
     return ;
   }
-  printf("Deleted the watchpoint No.%d.", now->NO);
+  printf("Deleted the watchpoint No.%d.\n", now->NO);
   if (now == head) 
     head = now->next;
   else 
