@@ -224,7 +224,8 @@ static int cmd_w(char *args)
     //printf("%d\n", now->pre_val);
     bool success = 1;
     now->pre_val = expr(args, &success);
-    printf("%s=%d\n", now->args, now->pre_val);
+    //printf("%s=%d\n", now->args, now->pre_val);
+    printf("%s\n", now->args);
     if (!success) {
       //now->Divided0 = 1;
       free_wp(now->NO);
