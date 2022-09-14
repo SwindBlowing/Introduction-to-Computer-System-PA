@@ -240,13 +240,12 @@ static word_t eval(int p, int q, bool *legal) {
   }
   else {
     int op = find_main_calc(p, q);
-    printf("arrived!\n");
+    
     if (op == -1) {
-      printf("ERROR!\n");
       *legal = 0;
       return 1;
     }
-    
+    printf("%d\n", op);
     if (pty[tokens[op].type] == 2) {
       word_t val2 = eval(op + 1, q, legal);
       switch(tokens[op].type) {
