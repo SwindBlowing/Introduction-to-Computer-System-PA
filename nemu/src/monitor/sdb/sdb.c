@@ -156,13 +156,17 @@ static int cmd_info(char *args) {
 
 static int cmd_x(char *args)
 {
+  bool success = 1;
   char *arg1 = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
-  printf("%s\n", arg2);
   uint32_t N = 0;
   sscanf(arg1, "%u", &N);
   paddr_t EXPR = 0;
-  sscanf(arg2, "%x", &EXPR);
+  EXPR = expr(arg2, &success);
+  if (!success) {
+    printf("Bad expression '%s'\n", args);
+    return 0;
+  }
   for (int i = 0; i < N; i++) {
     printf("0x%x    0x", EXPR);
     for (int j = 3; j >= 0; j--) 
