@@ -206,6 +206,7 @@ static word_t eval(int p, int q, bool *legal) {
     return 1;
   }
   else if (p == q) {
+    printf("Now here\n");
     /* Single token.
      * For now this token should be a number.
      * Return the value of the number.
