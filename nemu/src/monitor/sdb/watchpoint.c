@@ -102,12 +102,13 @@ bool wp_pause()
   now = now->next;
   while (now != NULL) {
     bool success = 1;
+    printf("%s\n", now->args);
     word_t now_val = expr(now->args, &success);
     if (!success) {
       if (now->Divided0) ;
       else {
         now->Divided0 = 1;
-        printf("Watchpoint %d changed, from now divided 0 to divided.\n", now->NO);
+        printf("Watchpoint %d changed, from not divided 0 to divided.\n", now->NO);
         return false;
       }
     }
