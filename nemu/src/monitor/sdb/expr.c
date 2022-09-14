@@ -245,7 +245,8 @@ static word_t eval(int p, int q, bool *legal) {
       *legal = 0;
       return 1;
     }
-    printf("%d\n", op);
+    //printf("%d\n", op);
+    //printf("arrived!\n");
     if (pty[tokens[op].type] == 2) {
       word_t val2 = eval(op + 1, q, legal);
       switch(tokens[op].type) {
@@ -253,6 +254,7 @@ static word_t eval(int p, int q, bool *legal) {
             word_t N = 0;
             for (int i = 3; i >= 0; i--) 
               N = N * 256 + paddr_read(val2 + i, 1);
+            return N;
         default: *legal = 0; return 1;
       }
     }
