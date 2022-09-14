@@ -85,6 +85,7 @@ void free_wp(word_t N)
 
 bool wp_pause()
 {
+  bool flag = true;
   //assert(head != NULL);
   WP *now = head;
   while (now != NULL) {
@@ -97,18 +98,27 @@ bool wp_pause()
       else {
         now->Divided0 = 1;
         printf("Watchpoint %d changed, from not divided 0 to divided.\n", now->NO);
-        return false;
+        flag = false;
       }
     }
     now->Divided0 = 0;
     if (now_val != now->pre_val) {
       printf("Watchpoint %d changed, from %u to %u.\n", now->NO, now->pre_val, now_val);
       now->pre_val = now_val;
-      return false;
+      flag = false;
     }
     now = now->next;
   }
-  return true;
+  return flag;
+}
+
+void print_watchpoints()
+{
+  WP *now = head;
+  while (now != NULL) {
+    printf("%s    %u\n", now->args, now->pre_val);
+    now = now->next;
+  }
 }
 /* TODO: Implement the functionality of watchpoint */
 

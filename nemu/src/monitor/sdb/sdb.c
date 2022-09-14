@@ -41,6 +41,7 @@ bool make_token(char *e);
 WP* new_wp();
 void free_wp(word_t N);
 bool wp_pause();
+void print_watchpoints();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -177,6 +178,7 @@ static int cmd_info(char *args) {
       isa_reg_display();
       break;
     case 'w':
+      print_watchpoints();
       break;
     default:
       printf("Unknown command '%s'\n", arg);
