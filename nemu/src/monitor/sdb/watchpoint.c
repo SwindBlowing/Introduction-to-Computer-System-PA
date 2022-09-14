@@ -47,20 +47,8 @@ void init_wp_pool() {
 WP* new_wp()
 {
   if (free_ == NULL) {
-    printf("arrived!");
-    if (WP_num == NR_WP) {
-      printf("No free watchpoint. Add failed!\n");
-      return NULL;
-    }
-    WP_num++;
-    wp_pool[WP_num - 1] = (WP){++totId, NULL, NULL, 0, 0};
-    if (head == NULL) head = &wp_pool[WP_num - 1];
-    else {
-      wp_pool[WP_num - 1].next = head;
-      head = &wp_pool[WP_num - 1];
-    }
-    wp_pool[WP_num - 1].args = "1 + 2";
-    return &wp_pool[WP_num - 1];
+    printf("No free watchpoint. Add failed!\n");
+    return NULL;
   }
   else {
     WP *now = free_;
