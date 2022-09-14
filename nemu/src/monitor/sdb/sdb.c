@@ -223,7 +223,7 @@ static int cmd_w(char *args)
     now->args = args;
     //printf("%d\n", now->pre_val);
     bool success = 1;
-    now->pre_val = expr(args, &success);
+    now->pre_val = expr(now->args, &success);
     //printf("%s=%d\n", now->args, now->pre_val);
     printf("%s\n", now->args);
     if (!success) {
