@@ -224,7 +224,7 @@ static int cmd_w(char *args)
   if (now != NULL) {
     
     strcpy(now->args, args);
-    assert(0);
+    //assert(0);
     //printf("%d\n", now->pre_val);
     bool success = 1;
     now->pre_val = expr(now->args, &success);
