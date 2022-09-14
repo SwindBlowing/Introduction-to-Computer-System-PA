@@ -218,11 +218,6 @@ static int cmd_p(char *args)
 
 static int cmd_w(char *args)
 {
-  bool flag = check_number(args, 258);
-  if (!flag) {
-    printf("Unknown command '%s'\n", args);
-    return 0;
-  }
   WP *now = new_wp();
   if (now != NULL) {
     now->args = args;
@@ -235,11 +230,6 @@ static int cmd_w(char *args)
 
 static int cmd_d(char *args)
 {
-  bool flag = check_number(args, 258);
-  if (!flag) {
-    printf("Unknown command '%s'\n", args);
-    return 0;
-  }
   bool success = 1;
   word_t N = expr(args, &success);
   if (success)
