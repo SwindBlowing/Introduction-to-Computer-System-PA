@@ -83,14 +83,23 @@ static struct {
 
 #define NR_CMD ARRLEN(cmd_table)
 
-bool check_number(char *arg)
+bool check_number(char *arg, int type)
 {
   char *now = arg;
   if (now == NULL) return 0;
-  while (*now) {
-    if (*now < '0' || *now > '9') 
-      return 0;
-    now++;
+  if (type == 258) {
+    while (*now) {
+      if (*now < '0' || *now > '9') 
+        return 0;
+      now++;
+    }
+  }
+  else {
+    while (*now) {
+      if ((*now < '0' || *now > '9') && (*now < 'a' || *now > 'f')) 
+        return 0;
+      now++;
+    }
   }
   return 1;
 }
@@ -125,7 +134,7 @@ static int cmd_si(char *args) {
     cpu_exec(n);
     return 0;
   }
-  bool flag = check_number(args);
+  bool flag = check_number(args, 258);
   if (flag) {
     sscanf(arg, "%lu", &n);
     cpu_exec(n);

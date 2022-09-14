@@ -21,7 +21,7 @@
 #include <regex.h>
 #include "memory/paddr.h"
 
-bool check_number(char *arg);
+bool check_number(char *arg, int type);
 word_t isa_reg_str2val(const char *s, bool *success);
 
 enum {
@@ -221,7 +221,7 @@ static word_t eval(int p, int q, bool *legal) {
       return N;
     }
     else {
-      if (!check_number(tokens[p].str)) {
+      if (!check_number(tokens[p].str, tokens[p].type)) {
         *legal = 0;
         return 1;
       }
