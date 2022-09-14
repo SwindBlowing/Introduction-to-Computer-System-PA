@@ -56,8 +56,8 @@ WP* new_wp()
     *now = (WP){++totId, NULL, NULL, 0, 0};
     now->next = head;
     head = now;
-    now->args = "1+1";
-    printf("%s\n", head->args);
+    //now->args = "1+1";
+    //printf("%s\n", head->args);
     return now;
   }
   return NULL;
@@ -82,7 +82,7 @@ void free_wp(word_t N)
 
 bool wp_pause()
 {
-  assert(head != NULL);
+  //assert(head != NULL);
   WP *now = head;
   while (now != NULL) {
     bool success = 1;
