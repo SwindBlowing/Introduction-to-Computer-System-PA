@@ -28,7 +28,7 @@ word_t expr(char *e, bool *success);
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-  char *args;
+  char args[65524];
   word_t pre_val;
   bool Divided0;
   /* TODO: Add more members if necessary */
