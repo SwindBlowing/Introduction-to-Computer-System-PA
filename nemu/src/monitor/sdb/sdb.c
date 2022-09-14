@@ -226,7 +226,7 @@ static int cmd_w(char *args)
     bool success = 1;
     now->pre_val = expr(now->args, &success);
     //printf("%s=%d\n", now->args, now->pre_val);
-    printf("%s\n", now->args);
+    //printf("%s\n", now->args);
     //assert(wp_pause());
     if (!success) {
       //now->Divided0 = 1;
