@@ -158,7 +158,7 @@ static int cmd_x(char *args)
 {
   char *arg1 = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
-  printf("%s\n", args);
+  printf("%s\n", arg2);
   uint32_t N = 0;
   sscanf(arg1, "%u", &N);
   paddr_t EXPR = 0;
