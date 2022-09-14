@@ -47,8 +47,10 @@ void init_wp_pool() {
 WP* new_wp()
 {
   if (free_ == NULL) {
-    if (WP_num == NR_WP) 
+    if (WP_num == NR_WP) {
+      printf("No free watchpoint. Add failed!\n");
       return NULL;
+    }
     WP_num++;
     wp_pool[WP_num - 1] = (WP){++totId, NULL, NULL, 0, 0};
     if (head == NULL) head->next = &wp_pool[WP_num - 1];
@@ -91,7 +93,7 @@ void free_wp(WP *wp)
   }
 }
 
-void wp_pause()
+bool wp_pause()
 {
   WP *now = head;
   now = now->next;
@@ -102,12 +104,18 @@ void wp_pause()
       if (now->Divided0) ;
       else {
         now->Divided0 = 1;
-        TODO();
+        printf("Watchpoint %d changed, from now divided 0 to divided.\n", now->NO);
+        return false;
       }
     }
     now->Divided0 = 0;
-    if (now_val != now->pre_val) TODO();
+    if (now_val != now->pre_val) {
+      printf("Watchpoint %d changed, from %u to %u.\n", now->NO, now->pre_val, now_val);
+      now->pre_val = now_val;
+      return false;
+    }
   }
+  return true;
 }
 /* TODO: Implement the functionality of watchpoint */
 
