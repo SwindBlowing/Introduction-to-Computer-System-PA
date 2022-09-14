@@ -82,7 +82,7 @@ void free_wp(word_t N)
 
 bool wp_pause()
 {
-  //printf("%s\n", head->args);
+  printf("%s\n", head->args);
   WP *now = head;
   while (now != NULL) {
     bool success = 1;
