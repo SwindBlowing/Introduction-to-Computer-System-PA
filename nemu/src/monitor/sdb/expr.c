@@ -212,7 +212,7 @@ static word_t eval(int p, int q, bool *legal) {
      */
     if (tokens[p].type == TK_REG) {
       word_t N = isa_reg_str2val(tokens[p].str, legal);
-      Log("Now here\n");
+      printf("Now here\n");
       if (!*legal) return 1;
       return N;
     }
