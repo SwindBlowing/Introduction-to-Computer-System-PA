@@ -59,7 +59,7 @@ WP* new_wp()
       head = &wp_pool[WP_num - 1];
     }
     wp_pool[WP_num - 1].args = "1 + 2";
-    printf("%s\n", head->args);
+    printf("arrived!");
     return &wp_pool[WP_num - 1];
   }
   else {
