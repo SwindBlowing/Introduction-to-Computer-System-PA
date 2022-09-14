@@ -58,6 +58,8 @@ WP* new_wp()
       wp_pool[WP_num - 1].next = head;
       head = &wp_pool[WP_num - 1];
     }
+    wp_pool[WP_num - 1].args = "1 + 2";
+    printf("%s\n", head->args);
     return &wp_pool[WP_num - 1];
   }
   else {
@@ -96,11 +98,11 @@ void free_wp(word_t N)
 
 bool wp_pause()
 {
-  printf("%s\n", head->args);
+  //printf("%s\n", head->args);
   WP *now = head;
   while (now != NULL) {
     bool success = 1;
-    printf("%s\n", now->args);
+    //printf("%s\n", now->args);
     word_t now_val = expr(now->args, &success);
     if (!success) {
       if (now->Divided0) ;
