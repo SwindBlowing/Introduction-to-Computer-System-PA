@@ -167,11 +167,11 @@ static int cmd_x(char *args)
 {
   bool success = 1;
   char *arg1 = strtok(NULL, " ");
-  //char *arg2 = strtok(NULL, " ");
+  char *arg2 = arg1 + strlen(arg1) + 1;
   uint32_t N = 0;
   sscanf(arg1, "%u", &N);
   paddr_t EXPR = 0;
-  EXPR = expr(args, &success);
+  EXPR = expr(arg2, &success);
   if (!success) {
     printf("Bad expression '%s'\n", args);
     return 0;
