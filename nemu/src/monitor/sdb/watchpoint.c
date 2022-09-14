@@ -105,7 +105,7 @@ bool wp_pause()
       now->pre_val = now_val;
       return false;
     }
-    now++;
+    now = now->next;
   }
   return true;
 }
