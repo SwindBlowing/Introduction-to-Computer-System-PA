@@ -285,6 +285,10 @@ static word_t eval(int p, int q, bool *legal) {
 }
 
 word_t expr(char *e, bool *success) {
+  if (e == NULL) {
+    *success = false;
+    return 0;
+  }
   if (!make_token(e)) {
     *success = false;
     return 0;
