@@ -220,7 +220,7 @@ static int cmd_p(char *args)
 
 static int cmd_w(char *args)
 {
-  printf("arrived!");
+  assert(0);
   WP *now = new_wp();
   if (now != NULL) {
     printf("arrived!");
