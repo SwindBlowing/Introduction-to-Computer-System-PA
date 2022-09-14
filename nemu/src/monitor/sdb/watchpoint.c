@@ -71,6 +71,7 @@ WP* new_wp()
     }
     return now;
   }
+  printf("New watchpoint NO.%d.\n", totId);
   return NULL;
 }
 
