@@ -220,12 +220,10 @@ static int cmd_p(char *args)
 
 static int cmd_w(char *args)
 {
-  assert(0);
   WP *now = new_wp();
   if (now != NULL) {
-    printf("arrived!");
+    assert(0);
     strcpy(now->args, args);
-    printf("arrived!");
     //printf("%d\n", now->pre_val);
     bool success = 1;
     now->pre_val = expr(now->args, &success);
