@@ -240,11 +240,12 @@ static word_t eval(int p, int q, bool *legal) {
   }
   else {
     int op = find_main_calc(p, q);
+    printf("arrived!\n");
     if (!op) {
       *legal = 0;
       return 1;
     }
-    //printf("arrived!\n");
+    
     if (pty[tokens[op].type] == 2) {
       word_t val2 = eval(op + 1, q, legal);
       switch(tokens[op].type) {
@@ -289,10 +290,8 @@ word_t expr(char *e, bool *success) {
   for (int i = 0; i < nr_token; i ++) {
     if (tokens[i].type == '*' && (i == 0 || is_calc_bool(tokens[i - 1].type))) {
       tokens[i].type = TK_DEREF;
-      printf("arrived!\n");
     }
   } 
-  printf("%d\n", nr_token);
   //for (int i = 0; i < nr_token; i++)
   //  printf("%s\n", tokens[i].str);
   /* TODO: Insert codes to evaluate the expression. */
