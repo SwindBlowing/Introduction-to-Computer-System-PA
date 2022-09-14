@@ -17,11 +17,14 @@
 
 #define NR_WP 32
 
+word_t expr(char *e, bool *success);
+
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
   char *args;
   word_t pre_val;
+  bool Divided0;
   /* TODO: Add more members if necessary */
 
 } WP;
@@ -44,8 +47,10 @@ void init_wp_pool() {
 WP* new_wp()
 {
   if (free_ == NULL) {
+    if (WP_num == NR_WP) 
+      return NULL;
     WP_num++;
-    wp_pool[WP_num - 1] = (WP){++totId, NULL, NULL, 0};
+    wp_pool[WP_num - 1] = (WP){++totId, NULL, NULL, 0, 0};
     if (head == NULL) head->next = &wp_pool[WP_num - 1];
     else {
       WP *pre_head = head->next;
@@ -57,7 +62,7 @@ WP* new_wp()
   else {
     WP *now = free_->next;
     free_->next = now->next;
-    *now = (WP){++totId, NULL, NULL, 0};
+    *now = (WP){++totId, NULL, NULL, 0, 0};
     if (head == NULL) head->next = now;
     else {
       WP *pre_head = head->next;
@@ -67,6 +72,42 @@ WP* new_wp()
     return now;
   }
   return NULL;
+}
+
+void free_wp(WP *wp)
+{
+  WP *now = head;
+  while (now != NULL && now->next != wp) now = now->next;
+  if (now == NULL) {
+    printf("Free Failed!\n");
+    return ;
+  }
+  now->next = wp->next;
+  *wp = (WP){wp->NO, NULL, NULL, 0, 0};
+  if (free_ == NULL) free_->next = wp;
+  else {
+    wp->next = free_->next;
+    free_->next = wp;
+  }
+}
+
+void wp_pause()
+{
+  WP *now = head;
+  now = now->next;
+  while (now != NULL) {
+    bool success = 1;
+    word_t now_val = expr(now->args, &success);
+    if (!success) {
+      if (now->Divided0) ;
+      else {
+        now->Divided0 = 1;
+        TODO();
+      }
+    }
+    now->Divided0 = 0;
+    if (now_val != now->pre_val) TODO();
+  }
 }
 /* TODO: Implement the functionality of watchpoint */
 
