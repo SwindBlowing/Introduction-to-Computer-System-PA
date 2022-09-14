@@ -99,7 +99,6 @@ void free_wp(word_t N)
 bool wp_pause()
 {
   WP *now = head;
-  now = now->next;
   while (now != NULL) {
     bool success = 1;
     printf("%s\n", now->args);
