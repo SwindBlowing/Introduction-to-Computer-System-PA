@@ -38,7 +38,7 @@ void init_regex();
 void init_wp_pool();
 bool make_token(char *e);
 WP* new_wp();
-void free_wp(WP *wp);
+void free_wp(word_t N);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -78,9 +78,9 @@ static int cmd_x(char *args);
 
 static int cmd_p(char *args);
 
-//static int cmd_w(char *args);
+static int cmd_w(char *args);
 
-//static int cmd_d(char *args);
+static int cmd_d(char *args);
 
 static struct {
   const char *name;
@@ -94,6 +94,8 @@ static struct {
   { "info", "Print register status or watchpoint information", cmd_info},
   { "x", "Scan memory", cmd_x},
   { "p", "Calculate the expression", cmd_p},
+  { "w", "Add watchpoint", cmd_w},
+  { "d", "Delete watchpoint", cmd_d},
 
   /* TODO: Add more commands */
 
@@ -211,6 +213,37 @@ static int cmd_p(char *args)
   ans = expr(args, &success);
   if (!success) printf("Bad expression '%s'\n", args);
   else printf("%u\n", ans);
+  return 0;
+}
+
+static int cmd_w(char *args)
+{
+  bool flag = check_number(args, 258);
+  if (!flag) {
+    printf("Unknown command '%s'\n", args);
+    return 0;
+  }
+  WP *now = new_wp();
+  if (now != NULL) {
+    now->args = args;
+    bool success = 1;
+    now->pre_val = expr(args, &success);
+    if (!success) now->Divided0 = 1;
+  }
+  return 0;
+}
+
+static int cmd_d(char *args)
+{
+  bool flag = check_number(args, 258);
+  if (!flag) {
+    printf("Unknown command '%s'\n", args);
+    return 0;
+  }
+  bool success = 1;
+  word_t N = expr(args, &success);
+  if (success)
+    free_wp(N);
   return 0;
 }
 

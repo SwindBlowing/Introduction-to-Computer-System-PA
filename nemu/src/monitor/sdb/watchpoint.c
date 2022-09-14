@@ -53,43 +53,44 @@ WP* new_wp()
     }
     WP_num++;
     wp_pool[WP_num - 1] = (WP){++totId, NULL, NULL, 0, 0};
-    if (head == NULL) head->next = &wp_pool[WP_num - 1];
+    if (head == NULL) head = &wp_pool[WP_num - 1];
     else {
-      WP *pre_head = head->next;
-      head->next = &wp_pool[WP_num - 1];
-      wp_pool[WP_num - 1].next = pre_head;
+      wp_pool[WP_num - 1].next = head;
+      head = &wp_pool[WP_num - 1];
     }
     return &wp_pool[WP_num - 1];
   }
   else {
-    WP *now = free_->next;
-    free_->next = now->next;
+    WP *now = free_;
+    free_ = now->next;
     *now = (WP){++totId, NULL, NULL, 0, 0};
-    if (head == NULL) head->next = now;
+    if (head == NULL) head = now;
     else {
-      WP *pre_head = head->next;
-      head->next = now;
-      now = pre_head;
+      now->next = head;
+      head = now;
     }
     return now;
   }
   return NULL;
 }
 
-void free_wp(WP *wp)
+void free_wp(word_t N)
 {
-  WP *now = head;
-  while (now != NULL && now->next != wp) now = now->next;
+  WP *now = head, *pre = NULL;
+  while (now != NULL && now->NO != N) pre = now, now = now->next;
   if (now == NULL) {
-    printf("Free Failed!\n");
+    printf("No target point. Free Failed!\n");
     return ;
   }
-  now->next = wp->next;
-  *wp = (WP){wp->NO, NULL, NULL, 0, 0};
-  if (free_ == NULL) free_->next = wp;
+  if (now == head) 
+    head = now->next;
+  else 
+    pre->next = now->next;
+  *now = (WP){now->NO, NULL, NULL, 0, 0};
+  if (free_ == NULL) free_ = now;
   else {
-    wp->next = free_->next;
-    free_->next = wp;
+    now->next = free_;
+    free_ = now;
   }
 }
 
