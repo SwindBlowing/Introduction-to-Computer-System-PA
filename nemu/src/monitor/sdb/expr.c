@@ -19,6 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include "memory/paddr.h"
 
 bool check_number(char *arg);
 word_t isa_reg_str2val(const char *s, bool *success);
@@ -27,7 +28,7 @@ enum {
   TK_NOTYPE = 256, TK_EQ = 257,
   TK_DNUM = 258, TK_HNUM = 259, 
   TK_NEQ = 260, TK_AND = 261, 
-  TK_REG = 262, TK_PDF = 263, 
+  TK_REG = 262, TK_DEREF = 263, 
 
   /* TODO: Add more token types */
 
@@ -65,7 +66,7 @@ static word_t pty[512] = {};
 
 static void init_pty()
 {
-
+  pty[TK_DEREF] = 2;
   pty['*'] = pty['/'] = 4; 
   pty['+'] = pty['-'] = 5;
   pty[TK_EQ] = pty[TK_NEQ] = 8;
@@ -181,7 +182,7 @@ static bool check_parentheses(int p, int q, bool *legal)
 
 static bool is_calc_bool(word_t type)
 {
-  return type == '+' || type == '-' || type == '*' || type == '/' || type == TK_AND || type == TK_EQ || type == TK_NEQ;
+  return type == '+' || type == '-' || type == '*' || type == '/' || type == TK_AND || type == TK_EQ || type == TK_NEQ || type == TK_DEREF;
 }
 
 static int find_main_calc(int p, int q)
@@ -193,7 +194,9 @@ static int find_main_calc(int p, int q)
     else if (tokens[i].type == ')') lef--;
     else if (is_calc_bool(tokens[i].type)) {
       if (lef) continue;
-      else if (!pos || pty[tokens[i].type] >= pty[tokens[pos].type]) pos = i;
+      else if (!pos) pos = i;
+      else if (pty[tokens[i].type] > pty[tokens[pos].type]) pos = i;
+      else if (pty[tokens[i].type] != 2 && pty[tokens[i].type] == pty[tokens[pos].type]) pos = i;
     }
   return pos;
 }
@@ -241,24 +244,36 @@ static word_t eval(int p, int q, bool *legal) {
       *legal = 0;
       return 1;
     }
-    word_t val1 = eval(p, op - 1, legal);
-    word_t val2 = eval(op + 1, q, legal);
+    if (pty[tokens[op].type] == 2) {
+      word_t val2 = eval(op + 1, q, legal);
+      switch(tokens[op].type) {
+        case TK_DEREF:
+            word_t N = 0;
+            for (int i = 3; i >= 0; i--) 
+              N = N * 256 + paddr_read(val2 + i, 1);
+        default: *legal = 0; return 1;
+      }
+    }
+    else {
+      word_t val1 = eval(p, op - 1, legal);
+      word_t val2 = eval(op + 1, q, legal);
 
-    switch (tokens[op].type) {
-      case '+': return val1 + val2;
-      case '-': return val1 - val2;
-      case '*': return val1 * val2;
-      case '/': 
-        if (val2 == 0) {
-          printf("Divide 0 Error!\n");
-          *legal = 0;
-          return 1;
-        }
-        else return val1 / val2;
-      case TK_AND: return val1 && val2;
-      case TK_EQ: return val1 == val2;
-      case TK_NEQ: return val1 != val2;
-      default: *legal = 0; return 1;
+      switch (tokens[op].type) {
+        case '+': return val1 + val2;
+        case '-': return val1 - val2;
+        case '*': return val1 * val2;
+        case '/': 
+          if (val2 == 0) {
+            printf("Divide 0 Error!\n");
+            *legal = 0;
+            return 1;
+          }
+          else return val1 / val2;
+        case TK_AND: return val1 && val2;
+        case TK_EQ: return val1 == val2;
+        case TK_NEQ: return val1 != val2;
+        default: *legal = 0; return 1;
+      }
     }
   }
   return 1;
@@ -269,6 +284,11 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  for (int i = 0; i < nr_token; i ++) {
+    if (tokens[i].type == '*' && (i == 0 || is_calc_bool(tokens[i - 1].type))) {
+      tokens[i].type = TK_DEREF;
+    }
+  } 
   //for (int i = 0; i < nr_token; i++)
   //  printf("%s\n", tokens[i].str);
   /* TODO: Insert codes to evaluate the expression. */
