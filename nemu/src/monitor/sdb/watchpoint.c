@@ -26,6 +26,7 @@ typedef struct watchpoint {
 
 } WP;
 
+int WP_num = 0, totId = 0;
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
 
@@ -40,5 +41,32 @@ void init_wp_pool() {
   free_ = wp_pool;
 }
 
+WP* new_wp()
+{
+  if (free_ == NULL) {
+    WP_num++;
+    wp_pool[WP_num - 1] = (WP){++totId, NULL, NULL, 0};
+    if (head == NULL) head->next = &wp_pool[WP_num - 1];
+    else {
+      WP *pre_head = head->next;
+      head->next = &wp_pool[WP_num - 1];
+      wp_pool[WP_num - 1].next = pre_head;
+    }
+    return &wp_pool[WP_num - 1];
+  }
+  else {
+    WP *now = free_->next;
+    free_->next = now->next;
+    *now = (WP){++totId, NULL, NULL, 0};
+    if (head == NULL) head->next = now;
+    else {
+      WP *pre_head = head->next;
+      head->next = now;
+      now = pre_head;
+    }
+    return now;
+  }
+  return NULL;
+}
 /* TODO: Implement the functionality of watchpoint */
 
