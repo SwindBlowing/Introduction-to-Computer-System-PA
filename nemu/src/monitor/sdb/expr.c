@@ -187,14 +187,14 @@ static bool is_calc_bool(word_t type)
 
 static int find_main_calc(int p, int q)
 {
-  int pos = 0;
+  int pos = -1;
   int lef = 0;
   for (int i = p; i <= q; i++)
     if (tokens[i].type == '(') lef++;
     else if (tokens[i].type == ')') lef--;
     else if (is_calc_bool(tokens[i].type)) {
       if (lef) continue;
-      else if (!pos) pos = i;
+      else if (pos == -1) pos = i;
       else if (pty[tokens[i].type] > pty[tokens[pos].type]) pos = i;
       else if (pty[tokens[i].type] != 2 && pty[tokens[i].type] == pty[tokens[pos].type]) pos = i;
     }
@@ -241,7 +241,7 @@ static word_t eval(int p, int q, bool *legal) {
   else {
     int op = find_main_calc(p, q);
     printf("arrived!\n");
-    if (!op) {
+    if (op == -1) {
       *legal = 0;
       return 1;
     }
