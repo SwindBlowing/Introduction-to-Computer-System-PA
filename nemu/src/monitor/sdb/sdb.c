@@ -221,8 +221,9 @@ static int cmd_w(char *args)
   WP *now = new_wp();
   //assert(now != NULL);
   if (now != NULL) {
+    printf("Added new watchpoint NO.%d.\n", now->NO);
     now->args = args;
-    printf("%s\n", now->args);
+    //printf("%s\n", now->args);
     bool success = 1;
     now->pre_val = expr(args, &success);
     if (!success) now->Divided0 = 1;

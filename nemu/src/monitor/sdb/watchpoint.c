@@ -58,7 +58,6 @@ WP* new_wp()
       wp_pool[WP_num - 1].next = head;
       head = &wp_pool[WP_num - 1];
     }
-    printf("Added new watchpoint NO.%d.\n", totId);
     return &wp_pool[WP_num - 1];
   }
   else {
@@ -70,7 +69,6 @@ WP* new_wp()
       now->next = head;
       head = now;
     }
-    printf("Added new watchpoint NO.%d.\n", totId);
     return now;
   }
   return NULL;
@@ -98,6 +96,7 @@ void free_wp(word_t N)
 
 bool wp_pause()
 {
+  printf("%s\n", head->args);
   WP *now = head;
   while (now != NULL) {
     bool success = 1;
