@@ -136,6 +136,10 @@ static int cmd_si(char *args) {
 
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
+  if (arg == NULL || strlen(arg) > 1) {
+    printf("Unknown command '%s'\n", arg);
+    return 0;
+  }
   switch (*arg)
   {
     case 'f':
