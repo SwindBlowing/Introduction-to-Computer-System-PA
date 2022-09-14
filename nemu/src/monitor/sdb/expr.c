@@ -244,8 +244,8 @@ static word_t eval(int p, int q, bool *legal) {
       *legal = 0;
       return 1;
     }
+    printf("arrived!\n");
     if (pty[tokens[op].type] == 2) {
-      printf("arrived!\n");
       word_t val2 = eval(op + 1, q, legal);
       switch(tokens[op].type) {
         case TK_DEREF:
@@ -255,6 +255,7 @@ static word_t eval(int p, int q, bool *legal) {
         default: *legal = 0; return 1;
       }
     }
+
     else {
       word_t val1 = eval(p, op - 1, legal);
       word_t val2 = eval(op + 1, q, legal);
