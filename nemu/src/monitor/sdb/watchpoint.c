@@ -54,11 +54,10 @@ WP* new_wp()
     WP *now = free_;
     free_ = now->next;
     *now = (WP){++totId, NULL, NULL, 0, 0};
-    if (head == NULL) head = now;
-    else {
-      now->next = head;
-      head = now;
-    }
+    now->next = head;
+    head = now;
+    now->args = "1+1";
+    printf("%s\n", head->args);
     return now;
   }
   return NULL;
@@ -77,11 +76,8 @@ void free_wp(word_t N)
   else 
     pre->next = now->next;
   *now = (WP){now->NO, NULL, NULL, 0, 0};
-  if (free_ == NULL) free_ = now;
-  else {
-    now->next = free_;
-    free_ = now;
-  }
+  now->next = free_;
+  free_ = now;
 }
 
 bool wp_pause()
