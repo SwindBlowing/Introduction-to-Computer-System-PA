@@ -244,7 +244,7 @@ static word_t eval(int p, int q, bool *legal) {
       *legal = 0;
       return 1;
     }
-    printf("arrived!\n");
+    //printf("arrived!\n");
     if (pty[tokens[op].type] == 2) {
       word_t val2 = eval(op + 1, q, legal);
       switch(tokens[op].type) {
@@ -291,6 +291,7 @@ word_t expr(char *e, bool *success) {
       tokens[i].type = TK_DEREF;
     }
   } 
+  printf("%d\n", nr_token);
   //for (int i = 0; i < nr_token; i++)
   //  printf("%s\n", tokens[i].str);
   /* TODO: Insert codes to evaluate the expression. */
