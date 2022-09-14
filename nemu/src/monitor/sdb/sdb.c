@@ -39,6 +39,7 @@ void init_wp_pool();
 bool make_token(char *e);
 WP* new_wp();
 void free_wp(word_t N);
+bool wp_pause();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -226,6 +227,7 @@ static int cmd_w(char *args)
     now->pre_val = expr(now->args, &success);
     //printf("%s=%d\n", now->args, now->pre_val);
     printf("%s\n", now->args);
+    assert(wp_pause());
     if (!success) {
       //now->Divided0 = 1;
       free_wp(now->NO);
