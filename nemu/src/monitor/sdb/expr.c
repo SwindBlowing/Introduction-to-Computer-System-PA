@@ -289,6 +289,7 @@ word_t expr(char *e, bool *success) {
   for (int i = 0; i < nr_token; i ++) {
     if (tokens[i].type == '*' && (i == 0 || is_calc_bool(tokens[i - 1].type))) {
       tokens[i].type = TK_DEREF;
+      printf("arrived!\n");
     }
   } 
   printf("%d\n", nr_token);
