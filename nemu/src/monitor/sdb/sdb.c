@@ -19,20 +19,27 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include "memory/paddr.h"
-#include "watchpoint.c"
 
 static int is_batch_mode = false;
 
 word_t expr(char *e, bool *success);
 
+typedef struct watchpoint {
+  int NO;
+  struct watchpoint *next;
+  char *args;
+  word_t pre_val;
+  //bool Divided0;
+  /* TODO: Add more members if necessary */
 
+} WP;
 
 void init_regex();
 void init_wp_pool();
 bool make_token(char *e);
-//WP* new_wp();
-//void free_wp(word_t N);
-//bool wp_pause();
+WP* new_wp();
+void free_wp(word_t N);
+bool wp_pause();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
