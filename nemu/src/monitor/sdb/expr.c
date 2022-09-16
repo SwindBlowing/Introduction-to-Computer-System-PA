@@ -186,11 +186,6 @@ static bool is_calc_bool(word_t type)
   return type == '+' || type == '-' || type == '*' || type == '/' || type == TK_AND || type == TK_EQ || type == TK_NEQ || type == TK_DEREF || type == TK_NGT;
 }
 
-static bool is_parentheses(word_t type)
-{
-  return type == '(' || type == ')';
-}
-
 static int find_main_calc(int p, int q)
 {
   int pos = -1;
@@ -258,6 +253,7 @@ static word_t eval(int p, int q, bool *legal) {
       word_t val2 = eval(op + 1, q, legal);
       switch(tokens[op].type) {
         case TK_DEREF:
+          assert(0);
           for (int i = 3; i >= 0; i--) 
             N = N * 256 + paddr_read(val2 + i, 1);
           return N;
@@ -301,14 +297,13 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   for (int i = 0; i < nr_token; i ++) {
-    if (tokens[i].type == '*' && (i == 0 || is_calc_bool(tokens[i - 1].type) || is_parentheses(tokens[i - 1].type))) {
+    if (tokens[i].type == '*' && (i == 0 || is_calc_bool(tokens[i - 1].type) || tokens[i - 1].type == '(')) {
       tokens[i].type = TK_DEREF;
     }
-    if (tokens[i].type == '-' && (i == 0 || is_calc_bool(tokens[i - 1].type) || is_parentheses(tokens[i - 1].type))) {
+    if (tokens[i].type == '-' && (i == 0 || is_calc_bool(tokens[i - 1].type) || tokens[i - 1].type == '(')) {
       tokens[i].type = TK_NGT;
     }
   } 
-  assert(0);
   //printf("%d\n", nr_token);
   //for (int i = 0; i < nr_token; i++)
   //  printf("%s\n", tokens[i].str);
