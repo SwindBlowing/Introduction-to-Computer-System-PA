@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
   for (int i = 1; i <= 500; i++) {
     char arg[] = {};
     bool p = fscanf(fp, "%u %s", &nowu, arg);
-    //printf("%s \n", arg);
+    printf("%s \n", arg);
     p = 1;
     assert(p);
     bool flag = 1;
