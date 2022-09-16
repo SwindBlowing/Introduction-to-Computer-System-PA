@@ -29,6 +29,7 @@ enum {
   TK_DNUM = 258, TK_HNUM = 259, 
   TK_NEQ = 260, TK_AND = 261, 
   TK_REG = 262, TK_DEREF = 263, 
+  TK_NGT = 264,
 
   /* TODO: Add more token types */
 
@@ -66,7 +67,7 @@ static word_t pty[512] = {};
 
 static void init_pty()
 {
-  pty[TK_DEREF] = 2;
+  pty[TK_DEREF] = pty[TK_NGT] = 2;
   pty['*'] = pty['/'] = 4; 
   pty['+'] = pty['-'] = 5;
   pty[TK_EQ] = pty[TK_NEQ] = 8;
@@ -182,7 +183,7 @@ static bool check_parentheses(int p, int q, bool *legal)
 
 static bool is_calc_bool(word_t type)
 {
-  return type == '+' || type == '-' || type == '*' || type == '/' || type == TK_AND || type == TK_EQ || type == TK_NEQ || type == TK_DEREF;
+  return type == '+' || type == '-' || type == '*' || type == '/' || type == TK_AND || type == TK_EQ || type == TK_NEQ || type == TK_DEREF || type == TK_NGT;
 }
 
 static int find_main_calc(int p, int q)
@@ -252,9 +253,10 @@ static word_t eval(int p, int q, bool *legal) {
       word_t val2 = eval(op + 1, q, legal);
       switch(tokens[op].type) {
         case TK_DEREF:
-            for (int i = 3; i >= 0; i--) 
-              N = N * 256 + paddr_read(val2 + i, 1);
-            return N;
+          for (int i = 3; i >= 0; i--) 
+            N = N * 256 + paddr_read(val2 + i, 1);
+          return N;
+        case TK_NGT: return (word_t)(-val2);
         default: *legal = 0; return 1;
       }
     }
@@ -296,6 +298,9 @@ word_t expr(char *e, bool *success) {
   for (int i = 0; i < nr_token; i ++) {
     if (tokens[i].type == '*' && (i == 0 || is_calc_bool(tokens[i - 1].type))) {
       tokens[i].type = TK_DEREF;
+    }
+    if (tokens[i].type == '-' && (i == 0 || is_calc_bool(tokens[i - 1].type))) {
+      tokens[i].type = TK_NGT;
     }
   } 
   //printf("%d\n", nr_token);
