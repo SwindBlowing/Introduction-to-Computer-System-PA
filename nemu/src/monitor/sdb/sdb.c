@@ -174,7 +174,7 @@ static int cmd_info(char *args) {
   }
   switch (*arg)
   {
-    case 'f':
+    case 'r':
       isa_reg_display();
       break;
     case 'w':
