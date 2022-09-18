@@ -108,6 +108,7 @@ static struct {
 
 bool check_number(char *arg, int type)
 {
+  if (type != 258 && type != 259) return false;
   char *now = arg;
   if (now == NULL) return 0;
   if (type == 258) {
