@@ -42,6 +42,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
   if (!wp_pause()) {
     //printf("arrived!");
+    //set_nemu_state(NEMU_STOP, cpu.pc, )
     nemu_state.state = NEMU_STOP;
   }
     
