@@ -258,7 +258,7 @@ static word_t eval(int p, int q, bool *legal) {
       word_t val2 = eval(op + 1, q, legal);
       switch(tokens[op].type) {
         case TK_DEREF:
-          assert(0);
+          //assert(0);
           for (int i = 3; i >= 0; i--) 
             N = N * 256 + paddr_read(val2 + i, 1);
           return N;
