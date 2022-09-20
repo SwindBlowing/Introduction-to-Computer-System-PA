@@ -20,7 +20,6 @@ image:
 
 run: image
 	$(IMAGE)
-    c
 
 gdb: image
 	gdb -ex "handle SIGUSR1 SIGUSR2 SIGSEGV noprint nostop" $(IMAGE)
