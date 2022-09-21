@@ -26,12 +26,12 @@ int sprintf(char *out, const char *fmt, ...) {
       fmt++;
       switch(*fmt) {
         case 's' :
-          assert(0);
           s = va_arg(ap, char *);
           strcat(out, s);
           len = strlen(out);
           break;
         case 'd' :
+          assert(0);
           d = va_arg(ap, int);
           ld = d;
           lf = 1;
