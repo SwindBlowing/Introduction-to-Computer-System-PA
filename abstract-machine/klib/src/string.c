@@ -52,27 +52,78 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
-  panic("Not implemented");
+  //panic("Not implemented");
+  size_t len = 0;
+  while (*(s1 + len) != '\0' && *(s2 + len) != '\0' && *(s1 + len) == *(s2 + len))
+    len++;
+  if (*(s1 + len) == '\0' && *(s2 + len) == '\0') return 0;
+  else if (*(s1 + len) == '\0') return -1;
+  else return 1;
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
-  panic("Not implemented");
+  //panic("Not implemented");
+  size_t len = 0;
+  while (len < n && *(s1 + len) != '\0' && *(s2 + len) != '\0' && *(s1 + len) == *(s2 + len))
+    len++;
+  if (len == n) return 0;
+  else if (*(s1 + len) == '\0' && *(s2 + len) == '\0') return 0;
+  else if (*(s1 + len) == '\0') return -1;
+  else return 1;
 }
 
 void *memset(void *s, int c, size_t n) {
-  panic("Not implemented");
+  //panic("Not implemented");
+  size_t len = 0;
+  while (len < n) {
+    *((char *)s + len) = c;
+    len++;
+  }
+  return s;
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  panic("Not implemented");
+  //panic("Not implemented");
+  size_t len = 0;
+  if (dst < src) {
+    while (len < n) {
+      *((char *)dst + len) = *((char *)src + len);
+      len++;
+    }
+  }
+  else {
+    len = n - 1;
+    while (len >= 0) {
+      *((char *)dst + len) = *((char *)src + len);
+      len--;
+    }
+  }
+  return dst;
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
-  panic("Not implemented");
+  //panic("Not implemented");
+  size_t len = 0;
+  while (len < n) {
+    *((char *)out + len) = *((char *)in + len);
+    len++;
+  }
+  return out;
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
   panic("Not implemented");
+  size_t len = 0;
+  while (len < n && *((unsigned char *)s1 + len) != '\0' &&
+     *((unsigned char *)s2 + len) != '\0' && 
+     *((unsigned char *)s1 + len) == *((unsigned char *)s2 + len))
+    len++;
+  if (len == n) return 0;
+  else if (*((unsigned char *)s1 + len) == '\0' && 
+    *((unsigned char *)s2 + len) == '\0') 
+    return 0;
+  else if (*((unsigned char *)s1 + len) == '\0') return -1;
+  else return 1;
 }
 
 #endif
