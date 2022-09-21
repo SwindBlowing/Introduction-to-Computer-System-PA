@@ -24,6 +24,7 @@ int sprintf(char *out, const char *fmt, ...) {
   while (*fmt != '\0') {
     if (*fmt == '%') {
       fmt++;
+      assert(*fmt != '\0');
       switch(*fmt) {
         case 's' :
           s = va_arg(ap, char *);
@@ -31,7 +32,6 @@ int sprintf(char *out, const char *fmt, ...) {
           len = strlen(out);
           break;
         case 'd' :
-          assert(0);
           d = va_arg(ap, int);
           ld = d;
           lf = 1;
