@@ -24,14 +24,28 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
+#define IRINGBUF_NUM 20
+
+const bool iringbuf = 1;
+static char ins[IRINGBUF_NUM][100];
+static int nowcnt = 0;
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
+
 void device_update();
 bool wp_pause();
+
+void iringbufPrint()
+{
+  if (iringbuf) {
+    for (int i = 0; i < IRINGBUF_NUM; i++)
+      puts(ins[i]);
+  }
+}
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
@@ -40,6 +54,10 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
+  if (iringbuf) {
+    strcpy(ins[nowcnt], _this->logbuf);
+    nowcnt = (nowcnt + 1) % IRINGBUF_NUM;
+  }
   if (!wp_pause()) {
     //printf("arrived!");
     //set_nemu_state(NEMU_STOP, cpu.pc, )
