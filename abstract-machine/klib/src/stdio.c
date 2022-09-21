@@ -24,12 +24,11 @@ int sprintf(char *out, const char *fmt, ...) {
   while (*fmt != '\0') {
     if (*fmt == '%') {
       fmt++;
-      //assert(*fmt != '\0');
       switch(*fmt) {
         case 's' :
           s = va_arg(ap, char *);
-          strcat(out, s);
-          len = strlen(out);
+          memcpy(out + len, s, strlen(s));
+          len += strlen(s);
           break;
         case 'd' :
           d = va_arg(ap, int);
