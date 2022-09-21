@@ -14,7 +14,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 }
 
 int sprintf(char *out, const char *fmt, ...) {
-  assert(0);
   //panic("Not implemented");
   va_list ap;
   int len = 0;
@@ -27,6 +26,7 @@ int sprintf(char *out, const char *fmt, ...) {
       fmt++;
       switch(*fmt) {
         case 's' :
+          assert(0);
           s = va_arg(ap, char *);
           strcat(out, s);
           len = strlen(out);
