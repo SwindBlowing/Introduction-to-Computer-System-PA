@@ -112,7 +112,7 @@ void *memcpy(void *out, const void *in, size_t n) {
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
-  panic("Not implemented");
+  //panic("Not implemented");
   size_t len = 0;
   while (len < n && *((unsigned char *)s1 + len) != '\0' &&
      *((unsigned char *)s2 + len) != '\0' && 
