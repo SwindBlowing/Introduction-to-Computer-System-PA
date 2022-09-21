@@ -58,7 +58,8 @@ int strcmp(const char *s1, const char *s2) {
     len++;
   if (*(s1 + len) == '\0' && *(s2 + len) == '\0') return 0;
   else if (*(s1 + len) == '\0') return -1;
-  else return 1;
+  else if (*(s2 + len) == '\0') return 1;
+  else return *(s1 + len) > *(s2 + len) ? 1 : -1;
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
@@ -69,7 +70,8 @@ int strncmp(const char *s1, const char *s2, size_t n) {
   if (len == n) return 0;
   else if (*(s1 + len) == '\0' && *(s2 + len) == '\0') return 0;
   else if (*(s1 + len) == '\0') return -1;
-  else return 1;
+  else if (*(s2 + len) == '\0') return 1;
+  else return *(s1 + len) > *(s2 + len) ? 1 : -1;
 }
 
 void *memset(void *s, int c, size_t n) {
@@ -123,7 +125,8 @@ int memcmp(const void *s1, const void *s2, size_t n) {
     *((unsigned char *)s2 + len) == '\0') 
     return 0;
   else if (*((unsigned char *)s1 + len) == '\0') return -1;
-  else return 1;
+  else if (*((unsigned char *)s2 + len) == '\0') return 1;
+  else return *((unsigned char *)s1 + len) > *((unsigned char *)s2 + len) ? 1 : -1;
 }
 
 #endif
