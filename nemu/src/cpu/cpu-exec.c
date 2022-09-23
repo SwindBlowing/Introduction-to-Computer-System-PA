@@ -42,7 +42,7 @@ bool wp_pause();
 void iringbufPrint()
 {
   if (iringbuf) {
-    printf("\nINSTRUCTION MESSAGES:\n");
+    printf("\nINSTRUCTION ERROR MESSAGES:\n");
     for (int i = 0; i < IRINGBUF_NUM; i++) {
       if (i != (nowcnt - 1 + IRINGBUF_NUM) % IRINGBUF_NUM) printf("      ");
       else printf("--->  ");
