@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include <isa.h>
+#include <elf.h>
 #include <memory/paddr.h>
 
 void init_rand();
@@ -95,6 +96,8 @@ static int parse_args(int argc, char *argv[]) {
         exit(0);
     }
   }
+
+  
   return 0;
 }
 
