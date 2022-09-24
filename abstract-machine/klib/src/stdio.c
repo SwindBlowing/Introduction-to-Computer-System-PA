@@ -48,6 +48,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
 
 int printf(const char *fmt, ...) {
   //panic("Not implemented");
+  putch('f'); putch('u'); putch('c'); putch('k');
   va_list ap;
   int len = 0;
   va_start(ap, fmt);
