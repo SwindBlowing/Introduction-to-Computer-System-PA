@@ -19,8 +19,7 @@
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   bool flag = true;
-  printf("%u %u %u\n", cpu.pc, pc, ref_r->pc);
-  if (cpu.pc != pc) flag = false;
+  if (cpu.pc != ref_r->pc) flag = false;
 
   return flag;
 }
