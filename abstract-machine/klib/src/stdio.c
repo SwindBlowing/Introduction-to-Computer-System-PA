@@ -47,6 +47,12 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
         default : *isError = 1; return ;
       }
     }
+    else if (*fmt == '/' && *(fmt + 1) == 'n') {
+      fmt++;
+      if (!shouldPut) *(out + *len) = '\n';
+      else putch('\n');
+      len += 1;
+    }
     else {
       if (!shouldPut) *(out + *len) = *fmt;
       else putch(*fmt);
@@ -64,20 +70,6 @@ int printf(const char *fmt, ...) {
   va_start(ap, fmt);
   bool isError = 0;
   deal_with_args("", fmt, &len, &ap, &isError, PUT);
-  /*while (*fmt != '\0') {
-    if (*fmt == '%') {
-      fmt++;
-      bool isError = 0;
-      deal_with_args("", fmt, &len, &ap, &isError, PUT);
-      if (isError) return -1;
-    }
-    else {
-      putch(*fmt);
-      len++;
-    }
-    fmt++;
-  }*/
-
   va_end(ap);
   if (isError) return -1;
   return len;
@@ -94,44 +86,6 @@ int sprintf(char *out, const char *fmt, ...) {
   va_start(ap, fmt);
   bool isError = 0;
   deal_with_args(out, fmt, &len, &ap, &isError, NOTPUT);
-  /*while (*fmt != '\0') {
-    if (*fmt == '%') {
-      fmt++;
-      bool isError = 0;
-      deal_with_args(out, fmt, &len, &ap, &isError, NOTPUT);
-      if (isError) return -1;
-      switch(*fmt) {
-        case 's' :
-          s = va_arg(ap, char *);
-          memcpy(out + len, s, strlen(s));
-          len += strlen(s);
-          break;
-        case 'd' :
-          d = va_arg(ap, int);
-          ld = d;
-          lf = 1;
-          if (ld < 0) {
-            ld *= -1;
-            *(out + len) = '-';
-            len++;
-          }
-          while (lf * 10 <= ld) lf *= 10;
-          while (lf) {
-            *(out + len) = '0' + ld / lf;
-            len++;
-            ld %= lf;
-            lf /= 10;
-          }
-          break;
-        default : return -1;
-      }
-    }
-    else {
-      *(out + len) = *fmt;
-      len++;
-    }
-    fmt++;
-  }*/
   va_end(ap);
   *(out + len) = '\0';
   if (isError) return -1;
