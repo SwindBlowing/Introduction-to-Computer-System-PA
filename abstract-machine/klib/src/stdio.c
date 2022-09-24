@@ -5,7 +5,9 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isError)
+const int PUT = 1, NOTPUT = 0;
+
+void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isError, bool shouldPut)
 {
   int d = 0;
   long long ld = 0, lf = 1;
@@ -13,7 +15,11 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
   switch(*fmt) {
     case 's' :
       s = va_arg(*ap, char *);
-      memcpy(out + *len, s, strlen(s));
+      if (!shouldPut) memcpy(out + *len, s, strlen(s));
+      else {
+        for (int i = 0; i < strlen(s); i++)
+          putch(*(s + i));
+      }
       *len += strlen(s);
       break;
     case 'd' :
@@ -22,12 +28,14 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
       lf = 1;
       if (ld < 0) {
         ld *= -1;
-        *(out + *len) = '-';
+        if (!shouldPut) *(out + *len) = '-';
+        else putch('-');
         *len += 1;
       }
       while (lf * 10 <= ld) lf *= 10;
       while (lf) {
-        *(out + *len) = '0' + ld / lf;
+        if (!shouldPut) *(out + *len) = '0' + ld / lf;
+        else putch('0' + ld / lf);
         *len += 1;
         ld %= lf;
         lf /= 10;
@@ -39,7 +47,25 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
 }
 
 int printf(const char *fmt, ...) {
-  panic("Not implemented");
+  //panic("Not implemented");
+  va_list ap;
+  int len = 0;
+  va_start(ap, fmt);
+  while (*fmt != '\0') {
+    if (*fmt == '%') {
+      fmt++;
+      bool isError = 0;
+      deal_with_args("", fmt, &len, &ap, &isError, PUT);
+      if (isError) return -1;
+    }
+    else {
+      putch(*fmt);
+      len++;
+    }
+    fmt++;
+  }
+  va_end(ap);
+  return len;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
@@ -55,7 +81,7 @@ int sprintf(char *out, const char *fmt, ...) {
     if (*fmt == '%') {
       fmt++;
       bool isError = 0;
-      deal_with_args(out, fmt, &len, &ap, &isError);
+      deal_with_args(out, fmt, &len, &ap, &isError, NOTPUT);
       if (isError) return -1;
       /*switch(*fmt) {
         case 's' :
