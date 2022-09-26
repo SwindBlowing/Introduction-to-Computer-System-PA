@@ -10,7 +10,9 @@ const int PUT = 1, NOTPUT = 0;
 void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isError, bool shouldPut)
 {
   int d = 0, numLen = 0;
+  unsigned ud = 0;
   long long ld = 0, lf = 1;
+  unsigned long long lud = 0, luf = 1;
   char *s = NULL;
   bool zeroCplt = 0, zeroCpltNum = 0;
   while (*fmt != '\0') {
@@ -61,6 +63,27 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
             *len += 1;
             ld %= lf;
             lf /= 10;
+          }
+          break;
+        case 'u' :
+          ud = va_arg(*ap, unsigned);
+          lud = ud;
+          luf = 1; numLen = 0;
+          while (luf * 10 <= lud) luf *= 10, numLen++;
+          if (zeroCplt) {
+            zeroCplt = 0;
+            for (int i = 1; i <= zeroCpltNum - numLen; i++) {
+              if (!shouldPut) *(out + *len) = '0';
+              else putch('0');
+              *len += 1;
+            }
+          }
+          while (lf) {
+            if (!shouldPut) *(out + *len) = '0' + lud / luf;
+            else putch('0' + lud / luf);
+            *len += 1;
+            lud %= luf;
+            luf /= 10;
           }
           break;
         default : *isError = 1; return ;
