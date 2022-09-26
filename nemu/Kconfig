@@ -124,6 +124,9 @@ menu "Testing and Debugging"
 config WATCHPOINT
   bool "Enable watchpoint"
   default y
+config IRINGBUF
+  bool "Enable iringbuf"
+  default y
 config TRACE
   bool "Enable tracer"
   default y

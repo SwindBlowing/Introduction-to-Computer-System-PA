@@ -26,7 +26,6 @@
 #define MAX_INST_TO_PRINT 10
 #define IRINGBUF_NUM 20
 
-const bool iringbuf = 1;
 static char ins[IRINGBUF_NUM][100];
 static int nowcnt = 0;
 
@@ -41,13 +40,12 @@ bool wp_pause();
 
 void iringbufPrint()
 {
-  if (iringbuf) {
-    printf("\nINSTRUCTION ERROR MESSAGES:\n");
-    for (int i = 0; i < IRINGBUF_NUM; i++) {
-      if (i != (nowcnt - 1 + IRINGBUF_NUM) % IRINGBUF_NUM) printf("      ");
-      else printf("--->  ");
-      puts(ins[i]);
-    }
+  IFNDEF(CONFIG_IRINGBUF, return);
+  printf("\nINSTRUCTION ERROR MESSAGES:\n");
+  for (int i = 0; i < IRINGBUF_NUM; i++) {
+    if (i != (nowcnt - 1 + IRINGBUF_NUM) % IRINGBUF_NUM) printf("      ");
+    else printf("--->  ");
+    puts(ins[i]);
   }
 }
 
@@ -58,10 +56,10 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
-  if (iringbuf) {
+  IFDEF(CONFIG_IRINGBUF, {
     strcpy(ins[nowcnt], _this->logbuf);
     nowcnt = (nowcnt + 1) % IRINGBUF_NUM;
-  }
+  });
   if (!wp_pause()) {
     //printf("arrived!");
     //set_nemu_state(NEMU_STOP, cpu.pc, )
