@@ -9,12 +9,22 @@ const int PUT = 1, NOTPUT = 0;
 
 void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isError, bool shouldPut)
 {
-  int d = 0;
+  int d = 0, numLen = 0;
   long long ld = 0, lf = 1;
   char *s = NULL;
+  bool zeroCplt = 0, zeroCpltNum = 0;
   while (*fmt != '\0') {
     if (*fmt == '%') {
       fmt++;
+      if (*fmt == '0') {
+        zeroCplt = 1;
+        zeroCpltNum = 0;
+        fmt++;
+        while (*fmt >= '0' && *fmt <= '9') {
+          zeroCpltNum = zeroCpltNum * 10 + *fmt - '0';
+          fmt++;
+        }
+      }
       switch(*fmt) {
         case 's' :
           s = va_arg(*ap, char *);
@@ -28,14 +38,23 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
         case 'd' :
           d = va_arg(*ap, int);
           ld = d;
-          lf = 1;
+          lf = 1; numLen = 0;
           if (ld < 0) {
             ld *= -1;
             if (!shouldPut) *(out + *len) = '-';
             else putch('-');
             *len += 1;
           }
-          while (lf * 10 <= ld) lf *= 10;
+          while (lf * 10 <= ld) lf *= 10, numLen++;
+          if (d < 0) numLen++;
+          if (zeroCplt) {
+            zeroCplt = 0;
+            for (int i = 1; i <= zeroCpltNum - numLen; i++) {
+              if (!shouldPut) *(out + *len) = '0';
+              else putch('0');
+              *len += 1;
+            }
+          }
           while (lf) {
             if (!shouldPut) *(out + *len) = '0' + ld / lf;
             else putch('0' + ld / lf);
