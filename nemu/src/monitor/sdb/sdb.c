@@ -223,6 +223,7 @@ static int cmd_p(char *args)
 
 static int cmd_w(char *args)
 {
+  IFNDEF(CONFIG_WATCHPOINT, printf("Unknown Command!\n"); return 0);
   WP *now = new_wp();
   if (now != NULL) {
     
@@ -246,6 +247,7 @@ static int cmd_w(char *args)
 
 static int cmd_d(char *args)
 {
+  IFNDEF(CONFIG_WATCHPOINT, printf("Unknown Command!\n"); return 0);
   bool success = 1;
   word_t N = expr(args, &success);
   if (success)
