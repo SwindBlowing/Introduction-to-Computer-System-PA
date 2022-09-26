@@ -78,7 +78,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
               *len += 1;
             }
           }
-          while (lf) {
+          while (luf) {
             if (!shouldPut) *(out + *len) = '0' + lud / luf;
             else putch('0' + lud / luf);
             *len += 1;
