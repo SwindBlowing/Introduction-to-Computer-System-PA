@@ -26,8 +26,10 @@
 #define MAX_INST_TO_PRINT 10
 #define IRINGBUF_NUM 20
 
+#ifdef CONFIG_IRINGBUF
 static char ins[IRINGBUF_NUM][100];
 static int nowcnt = 0;
+#endif
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -38,9 +40,9 @@ static bool g_print_step = false;
 void device_update();
 bool wp_pause();
 
+#ifdef CONFIG_IRINGBUF
 void iringbufPrint()
 {
-  IFNDEF(CONFIG_IRINGBUF, return);
   printf("\nINSTRUCTION ERROR MESSAGES:\n");
   for (int i = 0; i < IRINGBUF_NUM; i++) {
     if (i != (nowcnt - 1 + IRINGBUF_NUM) % IRINGBUF_NUM) printf("      ");
@@ -48,6 +50,7 @@ void iringbufPrint()
     puts(ins[i]);
   }
 }
+#endif
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
@@ -60,6 +63,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
     strcpy(ins[nowcnt], _this->logbuf);
     nowcnt = (nowcnt + 1) % IRINGBUF_NUM;
   });
+
   if (!wp_pause()) {
     //printf("arrived!");
     //set_nemu_state(NEMU_STOP, cpu.pc, )
@@ -117,7 +121,7 @@ static void statistic() {
 
 void assert_fail_msg() {
   isa_reg_display();
-  iringbufPrint();
+  IFDEF(CONFIG_IRINGBUF, iringbufPrint());
   statistic();
 }
 
@@ -150,6 +154,9 @@ void cpu_exec(uint64_t n) {
       // fall through
     case NEMU_QUIT: statistic();
   }
+
+  #ifdef CONFIG_IRINGBUF
   if (nemu_state.state == NEMU_ABORT) iringbufPrint();
-  
+  #endif
+
 }
