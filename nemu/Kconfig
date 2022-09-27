@@ -124,9 +124,7 @@ menu "Testing and Debugging"
 config WATCHPOINT
   bool "Enable watchpoint"
   default y
-config IRINGBUF
-  bool "Enable iringbuf"
-  default y
+
 config TRACE
   bool "Enable tracer"
   default y
@@ -154,6 +152,11 @@ config MTRACE
 config ITRACE
   depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
   bool "Enable instruction tracer"
+  default y
+
+config IRINGBUF
+  depends on ITRACE
+  bool "Enable iringbuf"
   default y
 
 config ITRACE_COND
