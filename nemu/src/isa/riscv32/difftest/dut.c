@@ -20,9 +20,15 @@
 const int NXPR = 32;
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
-  if (cpu.pc != ref_r->pc) return false;
+  if (cpu.pc != ref_r->pc) {
+    Log("PC Difftest Failed at CPUpc = %u, REFpc= %u", cpu.pc, ref_r->pc);
+    return false;
+  }
   for (int i = 0; i < NXPR; i++)
-    if (cpu.gpr[i] != ref_r->gpr[i]) return false;
+    if (cpu.gpr[i] != ref_r->gpr[i]) {
+      Log("CPU Difftest Failed at CPUpc = %u, REFpc= %u", cpu.pc, ref_r->pc);
+      return false;
+    }
   return true;
 }
 
