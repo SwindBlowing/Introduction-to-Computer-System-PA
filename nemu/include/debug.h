@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <utils.h>
 
-volatile static int dummy;
+volatile static int dummy = 0;
 
 #define Log(format, ...) \
     _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_BLUE) "\n", \
