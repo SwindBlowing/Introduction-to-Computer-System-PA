@@ -51,7 +51,7 @@ static int difftest_port = 1234;
 
 static void load_elf()
 {
-	char ch[99];
+	char ch[99] = {'\0'};
 	FILE *fp = fopen(elf_file, "rb");
 
 	Elf32_Ehdr ehdr;
@@ -66,7 +66,7 @@ static void load_elf()
 		p = fread(shdrs, sizeof(char *), 1, fp); p = 1; assert(p);
 		if (strcmp(ch, ".test") == 0)
 			printf("arrived!\n");
-		printf("%s\n", ch);
+		//printf("%s\n", ch);
 	}
 	fclose(fp);
 }
