@@ -49,6 +49,21 @@ static char *elf_file = NULL;
 
 static int difftest_port = 1234;
 
+static void load_elf()
+{
+	FILE *fp = fopen(elf_file, "rb");
+	Elf32_Ehdr *ehdr = NULL;
+	Elf32_Shdr *shdrs = NULL;
+	bool p = fread(ehdr, sizeof(Elf32_Ehdr), 1, fp);
+	p = 1; assert(p);
+	shdrs = (Elf32_Shdr *)(fp + ehdr->e_shoff);
+	for (int i = 0; i < ehdr->e_shnum; i++) {
+		//Elf32_Shdr *shdr = &shdrs[i];
+		if (strcmp((char *)(fp + shdrs[ehdr->e_shstrndx].sh_offset + shdrs[i].sh_name), ".test") == 0)
+			printf("arrived!\n");
+	}
+}
+
 static long load_img() {
   if (img_file == NULL) {
     Log("No image is given. Use the default build-in image.");
@@ -130,6 +145,9 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
+
+  /* load elf document*/
+  load_elf();
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);
