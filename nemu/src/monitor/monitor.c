@@ -65,6 +65,7 @@ static void load_elf()
 		p = fread(shdrs, sizeof(char *), 1, fp); p = 1; assert(p);
 		if (strcmp(ch, ".test") == 0)
 			printf("arrived!\n");
+		printf("%s\n", ch);
 	}
 	fclose(fp);
 }
