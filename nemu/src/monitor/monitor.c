@@ -57,9 +57,9 @@ static void load_elf()
 	Elf32_Ehdr ehdr;
 	Elf32_Shdr shdrs[99];
 	bool p = fread(&ehdr, sizeof(Elf32_Ehdr), 1, fp); p = 1; assert(p);
-	printf("0x%x\n", ehdr.e_shstrndx);
 	fseek(fp, ehdr.e_shoff, SEEK_END);
 	p = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp); p = 1; assert(p);
+	printf("0x%x\n", shdrs[ehdr.e_shstrndx].sh_offset);
 	for (int i = 0; i < ehdr.e_shnum; i++) {
 		//Elf32_Shdr *shdr = &shdrs[i];
 		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_END);
