@@ -62,7 +62,7 @@ static void load_elf()
 	for (int i = 0; i < ehdr.e_shnum; i++) {
 		//Elf32_Shdr *shdr = &shdrs[i];
 		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_SET);
-		p = fread(shdrs, sizeof(char), 10, fp); p = 1; assert(p);
+		p = fread(ch, sizeof(char), 10, fp); p = 1; assert(p);
 		if (strcmp(ch, ".test") == 0)
 			printf("arrived!\n");
 		printf("%s\n", ch);
