@@ -51,17 +51,22 @@ static int difftest_port = 1234;
 
 static void load_elf()
 {
-	/*FILE *fp = fopen(elf_file, "rb");
-	Elf32_Ehdr *ehdr = NULL;
-	Elf32_Shdr *shdrs = NULL;
-	bool p = fread(ehdr, sizeof(Elf32_Ehdr), 1, fp);
-	p = 1; assert(p);
-	shdrs = (Elf32_Shdr *)(fp + ehdr->e_shoff);
-	for (int i = 0; i < ehdr->e_shnum; i++) {
+	char ch[99];
+	FILE *fp = fopen(elf_file, "rb");
+
+	Elf32_Ehdr ehdr;
+	Elf32_Shdr shdrs[99];
+	bool p = fread(&ehdr, sizeof(Elf32_Ehdr), 1, fp); p = 1; assert(p);
+	fseek(fp, ehdr.e_shoff, SEEK_END);
+	p = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp); p = 1; assert(p);
+	for (int i = 0; i < ehdr.e_shnum; i++) {
 		//Elf32_Shdr *shdr = &shdrs[i];
-		if (strcmp((char *)(fp + shdrs[ehdr->e_shstrndx].sh_offset + shdrs[i].sh_name), ".test") == 0)
+		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_END);
+		p = fread(shdrs, sizeof(char *), 1, fp); p = 1; assert(p);
+		if (strcmp(ch, ".test") == 0)
 			printf("arrived!\n");
-	}*/
+	}
+	fclose(fp);
 }
 
 static long load_img() {
