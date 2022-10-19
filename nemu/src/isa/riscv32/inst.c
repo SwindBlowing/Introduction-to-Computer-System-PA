@@ -66,7 +66,7 @@ static word_t * get_csr(word_t imm)
 }
 
 static int decode_exec(Decode *s) {
-	printf("%u\n", cpu.mstatus);
+	printf("%x\n", cpu.mstatus);
   int dest = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
