@@ -21,6 +21,7 @@
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
+#define CSR(imm) BITS(imm, 7, 0)
 
 #ifdef CONFIG_FTRACE
 void check_funct(uint32_t nowpc, uint32_t jmp_add, uint32_t snpc);
@@ -53,6 +54,14 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
     case TYPE_R: src1R(); src2R();         break;
     case TYPE_B: src1R(); src2R(); immB(); break;
   }
+}
+
+static word_t * get_csr(word_t imm)
+{
+	if (CSR(imm) == 0x341) return &cpu.mepc;
+	if (CSR(imm) == 0x300) return &cpu.mstatus;
+	if (CSR(imm) == 0x342) return &cpu.mcause;
+	panic("Invalid CSR id!");
 }
 
 static int decode_exec(Decode *s) {
@@ -92,6 +101,8 @@ static int decode_exec(Decode *s) {
   
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, s->dnpc = imm + s->pc, R(dest) = s->snpc; IFDEF(CONFIG_FTRACE, check_funct(s->pc, s->dnpc, s->snpc)););
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, s->dnpc = (imm + src1) & 0xFFFFFFFEu, R(dest) = s->snpc; IFDEF(CONFIG_FTRACE, check_funct(s->pc, s->dnpc, s->snpc)););
+
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, if (dest) R(dest) = *get_csr(imm); *get_csr(imm) = src1);
   
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, s->dnpc = (src1 == src2) ? imm + s->pc : s->dnpc);
   INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, s->dnpc = (src1 != src2) ? imm + s->pc : s->dnpc);
