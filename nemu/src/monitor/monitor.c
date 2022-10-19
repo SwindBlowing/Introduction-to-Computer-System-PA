@@ -73,7 +73,7 @@ static void load_elf()
 	}
 	for (int i = 0; i < num_of_sym; i++) {
 		if (symtabs[i].st_info != ELF32_ST_BIND(STT_FUNC)) continue;
-		assert(0);
+		printf("%d\n", i);
 	}
 	fclose(fp);
 }
