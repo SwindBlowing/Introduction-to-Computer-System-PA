@@ -66,7 +66,7 @@ static void load_elf()
 		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_SET);
 		p = fread(ch, sizeof(char *), 1, fp); p = 1; assert(p);
 		if (strcmp(ch, ".symtab") == 0) {
-			num_of_sym = shdrs[i].sh_size * 8 / sizeof(Elf32_Sym);
+			num_of_sym = shdrs[i].sh_size / sizeof(Elf32_Sym);
 			fseek(fp, shdrs[i].sh_offset, SEEK_SET);
 			p = fread(symtabs, sizeof(Elf32_Sym), num_of_sym, fp); p = 1; assert(p);
 		}
