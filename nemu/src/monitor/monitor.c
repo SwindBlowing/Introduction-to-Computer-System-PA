@@ -109,7 +109,7 @@ static void load_elf()
 		if (ELF32_ST_TYPE(symtabs[i].st_info) != STT_FUNC) continue;
 		functs_address[functs_size] = symtabs[i].st_value;
 		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + symtabs[i].st_name, SEEK_SET);
-		p = fread(&functs_name[functs_size], sizeof(char *), 1, fp); p = 1; assert(p);
+		p = fread(functs_name[functs_size], sizeof(char *), 1, fp); p = 1; assert(p);
 		functs_size++;
 	}
 	fclose(fp);
