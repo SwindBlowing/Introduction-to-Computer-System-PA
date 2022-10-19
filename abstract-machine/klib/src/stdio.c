@@ -154,6 +154,7 @@ int printf(const char *fmt, ...) {
   char out[14500] = {'\0'};
   deal_with_args(out, fmt, &len, &ap, &isError);
   va_end(ap);
+  panic("arrived!");
   putstr(out);
   if (isError) return -1;
   return len;
