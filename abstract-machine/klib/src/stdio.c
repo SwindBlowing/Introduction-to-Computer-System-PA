@@ -16,6 +16,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
   unsigned long long lud = 0, luf = 1;
   char *s = NULL;
   bool zeroCplt = 0, zeroCpltNum = 0;
+  bool isLongLong = 0;
   while (*fmt != '\0') {
     if (*fmt == '%') {
       fmt++;
@@ -29,15 +30,20 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
         }
       }
       switch(*fmt) {
+		case 'l' :
+		  isLongLong = 1;
+		  if (*(fmt + 1) == 'u' || *(fmt + 1) == 'd') break;
+		  goto label_d;
+		  break;
         case 's' :
           s = va_arg(*ap, char *);
           memcpy(out + *len, s, strlen(s));
           *len += strlen(s);
           break;
 
-        case 'd' :
-          d = va_arg(*ap, int);
-          ld = d;
+        case 'd' : label_d :
+          if (!isLongLong) d = va_arg(*ap, int), ld = d;
+		  else isLongLong = 0, ld = va_arg(*ap, long long);
           lf = 1; numLen = 0;
           if (ld < 0) {
             ld *= -1;
@@ -62,8 +68,8 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           break;
 
         case 'u' :
-          ud = va_arg(*ap, unsigned);
-          lud = ud;
+		  if (!isLongLong) ud = va_arg(*ap, unsigned), lud = ud;
+		  else isLongLong = 0, lud = va_arg(*ap, unsigned long long);
           luf = 1; numLen = 0;
           while (luf * 10 <= lud) luf *= 10, numLen++;
           if (zeroCplt) {
@@ -100,7 +106,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
             luf /= 16;
           }
           break;
-		  
+
         default : *isError = 1; putch(*fmt); panic("-Unrealized sprintf char"); return ;
       }
     }
