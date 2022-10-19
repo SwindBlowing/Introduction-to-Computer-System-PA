@@ -55,7 +55,7 @@ uint32_t t_num = 0;
 
 static void print_funct(bool flag, uint32_t pos, uint32_t nowpc)
 {
-	printf("0x%x:", nowpc);
+	printf("0x%x: ", nowpc);
 	for (int i = 1; i <= t_num; i++) printf("\t");
 	if (!flag) 
 		printf("call [0x%x]", functs_address[pos]);
