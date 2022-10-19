@@ -69,6 +69,7 @@ static void load_elf()
 			p = fread(symtabs, sizeof(Elf32_Sym), shdrs[i].sh_size * 8 / sizeof(Elf32_Sym), fp); p = 1; assert(p);
 		}
 	}
+	printf("%d", symtabs->st_size);
 	fclose(fp);
 }
 
