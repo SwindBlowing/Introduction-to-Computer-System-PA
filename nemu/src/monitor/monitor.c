@@ -65,11 +65,12 @@ static void load_elf()
 		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_SET);
 		p = fread(ch, sizeof(char *), 1, fp); p = 1; assert(p);
 		if (strcmp(ch, ".symtab") == 0) {
+			printf("!!!!!!");
 			fseek(fp, shdrs[i].sh_offset, SEEK_SET);
 			p = fread(symtabs, sizeof(Elf32_Sym *), 1, fp); p = 1; assert(p);
 		}
 	}
-	printf("%d", symtabs[1].st_size);
+	//printf("%d", );
 	fclose(fp);
 }
 
