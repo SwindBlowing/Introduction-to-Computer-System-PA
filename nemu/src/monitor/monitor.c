@@ -72,6 +72,7 @@ static void load_elf()
 		}
 	}
 	for (int i = 0; i < num_of_sym; i++) {
+		printf("%d\n", symtabs[i].st_info);
 		if (symtabs[i].st_info != STT_FUNC) continue;
 		else assert(0);
 	}
