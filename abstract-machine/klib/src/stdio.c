@@ -7,7 +7,7 @@
 
 const int PUT = 1, NOTPUT = 0;
 
-void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isError, bool shouldPut)
+void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isError)
 {
   int d = 0, numLen = 0;
   unsigned ud = 0;
@@ -30,11 +30,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
       switch(*fmt) {
         case 's' :
           s = va_arg(*ap, char *);
-          if (!shouldPut) memcpy(out + *len, s, strlen(s));
-          else {
-            for (int i = 0; i < strlen(s); i++)
-              putch(*(s + i));
-          }
+          memcpy(out + *len, s, strlen(s));
           *len += strlen(s);
           break;
         case 'd' :
@@ -43,8 +39,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           lf = 1; numLen = 0;
           if (ld < 0) {
             ld *= -1;
-            if (!shouldPut) *(out + *len) = '-';
-            else putch('-');
+            *(out + *len) = '-';
             *len += 1;
           }
           while (lf * 10 <= ld) lf *= 10, numLen++;
@@ -52,14 +47,12 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           if (zeroCplt) {
             zeroCplt = 0;
             for (int i = 1; i <= zeroCpltNum - numLen; i++) {
-              if (!shouldPut) *(out + *len) = '0';
-              else putch('0');
+              *(out + *len) = '0';
               *len += 1;
             }
           }
           while (lf) {
-            if (!shouldPut) *(out + *len) = '0' + ld / lf;
-            else putch('0' + ld / lf);
+            *(out + *len) = '0' + ld / lf;
             *len += 1;
             ld %= lf;
             lf /= 10;
@@ -73,31 +66,27 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           if (zeroCplt) {
             zeroCplt = 0;
             for (int i = 1; i <= zeroCpltNum - numLen; i++) {
-              if (!shouldPut) *(out + *len) = '0';
-              else putch('0');
+              *(out + *len) = '0';
               *len += 1;
             }
           }
           while (luf) {
-            if (!shouldPut) *(out + *len) = '0' + lud / luf;
-            else putch('0' + lud / luf);
+            *(out + *len) = '0' + lud / luf;
             *len += 1;
             lud %= luf;
             luf /= 10;
           }
           break;
-        default : *isError = 1; return ;
+        default : *isError = 1; panic("Unrealized sprintf char"); return ;
       }
     }
-    else if (*fmt == '/' && *(fmt + 1) == 'n') {
+    /*else if (*fmt == '/' && *(fmt + 1) == 'n') {
       fmt++;
-      if (!shouldPut) *(out + *len) = '\n';
-      else putch('\n');
+      *(out + *len) = '\n';
       len += 1;
-    }
+    }*/
     else {
-      if (!shouldPut) *(out + *len) = *fmt;
-      else putch(*fmt);
+      *(out + *len) = *fmt;
       *len += 1;
     }
     fmt++;
@@ -111,8 +100,10 @@ int printf(const char *fmt, ...) {
   int len = 0;
   va_start(ap, fmt);
   bool isError = 0;
-  deal_with_args("", fmt, &len, &ap, &isError, PUT);
+  char out[145] = {'\0'};
+  deal_with_args(out, fmt, &len, &ap, &isError);
   va_end(ap);
+  putstr(out);
   if (isError) return -1;
   return len;
 }
@@ -127,7 +118,7 @@ int sprintf(char *out, const char *fmt, ...) {
   int len = 0;
   va_start(ap, fmt);
   bool isError = 0;
-  deal_with_args(out, fmt, &len, &ap, &isError, NOTPUT);
+  deal_with_args(out, fmt, &len, &ap, &isError);
   va_end(ap);
   *(out + len) = '\0';
   if (isError) return -1;
