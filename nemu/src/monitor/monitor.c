@@ -92,6 +92,7 @@ static void load_elf()
 	Elf32_Shdr shdrs[99];
 	Elf32_Sym symtabs[999];
 	int num_of_sym = 0;
+	int sym_off = 0;
 	bool p = fread(&ehdr, sizeof(Elf32_Ehdr), 1, fp); p = 1; assert(p);
 	fseek(fp, ehdr.e_shoff, SEEK_SET);
 	p = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp); p = 1; assert(p);
@@ -100,6 +101,7 @@ static void load_elf()
 		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_SET);
 		p = fread(ch, sizeof(char *), 1, fp); p = 1; assert(p);
 		if (strcmp(ch, ".symtab") == 0) {
+			sym_off = shdrs[i].sh_offset;
 			num_of_sym = shdrs[i].sh_size / sizeof(Elf32_Sym);
 			fseek(fp, shdrs[i].sh_offset, SEEK_SET);
 			p = fread(symtabs, sizeof(Elf32_Sym), num_of_sym, fp); p = 1; assert(p);
@@ -108,10 +110,9 @@ static void load_elf()
 	for (int i = 0; i < num_of_sym; i++) {
 		if (ELF32_ST_TYPE(symtabs[i].st_info) != STT_FUNC) continue;
 		functs_address[functs_size] = symtabs[i].st_value;
-		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + symtabs[i].st_name, SEEK_SET);
+		fseek(fp, sym_off + symtabs[i].st_name, SEEK_SET);
 		p = fread(functs_name[functs_size], sizeof(char *), 1, fp); p = 1; assert(p);
 		functs_size++;
-		printf("%x %x\n", shdrs[ehdr.e_shstrndx].sh_offset, symtabs[i].st_name);
 	}
 	fclose(fp);
 }
