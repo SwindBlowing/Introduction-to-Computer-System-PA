@@ -57,9 +57,9 @@ static void print_funct(bool flag, uint32_t pos)
 {
 	for (int i = 1; i <= t_num; i++) printf("\t");
 	if (!flag) 
-		printf("call [0x%x]\n", functs_address[pos]);
+		printf("call [0x%x]", functs_address[pos]);
 	else 
-		printf("ret [0x%x]\n", ret_address[pos]);
+		printf("ret [0x%x]", ret_address[pos]);
 	printf("\n");
 }
 
