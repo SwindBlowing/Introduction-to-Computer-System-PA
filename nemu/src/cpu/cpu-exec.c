@@ -65,8 +65,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   });
 
 #ifdef CONFIG_WATCHPOINT
- // if (!wp_pause()) 
-  //  nemu_state.state = NEMU_STOP;
+  if (!wp_pause()) 
+    nemu_state.state = NEMU_STOP;
 #endif
     
 }
