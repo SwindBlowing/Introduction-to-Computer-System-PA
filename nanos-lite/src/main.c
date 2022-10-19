@@ -14,9 +14,9 @@ int main() {
   Log("Build time: %s, %s", __TIME__, __DATE__);
 
   init_mm();
-
-  init_device();
 panic("Should reach here");
+  init_device();
+
   init_ramdisk();
 
 #ifdef HAS_CTE
