@@ -100,7 +100,7 @@ int printf(const char *fmt, ...) {
   int len = 0;
   va_start(ap, fmt);
   bool isError = 0;
-  char out[145] = {'\0'};
+  char out[14500] = {'\0'};
   deal_with_args(out, fmt, &len, &ap, &isError);
   va_end(ap);
   putstr(out);
