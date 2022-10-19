@@ -50,7 +50,9 @@ static char *elf_file = NULL;
 static int difftest_port = 1234;
 
 uint32_t functs_address[999], functs_size;
+char functs_name[999][999];
 uint32_t ret_address[999], ret_size;
+int ret_id[999];
 uint32_t t_num = 0;
 
 static void print_funct(bool flag, uint32_t pos, uint32_t nowpc)
@@ -58,9 +60,9 @@ static void print_funct(bool flag, uint32_t pos, uint32_t nowpc)
 	printf("0x%x: ", nowpc);
 	for (int i = 1; i <= t_num * 2; i++) printf(" ");
 	if (!flag) 
-		printf("call [0x%x]", functs_address[pos]);
+		printf("call [%s@0x%x]", functs_name[pos], functs_address[pos]);
 	else 
-		printf("ret [0x%x]", ret_address[pos]);
+		printf("ret [%s]", functs_name[ret_id[pos]]);
 	printf("\n");
 }
 
@@ -70,7 +72,8 @@ void check_funct(uint32_t nowpc, uint32_t jmp_add, uint32_t snpc)
 		if (functs_address[i] == jmp_add) {
 			print_funct(0, i, nowpc);
 			t_num++;
-			ret_address[ret_size++] = snpc;
+			ret_address[ret_size] = snpc;
+			ret_id[ret_size++] = i;
 		}
 	if (ret_address[ret_size - 1] == jmp_add) {
 		t_num--;
@@ -104,7 +107,10 @@ static void load_elf()
 	}
 	for (int i = 0; i < num_of_sym; i++) {
 		if (ELF32_ST_TYPE(symtabs[i].st_info) != STT_FUNC) continue;
-		functs_address[functs_size++] = symtabs[i].st_value;
+		functs_address[functs_size] = symtabs[i].st_value;
+		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + symtabs[i].st_name, SEEK_SET);
+		p = fread(&functs_name[functs_size], sizeof(char *), 1, fp); p = 1; assert(p);
+		functs_size++;
 	}
 	fclose(fp);
 }
