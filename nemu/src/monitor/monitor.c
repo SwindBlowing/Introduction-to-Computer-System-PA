@@ -56,6 +56,7 @@ static void load_elf()
 
 	Elf32_Ehdr ehdr;
 	Elf32_Shdr shdrs[99];
+	Elf32_Sym symtabs[999];
 	bool p = fread(&ehdr, sizeof(Elf32_Ehdr), 1, fp); p = 1; assert(p);
 	fseek(fp, ehdr.e_shoff, SEEK_SET);
 	p = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp); p = 1; assert(p);
@@ -63,9 +64,10 @@ static void load_elf()
 		//Elf32_Shdr *shdr = &shdrs[i];
 		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_SET);
 		p = fread(ch, sizeof(char *), 1, fp); p = 1; assert(p);
-		if (strcmp(ch, ".text") == 0)
-			printf("arrived!\n");
-		printf("%s\n", ch);
+		if (strcmp(ch, ".symtab") == 0) {
+			fseek(fp, shdrs[i].sh_offset, SEEK_SET);
+			p = fread(symtabs, sizeof(Elf32_Sym), shdrs[i].sh_size * 8 / sizeof(Elf32_Sym), fp); p = 1; assert(p);
+		}
 	}
 	fclose(fp);
 }
