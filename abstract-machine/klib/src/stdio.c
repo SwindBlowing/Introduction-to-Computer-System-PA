@@ -110,7 +110,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
 
 		case 'p' :
 		  if (!zeroCplt) zeroCplt = 1, zeroCpltNum = 16;
-		  lud = va_arg(*ap, unsigned long long);
+		  lud = (unsigned)va_arg(*ap, const void *);
           luf = 1; numLen = 1;
           while (luf * 16 <= lud) luf *= 16, numLen++;
           if (zeroCplt) {
@@ -127,7 +127,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
             luf /= 16;
           }
           break;
-		  
+
         default : *isError = 1; putch(*fmt); panic("-Unrealized sprintf char"); return ;
       }
     }

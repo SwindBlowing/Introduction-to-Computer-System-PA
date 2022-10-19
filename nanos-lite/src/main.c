@@ -14,7 +14,7 @@ int main() {
   Log("Build time: %s, %s", __TIME__, __DATE__);
 
   init_mm();
-panic("Should reach here");
+
   init_device();
 
   init_ramdisk();
