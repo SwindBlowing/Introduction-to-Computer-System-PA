@@ -19,6 +19,7 @@ int main() {
 
   init_ramdisk();
 
+panic("Should reach here");
 #ifdef HAS_CTE
   init_irq();
 #endif
