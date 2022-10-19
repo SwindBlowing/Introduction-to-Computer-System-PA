@@ -101,11 +101,11 @@ static void load_elf()
 		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_SET);
 		p = fread(ch, sizeof(char *), 1, fp); p = 1; assert(p);
 		if (strcmp(ch, ".symtab") == 0) {
-			sym_off = shdrs[i].sh_offset;
 			num_of_sym = shdrs[i].sh_size / sizeof(Elf32_Sym);
 			fseek(fp, shdrs[i].sh_offset, SEEK_SET);
 			p = fread(symtabs, sizeof(Elf32_Sym), num_of_sym, fp); p = 1; assert(p);
 		}
+		if (strcmp(ch, ".strtab") == 0) sym_off = shdrs[i].sh_offset;
 	}
 	for (int i = 0; i < num_of_sym; i++) {
 		if (ELF32_ST_TYPE(symtabs[i].st_info) != STT_FUNC) continue;
