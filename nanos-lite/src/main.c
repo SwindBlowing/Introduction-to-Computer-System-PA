@@ -16,9 +16,9 @@ int main() {
   init_mm();
 
   init_device();
-
-  init_ramdisk();
 panic("Should reach here");
+  init_ramdisk();
+
 #ifdef HAS_CTE
   init_irq();
 #endif
