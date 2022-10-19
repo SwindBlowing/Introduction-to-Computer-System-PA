@@ -72,7 +72,7 @@ static void load_elf()
 		}
 	}
 	for (int i = 0; i < num_of_sym; i++) {
-		if (symtabs[i].st_info != ELF32_ST_TYPE(STT_FUNC)) continue;
+		if (symtabs[i].st_info != ELF32_ST_INFO(ELF32_ST_BIND(STT_FUNC), ELF32_ST_TYPE(STT_FUNC))) continue;
 		printf("%d\n", i);
 	}
 	fclose(fp);
