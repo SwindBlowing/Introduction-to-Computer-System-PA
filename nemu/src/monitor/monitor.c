@@ -53,8 +53,9 @@ uint32_t functs_address[999], functs_size;
 uint32_t ret_address[999], ret_size;
 uint32_t t_num = 0;
 
-static void print_funct(bool flag, uint32_t pos)
+static void print_funct(bool flag, uint32_t pos, uint32_t nowpc)
 {
+	printf("0x%x:", nowpc);
 	for (int i = 1; i <= t_num; i++) printf("\t");
 	if (!flag) 
 		printf("call [0x%x]", functs_address[pos]);
@@ -63,17 +64,17 @@ static void print_funct(bool flag, uint32_t pos)
 	printf("\n");
 }
 
-void check_funct(uint32_t jmp_add, uint32_t snpc)
+void check_funct(uint32_t nowpc, uint32_t jmp_add, uint32_t snpc)
 {
 	for (int i = 0; i < functs_size; i++)
 		if (functs_address[i] == jmp_add) {
-			print_funct(0, i);
+			print_funct(0, i, nowpc);
 			t_num++;
 			ret_address[ret_size++] = snpc;
 		}
 	if (ret_address[ret_size - 1] == jmp_add) {
 		t_num--;
-		print_funct(1, ret_size - 1);
+		print_funct(1, ret_size - 1, nowpc);
 		ret_size--;
 	}
 	return ;
