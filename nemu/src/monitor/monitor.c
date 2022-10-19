@@ -55,6 +55,7 @@ uint32_t ret_address[999], ret_size;
 int ret_id[999];
 uint32_t t_num = 0;
 
+#ifdef CONFIG_FTRACE
 static void print_funct(bool flag, uint32_t pos, uint32_t nowpc)
 {
 	printf("0x%x: ", nowpc);
@@ -113,10 +114,10 @@ static void load_elf()
 		fseek(fp, sym_off + symtabs[i].st_name, SEEK_SET);
 		p = fread(functs_name[functs_size], sizeof(char *), 1, fp); p = 1; assert(p);
 		functs_size++;
-		printf("%x %x\n", sym_off, symtabs[i].st_name);
 	}
 	fclose(fp);
 }
+#endif
 
 static long load_img() {
   if (img_file == NULL) {
@@ -201,7 +202,7 @@ void init_monitor(int argc, char *argv[]) {
   long img_size = load_img();
 
   /* load elf document*/
-  load_elf();
+  IFDEF(CONFIG_FTRACE, load_elf());
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);
