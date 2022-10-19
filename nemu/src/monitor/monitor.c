@@ -49,6 +49,36 @@ static char *elf_file = NULL;
 
 static int difftest_port = 1234;
 
+uint32_t functs_address[999], functs_size;
+uint32_t ret_address[999], ret_size;
+uint32_t t_num = 0;
+
+static void print_funct(bool flag, uint32_t pos)
+{
+	for (int i = 1; i <= t_num; i++) printf("\t");
+	if (!flag) 
+		printf("call [0x%x]\n", functs_address[pos]);
+	else 
+		printf("ret [0x%x]\n", ret_address[pos]);
+	printf("\n");
+}
+
+void check_funct(uint32_t jmp_add, uint32_t snpc)
+{
+	for (int i = 0; i < functs_size; i++)
+		if (functs_address[i] == jmp_add) {
+			print_funct(0, i);
+			t_num++;
+			ret_address[ret_size++] = snpc;
+		}
+	if (ret_address[ret_size - 1] == jmp_add) {
+		t_num--;
+		print_funct(1, ret_size - 1);
+		ret_size--;
+	}
+	return ;
+}
+
 static void load_elf()
 {
 	char ch[99] = {'\0'};
@@ -73,7 +103,7 @@ static void load_elf()
 	}
 	for (int i = 0; i < num_of_sym; i++) {
 		if (ELF32_ST_TYPE(symtabs[i].st_info) != STT_FUNC) continue;
-		printf("0x%x\n", symtabs[i].st_value);
+		functs_address[functs_size++] = symtabs[i].st_value;
 	}
 	fclose(fp);
 }
