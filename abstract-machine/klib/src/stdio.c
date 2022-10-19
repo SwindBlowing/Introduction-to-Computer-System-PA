@@ -77,7 +77,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
             luf /= 10;
           }
           break;
-        default : *isError = 1; panic("Unrealized sprintf char"); return ;
+        default : *isError = 1; putch(*fmt); panic("Unrealized sprintf char"); return ;
       }
     }
     /*else if (*fmt == '/' && *(fmt + 1) == 'n') {
