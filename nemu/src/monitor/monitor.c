@@ -111,7 +111,7 @@ static void load_elf()
 		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + symtabs[i].st_name, SEEK_SET);
 		p = fread(functs_name[functs_size], sizeof(char *), 1, fp); p = 1; assert(p);
 		functs_size++;
-		printf("%s\n", functs_name[functs_size - 1]);
+		printf("%d %d\n", shdrs[ehdr.e_shstrndx].sh_offset, symtabs[i].st_name);
 	}
 	fclose(fp);
 }
