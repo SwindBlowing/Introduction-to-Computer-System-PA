@@ -15,7 +15,8 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
   long long ld = 0, lf = 1;
   unsigned long long lud = 0, luf = 1;
   char *s = NULL;
-  bool zeroCplt = 0, zeroCpltNum = 0;
+  bool zeroCplt = 0;
+  int zeroCpltNum = 0;
   bool isLongLong = 0;
   while (*fmt != '\0') {
     if (*fmt == '%') {
@@ -44,7 +45,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
         case 'd' : label_d :
           if (!isLongLong) d = va_arg(*ap, int), ld = d;
 		  else isLongLong = 0, ld = va_arg(*ap, long long);
-          lf = 1; numLen = 0;
+          lf = 1; numLen = 1;
           if (ld < 0) {
             ld *= -1;
             *(out + *len) = '-';
@@ -70,7 +71,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
         case 'u' :
 		  if (!isLongLong) ud = va_arg(*ap, unsigned), lud = ud;
 		  else isLongLong = 0, lud = va_arg(*ap, unsigned long long);
-          luf = 1; numLen = 0;
+          luf = 1; numLen = 1;
           while (luf * 10 <= lud) luf *= 10, numLen++;
           if (zeroCplt) {
             zeroCplt = 0;
@@ -90,11 +91,11 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
 		case 'x' :
 		  ud = va_arg(*ap, unsigned);
           lud = ud;
-          luf = 1; numLen = 0;
+          luf = 1; numLen = 1;
           while (luf * 16 <= lud) luf *= 16, numLen++;
           if (zeroCplt) {
             zeroCplt = 0;
-            for (int i = 1; i <= zeroCpltNum - numLen - 2; i++) {
+            for (int i = 1; i <= zeroCpltNum - numLen; i++) {
               *(out + *len) = '0';
               *len += 1;
             }
@@ -107,6 +108,26 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           }
           break;
 
+		case 'p' :
+		  if (!zeroCplt) zeroCplt = 1, zeroCpltNum = 16;
+		  lud = va_arg(*ap, unsigned long long);
+          luf = 1; numLen = 1;
+          while (luf * 16 <= lud) luf *= 16, numLen++;
+          if (zeroCplt) {
+            zeroCplt = 0;
+            for (int i = 1; i <= zeroCpltNum - numLen; i++) {
+              *(out + *len) = '0';
+              *len += 1;
+            }
+          }
+          while (luf) {
+            *(out + *len) = chs[lud / luf];
+            *len += 1;
+            lud %= luf;
+            luf /= 16;
+          }
+          break;
+		  
         default : *isError = 1; putch(*fmt); panic("-Unrealized sprintf char"); return ;
       }
     }
