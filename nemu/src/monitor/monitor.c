@@ -113,6 +113,7 @@ static void load_elf()
 		fseek(fp, sym_off + symtabs[i].st_name, SEEK_SET);
 		p = fread(functs_name[functs_size], sizeof(char *), 1, fp); p = 1; assert(p);
 		functs_size++;
+		printf("%x %x\n", sym_off, symtabs[i].st_name);
 	}
 	fclose(fp);
 }
