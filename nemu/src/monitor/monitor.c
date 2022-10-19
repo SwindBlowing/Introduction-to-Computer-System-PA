@@ -71,11 +71,9 @@ static void load_elf()
 			p = fread(symtabs, sizeof(Elf32_Sym), num_of_sym, fp); p = 1; assert(p);
 		}
 	}
-	printf("!!!%d\n", num_of_sym);
 	for (int i = 0; i < num_of_sym; i++) {
-		printf("%d\n", symtabs[i].st_info);
-		if (symtabs[i].st_info != STT_FUNC) continue;
-		else assert(0);
+		if (symtabs[i].st_info != ELF32_ST_BIND(STT_FUNC)) continue;
+		assert(0);
 	}
 	fclose(fp);
 }
