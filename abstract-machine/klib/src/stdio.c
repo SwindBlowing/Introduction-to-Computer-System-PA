@@ -6,6 +6,7 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 const int PUT = 1, NOTPUT = 0;
+char chs[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
 void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isError)
 {
@@ -33,6 +34,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           memcpy(out + *len, s, strlen(s));
           *len += strlen(s);
           break;
+
         case 'd' :
           d = va_arg(*ap, int);
           ld = d;
@@ -52,12 +54,13 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
             }
           }
           while (lf) {
-            *(out + *len) = '0' + ld / lf;
+            *(out + *len) = chs[ld / lf];
             *len += 1;
             ld %= lf;
             lf /= 10;
           }
           break;
+
         case 'u' :
           ud = va_arg(*ap, unsigned);
           lud = ud;
@@ -71,13 +74,34 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
             }
           }
           while (luf) {
-            *(out + *len) = '0' + lud / luf;
+            *(out + *len) = chs[lud / luf];
             *len += 1;
             lud %= luf;
             luf /= 10;
           }
           break;
-        default : *isError = 1; putch(*fmt); panic("Unrealized sprintf char"); return ;
+
+		case 'x' :
+		  ud = va_arg(*ap, unsigned);
+          lud = ud;
+          luf = 1; numLen = 0;
+          while (luf * 16 <= lud) luf *= 16, numLen++;
+          if (zeroCplt) {
+            zeroCplt = 0;
+            for (int i = 1; i <= zeroCpltNum - numLen - 2; i++) {
+              *(out + *len) = '0';
+              *len += 1;
+            }
+          }
+          while (luf) {
+            *(out + *len) = chs[lud / luf];
+            *len += 1;
+            lud %= luf;
+            luf /= 16;
+          }
+          break;
+		  
+        default : *isError = 1; putch(*fmt); panic("-Unrealized sprintf char"); return ;
       }
     }
     /*else if (*fmt == '/' && *(fmt + 1) == 'n') {
