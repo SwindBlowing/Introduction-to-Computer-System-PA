@@ -61,7 +61,7 @@ static word_t * get_csr(word_t imm)
 	if (CSR(imm) == 0x341) return &cpu.mepc;
 	if (CSR(imm) == 0x300) return &cpu.mstatus;
 	if (CSR(imm) == 0x342) return &cpu.mcause;
-	panic("Invalid CSR id!");
+	panic("Invalid CSR id 0x%llx", CSR(imm));
 }
 
 static int decode_exec(Decode *s) {
