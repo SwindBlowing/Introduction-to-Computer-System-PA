@@ -30,11 +30,6 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 	  Log("For gpr[%d], CPU.gpr = 0x%x, REF.gpr = 0x%x", i, cpu.gpr[i], ref_r->gpr[i]);
       return false;
     }
-  if (cpu.mstatus != ref_r->mstatus) {
-	Log("MSTATUS Difftest Failed at CPUpc = 0x%x, REFpc= 0x%x", cpu.pc, ref_r->pc);
-	Log("CPU.mstatus = 0x%x, REF.mstatus = 0x%x", cpu.mstatus, ref_r->mstatus);
-	return false;
-  }
 	
   return true;
 }
