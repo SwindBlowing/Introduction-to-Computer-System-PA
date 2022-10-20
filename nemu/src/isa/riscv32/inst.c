@@ -59,7 +59,10 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
 static word_t * get_csr(word_t imm)
 {
 	if (imm == 0x341) return &cpu.mepc;
-	if (imm == 0x305) return &cpu.mtvec;
+	if (imm == 0x305) {
+		printf("%x\n", cpu.mtvec);
+		return &cpu.mtvec;
+	}
 	if (imm == 0x300) return &cpu.mstatus;
 	if (imm == 0x342) return &cpu.mcause;
 	panic("Invalid CSR id 0x%x", imm);
@@ -132,7 +135,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem    , R, R(dest) = (int32_t)src1 % (int32_t)src2);
   INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu   , R, R(dest) = src1 % src2);
 
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->pc = cpu.mtvec);
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mtvec);
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0x0000000b, s->pc));
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
