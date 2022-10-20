@@ -61,6 +61,11 @@ void print_exception(uint32_t pc, uint32_t dnpc, uint32_t errorId)
 	printf("Jump to 0x%x to deal with exception at pc = 0x%x, errorId: %d\n", pc, dnpc, errorId);
 	printf("And current mstatus = 0x%x\n", cpu.mstatus);
 }
+
+void exception_return(uint32_t pc, uint32_t dnpc)
+{
+	printf("Exception returned from 0x%x, and next pc is 0x%x\n", pc, dnpc);
+}
 #endif
 
 #ifdef CONFIG_FTRACE
