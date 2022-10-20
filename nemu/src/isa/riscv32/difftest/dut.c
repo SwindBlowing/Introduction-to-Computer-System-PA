@@ -26,7 +26,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   }
   for (int i = 0; i < NXPR; i++)
     if (cpu.gpr[i] != ref_r->gpr[i]) {
-      Log("CPU Difftest Failed at CPUpc = 0x%x, REFpc= 0x%x", cpu.pc, ref_r->pc);
+      Log("REG Difftest Failed at CPUpc = 0x%x, REFpc= 0x%x", cpu.pc, ref_r->pc);
       return false;
     }
   return true;
