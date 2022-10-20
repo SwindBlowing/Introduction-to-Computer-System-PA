@@ -23,6 +23,10 @@
 #define Mw vaddr_write
 #define CSR(imm) BITS(imm, 7, 0)
 
+#ifdef CONFIG_ETRACE
+void print_exception(uint32_t pc, uint32_t dnpc, uint32_t errorId);
+#endif
+
 #ifdef CONFIG_FTRACE
 void check_funct(uint32_t nowpc, uint32_t jmp_add, uint32_t snpc);
 #endif
@@ -133,7 +137,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu   , R, R(dest) = src1 % src2);
 
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc);
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0x0000000b, s->pc));
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0x0000000b, s->pc); print_exception(s->pc, s->dnpc, 0xb));
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
