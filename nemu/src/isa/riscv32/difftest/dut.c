@@ -29,8 +29,11 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
       Log("REG Difftest Failed at CPUpc = 0x%x, REFpc= 0x%x", cpu.pc, ref_r->pc);
       return false;
     }
-  if (cpu.mstatus != ref_r->mstatus)
+  if (cpu.mstatus != ref_r->mstatus) {
 	Log("MSTATUS Difftest Failed at CPUpc = 0x%x, REFpc= 0x%x", cpu.pc, ref_r->pc);
+	return false;
+  }
+	
   return true;
 }
 
