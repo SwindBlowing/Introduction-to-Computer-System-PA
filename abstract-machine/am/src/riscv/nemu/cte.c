@@ -10,6 +10,7 @@ Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
+	  case 0x0:
 	  case 0x1: 
 	  case 0x2:
 	  case 0x3:
@@ -29,9 +30,8 @@ Context* __am_irq_handle(Context *c) {
 	  case 0x11:
 	  case 0x12:
 	  case 0x13:
-	  case 0x14:
 	  	ev.event = EVENT_SYSCALL; break;
-      default: assert(0); ev.event = EVENT_ERROR;  break;
+      default: ev.event = EVENT_ERROR;  break;
     }
     c = user_handler(ev, c);
     assert(c != NULL);
