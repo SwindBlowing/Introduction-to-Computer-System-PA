@@ -14,9 +14,9 @@ size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
-  #ifdef __LP64__
+  /*#ifdef __LP64__
   panic("?");
-  #endif
+  #endif*/
   Elf_Ehdr ehdr;
   ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
   Elf_Phdr phdr[ehdr.e_phnum];
@@ -27,8 +27,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		size_t virtAddr = phdr[i].p_vaddr;
 		size_t fileSize = phdr[i].p_filesz;
 		size_t memSize = phdr[i].p_memsz;
+		printf("%x %x %x %x\n", offset, virtAddr, fileSize, memSize);
 		ramdisk_read((void *)virtAddr, offset, fileSize);
-		memset((void *)((virtAddr + fileSize) * 8), 0, (memSize - fileSize) * 8);
+		memset((void *)(virtAddr + fileSize), 0, memSize - fileSize);
 	}
   }
   return ehdr.e_entry;
