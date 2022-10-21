@@ -137,7 +137,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem    , R, R(dest) = (int32_t)src1 % (int32_t)src2);
   INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu   , R, R(dest) = src1 % src2);
 
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc + 4; IFDEF(CONFIG_ETRACE, exception_return(s->pc, s->dnpc)));
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc; IFDEF(CONFIG_ETRACE, exception_return(s->pc, s->dnpc)));
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0x0000000b, s->pc); IFDEF(CONFIG_ETRACE, print_exception(s->pc, s->dnpc, 0xb)));
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
