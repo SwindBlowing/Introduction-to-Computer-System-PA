@@ -164,11 +164,6 @@ config ETRACE
   bool "Enable exception tracer"
   default y
 
-config STRACE
-  depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
-  bool "Enable syscall tracer"
-  default n
-
 config IRINGBUF
   depends on ITRACE
   bool "Enable iringbuf"

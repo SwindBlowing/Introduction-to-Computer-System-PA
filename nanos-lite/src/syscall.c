@@ -1,5 +1,8 @@
 #include <common.h>
 #include "syscall.h"
+
+#define CONFIG_ITRACE
+
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
