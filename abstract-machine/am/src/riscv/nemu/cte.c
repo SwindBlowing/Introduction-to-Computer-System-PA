@@ -9,9 +9,10 @@ Context* __am_irq_handle(Context *c) {
   //assert(0);
   if (user_handler) {
     Event ev = {0};
+	printf("%x %x\n", c->mcause, c->GPR1);
     switch (c->mcause) {
 	  case 0xb: {
-		switch (c->GPR2) {
+		switch (c->GPR1) {
 			case 0x0:
 			case 0x1: 
 			case 0x2:
