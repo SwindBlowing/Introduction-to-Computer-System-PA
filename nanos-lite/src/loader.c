@@ -20,11 +20,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   for (size_t i = 0; i < ehdr.e_phnum; i++) {
 	ramdisk_read(&phdr, ehdr.e_phoff + i * sizeof(Elf_Phdr), sizeof(Elf_Phdr));
 	if (phdr.p_type == PT_LOAD) {
-		size_t offset = phdr.p_offset;
+		size_t Offset = phdr.p_offset;
 		size_t virtAddr = phdr.p_vaddr;
 		size_t fileSize = phdr.p_filesz;
 		size_t memSize = phdr.p_memsz;
-		ramdisk_read((void *)virtAddr, offset, fileSize);
+		ramdisk_read((void *)virtAddr, Offset, fileSize);
 		memset((void *)(virtAddr + fileSize), 0, memSize - fileSize);
 	}
   }
