@@ -30,6 +30,7 @@ Context* __am_irq_handle(Context *c) {
 	  case 0x11:
 	  case 0x12:
 	  case 0x13:
+	    printf("%x", c->mcause);
 	  	ev.event = EVENT_SYSCALL; break;
       default: printf("%x", c->mcause); ev.event = EVENT_ERROR;  break;
     }
