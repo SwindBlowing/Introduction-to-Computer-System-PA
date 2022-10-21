@@ -18,15 +18,15 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   panic("?");
   #endif
   Elf_Ehdr ehdr;
-  Elf_Phdr phdr;
   ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
+  Elf_Phdr phdr[ehdr.e_phnum];
+  ramdisk_read(phdr, ehdr.e_phoff, ehdr.e_phnum * sizeof(Elf_Phdr));
   for (size_t i = 0; i < ehdr.e_phnum; i++) {
-	ramdisk_read(&phdr, ehdr.e_phoff + i * sizeof(Elf_Phdr) * 8, sizeof(Elf_Phdr));
-	if (phdr.p_type == PT_LOAD) {
-		size_t offset = phdr.p_offset;
-		size_t virtAddr = phdr.p_vaddr;
-		size_t fileSize = phdr.p_filesz;
-		size_t memSize = phdr.p_memsz;
+	if (phdr[i].p_type == PT_LOAD) {
+		size_t offset = phdr[i].p_offset;
+		size_t virtAddr = phdr[i].p_vaddr;
+		size_t fileSize = phdr[i].p_filesz;
+		size_t memSize = phdr[i].p_memsz;
 		ramdisk_read((void *)virtAddr, offset, fileSize);
 		memset((void *)(virtAddr + fileSize * 8), 0, (memSize - fileSize) * 8);
 	}
