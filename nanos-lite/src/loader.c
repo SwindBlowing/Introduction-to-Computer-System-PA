@@ -10,7 +10,8 @@
 #endif
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-  TODO();
+  //TODO();
+  //FILE *fp = fopen("../build/nanos-lite-riscv32-nemu.elf", "rb");
   return 0;
 }
 
