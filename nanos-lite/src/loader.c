@@ -15,8 +15,18 @@ size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
   Elf_Ehdr ehdr;
+  Elf_Phdr phdr;
   ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
-
+  for (size_t i = 0; i < ehdr.e_phnum; i++) {
+	ramdisk_read(&phdr, ehdr.e_phoff + i * sizeof(Elf_Phdr), sizeof(Elf_Phdr));
+	if (phdr.p_type == PT_LOAD) {
+		size_t offset = phdr.p_offset;
+		size_t virtAddr = phdr.p_vaddr;
+		size_t fileSize = phdr.p_filesz;
+		size_t memSize = phdr.p_memsz;
+		printf("%x %x %x %x\n", offset, virtAddr, fileSize, memSize);
+	}
+  }
   return 0;
 }
 
