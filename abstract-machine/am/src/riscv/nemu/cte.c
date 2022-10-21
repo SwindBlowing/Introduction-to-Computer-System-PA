@@ -10,29 +10,35 @@ Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
-	  case 0x0:
-	  case 0x1: 
-	  case 0x2:
-	  case 0x3:
-	  case 0x4:
-	  case 0x5:
-	  case 0x6: 
-	  case 0x7:
-	  case 0x8:
-	  case 0x9:
-	  case 0xa:
-	  case 0xb: 
-	  case 0xc:
-	  case 0xd:
-	  case 0xe:
-	  case 0xf:
-	  case 0x10: 
-	  case 0x11:
-	  case 0x12:
-	  case 0x13:
-	  	ev.event = EVENT_SYSCALL; break;
-	  case 0xffffffff:
-	  	ev.event = EVENT_YIELD; break;
+	  case 0xb: {
+		switch (c->GPR2) {
+			case 0x0:
+			case 0x1: 
+			case 0x2:
+			case 0x3:
+			case 0x4:
+			case 0x5:
+			case 0x6: 
+			case 0x7:
+			case 0x8:
+			case 0x9:
+			case 0xa:
+			case 0xb: 
+			case 0xc:
+			case 0xd:
+			case 0xe:
+			case 0xf:
+			case 0x10: 
+			case 0x11:
+			case 0x12:
+			case 0x13:
+				ev.event = EVENT_SYSCALL; break;
+			case 0xffffffff:
+				ev.event = EVENT_YIELD; break;
+			default: ev.event = EVENT_ERROR;  break;
+		}
+		break;
+	  }
       default: ev.event = EVENT_ERROR;  break;
     }
     c = user_handler(ev, c);
