@@ -14,12 +14,17 @@ size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
-  /*#ifdef __LP64__
-  panic("?");
-  #endif*/
   Elf_Ehdr ehdr;
   ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
+  //check part
   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);
+
+  #if defined(__ISA_NATIVE__)
+	assert(ehdr.e_machine == EM_X86_64);
+  #elif defined(__ISA_RISCV__)
+	assert(ehdr.e_machine == EM_RISCV);
+  #endif
+  //end check part
   Elf_Phdr phdr[ehdr.e_phnum];
   ramdisk_read(phdr, ehdr.e_phoff, ehdr.e_phnum * sizeof(Elf_Phdr));
   for (size_t i = 0; i < ehdr.e_phnum; i++) {
