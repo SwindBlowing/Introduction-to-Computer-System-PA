@@ -56,11 +56,6 @@ __am_asm_trap:
   csrw mepc, t2
 
   MAP(REGS, POP)
-  
-  # modified
-  LOAD t2, OFFSET_EPC(sp)
-  addi t2, t2, 4
-  csrw mepc, t2
 
   addi sp, sp, CONTEXT_SIZE
   mret
