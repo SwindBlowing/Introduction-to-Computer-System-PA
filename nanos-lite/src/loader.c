@@ -25,7 +25,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		size_t fileSize = phdr.p_filesz;
 		size_t memSize = phdr.p_memsz;
 		ramdisk_read((void *)virtAddr, offset, fileSize);
-		memset((void *)(virtAddr + fileSize), '\0', memSize - fileSize);
+		memset((void *)(virtAddr + fileSize), 0, memSize - fileSize);
 	}
   }
   return ehdr.e_entry;
