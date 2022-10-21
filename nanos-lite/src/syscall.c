@@ -8,4 +8,8 @@ void do_syscall(Context *c) {
 	case SYS_yield: yield(); c->GPRx = 0; break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
+#ifdef CONFIG_STRACE
+  printf("System call ID = %u\n", a[0]);
+  printf("GPRS value: %x %x %x %x %x\n", c->GPR1, c->GPR2, c->GPR3, c->GPR4, c->GPRx);
+#endif
 }

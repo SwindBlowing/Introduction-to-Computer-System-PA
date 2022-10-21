@@ -33,7 +33,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
       switch(*fmt) {
 		case 'l' :
 		  isLongLong = 1;
-		  if (*(fmt + 1) == 'u' || *(fmt + 1) == 'd') break;
+		  if (*(fmt + 1) == 'u') goto label_u;
 		  goto label_d;
 		  break;
         case 's' :
@@ -68,7 +68,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           }
           break;
 
-        case 'u' :
+        case 'u' : label_u :
 		  if (!isLongLong) ud = va_arg(*ap, unsigned), lud = ud;
 		  else isLongLong = 0, lud = va_arg(*ap, unsigned long long);
           luf = 1; numLen = 1;
