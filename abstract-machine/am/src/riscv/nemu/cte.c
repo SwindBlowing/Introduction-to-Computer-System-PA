@@ -32,7 +32,12 @@ Context* __am_irq_handle(Context *c) {
 			case 0x11:
 			case 0x12:
 			case 0x13:
-				ev.event = EVENT_SYSCALL; break;
+				ev.event = EVENT_SYSCALL; 
+				#ifdef CONFIG_STRACE
+  					printf("System call ID = %u\n", c->GPR1);
+  					printf("GPRS value: %x %x %x %x %x\n", c->GPR1, c->GPR2, c->GPR3, c->GPR4, c->GPRx);
+				#endif
+				break;
 			case 0xffffffff:
 				ev.event = EVENT_YIELD; break;
 			default: ev.event = EVENT_ERROR;  break;
