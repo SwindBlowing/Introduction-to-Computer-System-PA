@@ -2,7 +2,8 @@
 
 static Context* do_event(Event e, Context* c) {
   switch (e.event) {
-	case EVENT_YIELD: printf("Received yield message!\n"); break;
+	case EVENT_YIELD: printf("Received yield message!\n"); 
+		printf("Event ID = %d\n", e.event); break;
     default: panic("Unhandled event ID = %d", e.event);
   }
 

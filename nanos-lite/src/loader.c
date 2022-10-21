@@ -28,7 +28,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		size_t virtAddr = phdr[i].p_vaddr;
 		size_t fileSize = phdr[i].p_filesz;
 		size_t memSize = phdr[i].p_memsz;
-		printf("%x %x %x %x\n", offset, virtAddr, fileSize, memSize);
+		//printf("%x %x %x %x\n", offset, virtAddr, fileSize, memSize);
 		ramdisk_read((void *)virtAddr, offset, fileSize);
 		assert(memSize >= fileSize);
 		memset((void *)(virtAddr + fileSize), 0, memSize - fileSize);
