@@ -43,7 +43,7 @@ void init_fs() {
 
 int fs_open(const char *pathname, int flags, int mode)
 {
-	printf("arrived!");
+	printf("arrived! %s\n", pathname);
 	//panic("arrived!");
 	static size_t nowSize = sizeof(file_table) / sizeof(Finfo);
 	//printf("size: %u\n", nowSize);
