@@ -2,7 +2,7 @@
 #include <fs.h>
 #include "syscall.h"
 
-//#define CONFIG_STRACE
+#define CONFIG_STRACE
 
 #ifdef CONFIG_STRACE
 static char nowFile[999] = {'\0'};
