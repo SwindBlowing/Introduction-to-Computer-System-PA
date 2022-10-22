@@ -2,7 +2,7 @@
 #include <fs.h>
 #include "syscall.h"
 
-#define CONFIG_STRACE
+//#define CONFIG_STRACE
 
 #ifdef CONFIG_STRACE
 static char nowFile[999] = {'\0'};
@@ -33,6 +33,7 @@ void do_syscall(Context *c) {
 	case SYS_brk: c->GPRx = 0; break;
 	case SYS_gettimeofday:
 		if ((void *)a[1] != NULL) {
+			printf("arrived!\n");
 			*(size_t *)(a[1]) = io_read(AM_TIMER_UPTIME).us / 1000000;
 			*(size_t *)(a[1] + sizeof(size_t)) = io_read(AM_TIMER_UPTIME).us;
 		}
