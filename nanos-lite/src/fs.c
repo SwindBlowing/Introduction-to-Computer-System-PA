@@ -54,7 +54,10 @@ int fs_open(const char *pathname, int flags, int mode)
 	static size_t nowSize = sizeof(file_table) / sizeof(Finfo);
 	for (int i = 0; i < nowSize; i++)
 		if (strcmp(pathname, file_table[i].name) == 0) {
-			if (!isOpen[i]) isOpen[i] = 1, open_offset[i] = 0;
+			if (!isOpen[i]) {
+				isOpen[i] = 1;
+				fs_lseek(i, 0, SEEK_SET);
+			}
 			return i;
 		}
 	panic("No file is found");
@@ -65,6 +68,7 @@ size_t fs_read(int fd, void *buf, size_t len)
 	len = len < file_table[fd].size - open_offset[fd] ?
 			len : file_table[fd].size - open_offset[fd];
 	ramdisk_read(buf, file_table[fd].disk_offset + open_offset[fd], len);
+	fs_lseek(fd, len, SEEK_CUR);
 	return len;
 }
 size_t fs_write(int fd, const void *buf, size_t len)
@@ -73,6 +77,7 @@ size_t fs_write(int fd, const void *buf, size_t len)
 	len = len < file_table[fd].size - open_offset[fd] ?
 			len : file_table[fd].size - open_offset[fd];
 	ramdisk_write(buf, file_table[fd].disk_offset + open_offset[fd], len);
+	fs_lseek(fd, len, SEEK_CUR);
 	return len;
 }
 size_t fs_lseek(int fd, size_t offset, int whence)
@@ -92,6 +97,6 @@ size_t fs_lseek(int fd, size_t offset, int whence)
 }
 int fs_close(int fd)
 {
-	isOpen[fd] = 0; open_offset[fd] = 0;
+	isOpen[fd] = 0; fs_lseek(fd, 0, SEEK_SET);
 	return 0;
 }
