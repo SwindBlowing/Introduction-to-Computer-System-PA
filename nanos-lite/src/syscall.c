@@ -32,8 +32,11 @@ void do_syscall(Context *c) {
 	case SYS_lseek: c->GPRx = fs_lseek(a[1], a[2], a[3]); break;
 	case SYS_brk: c->GPRx = 0; break;
 	case SYS_gettimeofday:
-		*(size_t *)(a[1]) = io_read(AM_TIMER_UPTIME).us / 1000000;
-		
+		if ((void *)a[1] != NULL) {
+			*(size_t *)(a[1]) = io_read(AM_TIMER_UPTIME).us / 1000000;
+			*(size_t *)(a[1] + sizeof(size_t)) = io_read(AM_TIMER_UPTIME).us;
+		}
+		break;
     default: panic("Unhandled syscall ID = %u", a[0]);
   }
 
