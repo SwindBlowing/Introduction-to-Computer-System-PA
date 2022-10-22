@@ -17,6 +17,8 @@
 #include <elf.h>
 #include <memory/paddr.h>
 
+#define MAX_ELF_NUM  5
+
 void init_rand();
 void init_log(const char *log_file);
 void init_mem();
@@ -45,15 +47,18 @@ void sdb_set_batch_mode();
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 static char *img_file = NULL;
-static char *elf_file = NULL;
+static char *elf_file[MAX_ELF_NUM] = {NULL};
 
 static int difftest_port = 1234;
 
-uint32_t functs_address[999], functs_size;
-char functs_name[999][999];
-uint32_t ret_address[999], ret_size;
-int ret_id[999];
+#ifdef CONFIG_FTRACE
+uint32_t functs_address[MAX_ELF_NUM][999], functs_size[MAX_ELF_NUM];
+char functs_name[MAX_ELF_NUM][999][999];
+uint32_t ret_address[MAX_ELF_NUM][999], ret_size[MAX_ELF_NUM];
+int ret_id[MAX_ELF_NUM][999];
 uint32_t t_num = 0;
+uint32_t elf_num = 0;
+#endif
 
 #ifdef CONFIG_ETRACE
 void print_exception(uint32_t pc, uint32_t dnpc, uint32_t errorId)
@@ -69,31 +74,34 @@ void exception_return(uint32_t pc, uint32_t dnpc)
 #endif
 
 #ifdef CONFIG_FTRACE
-static void print_funct(bool flag, uint32_t pos, uint32_t nowpc)
+static void print_funct(bool flag, uint32_t pos, uint32_t nowpc, uint32_t q)
 {
 	printf("0x%x: ", nowpc);
 	for (int i = 1; i <= t_num * 2; i++) printf(" ");
 	if (!flag) 
-		printf("call [%s@0x%x]", functs_name[pos], functs_address[pos]);
+		printf("call [%s@0x%x]", functs_name[q][pos], functs_address[q][pos]);
 	else 
-		printf("ret [%s]", functs_name[ret_id[pos]]);
+		printf("ret [%s]", functs_name[q][ret_id[q][pos]]);
 	printf("\n");
 }
 
 void check_funct(uint32_t nowpc, uint32_t jmp_add, uint32_t snpc)
 {
-	for (int i = 0; i < functs_size; i++)
-		if (functs_address[i] == jmp_add) {
-			print_funct(0, i, nowpc);
-			t_num++;
-			ret_address[ret_size] = snpc;
-			ret_id[ret_size++] = i;
+	for (int q = 0; q < elf_num; q++) {
+		for (int i = 0; i < functs_size[q]; i++)
+			if (functs_address[q][i] == jmp_add) {
+				print_funct(0, i, nowpc, q);
+				t_num++;
+				ret_address[q][ret_size[q]] = snpc;
+				ret_id[q][ret_size[q]++] = i;
+			}
+		if (ret_address[q][ret_size[q] - 1] == jmp_add) {
+			t_num--;
+			print_funct(1, ret_size[q] - 1, nowpc, q);
+			ret_size[q]--;
 		}
-	if (ret_address[ret_size - 1] == jmp_add) {
-		t_num--;
-		print_funct(1, ret_size - 1, nowpc);
-		ret_size--;
 	}
+	
 	return ;
 }
 
@@ -101,40 +109,41 @@ static void load_elf()
 {
 	char ch[99] = {'\0'};
 
-	if (elf_file == NULL) {
+	if (elf_file[0] == NULL) {
 		Log("No elf document is given.");
 		return ;
 	}
+	for (int q = 0; q < elf_num; q++) {
+		FILE *fp = fopen(elf_file[q], "rb");
 
-	FILE *fp = fopen(elf_file, "rb");
-
-	Elf32_Ehdr ehdr;
-	Elf32_Shdr shdrs[99];
-	Elf32_Sym symtabs[999];
-	int num_of_sym = 0;
-	int sym_off = 0;
-	bool p = fread(&ehdr, sizeof(Elf32_Ehdr), 1, fp); p = 1; assert(p);
-	fseek(fp, ehdr.e_shoff, SEEK_SET);
-	p = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp); p = 1; assert(p);
-	for (int i = 0; i < ehdr.e_shnum; i++) {
-		//Elf32_Shdr *shdr = &shdrs[i];
-		fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_SET);
-		p = fread(ch, sizeof(char *), 1, fp); p = 1; assert(p);
-		if (strcmp(ch, ".symtab") == 0) {
-			num_of_sym = shdrs[i].sh_size / sizeof(Elf32_Sym);
-			fseek(fp, shdrs[i].sh_offset, SEEK_SET);
-			p = fread(symtabs, sizeof(Elf32_Sym), num_of_sym, fp); p = 1; assert(p);
+		Elf32_Ehdr ehdr;
+		Elf32_Shdr shdrs[99];
+		Elf32_Sym symtabs[999];
+		int num_of_sym = 0;
+		int sym_off = 0;
+		bool p = fread(&ehdr, sizeof(Elf32_Ehdr), 1, fp); p = 1; assert(p);
+		fseek(fp, ehdr.e_shoff, SEEK_SET);
+		p = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp); p = 1; assert(p);
+		for (int i = 0; i < ehdr.e_shnum; i++) {
+			//Elf32_Shdr *shdr = &shdrs[i];
+			fseek(fp, shdrs[ehdr.e_shstrndx].sh_offset + shdrs[i].sh_name, SEEK_SET);
+			p = fread(ch, sizeof(char *), 1, fp); p = 1; assert(p);
+			if (strcmp(ch, ".symtab") == 0) {
+				num_of_sym = shdrs[i].sh_size / sizeof(Elf32_Sym);
+				fseek(fp, shdrs[i].sh_offset, SEEK_SET);
+				p = fread(symtabs, sizeof(Elf32_Sym), num_of_sym, fp); p = 1; assert(p);
+			}
+			if (strcmp(ch, ".strtab") == 0) sym_off = shdrs[i].sh_offset;
 		}
-		if (strcmp(ch, ".strtab") == 0) sym_off = shdrs[i].sh_offset;
+		for (int i = 0; i < num_of_sym; i++) {
+			if (ELF32_ST_TYPE(symtabs[i].st_info) != STT_FUNC) continue;
+			functs_address[q][functs_size[q]] = symtabs[i].st_value;
+			fseek(fp, sym_off + symtabs[i].st_name, SEEK_SET);
+			p = fread(functs_name[q][functs_size[q]], sizeof(char *), 1, fp); p = 1; assert(p);
+			functs_size[q]++;
+		}
+		fclose(fp);
 	}
-	for (int i = 0; i < num_of_sym; i++) {
-		if (ELF32_ST_TYPE(symtabs[i].st_info) != STT_FUNC) continue;
-		functs_address[functs_size] = symtabs[i].st_value;
-		fseek(fp, sym_off + symtabs[i].st_name, SEEK_SET);
-		p = fread(functs_name[functs_size], sizeof(char *), 1, fp); p = 1; assert(p);
-		functs_size++;
-	}
-	fclose(fp);
 }
 #endif
 
@@ -173,7 +182,7 @@ static int parse_args(int argc, char *argv[]) {
   int o;
   while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:", table, NULL)) != -1) {
     switch (o) {
-	  case 'e': elf_file = optarg; break;
+	  case 'e': elf_file[elf_num++] = optarg; break;
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
