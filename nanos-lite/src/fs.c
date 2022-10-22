@@ -71,7 +71,7 @@ size_t fs_write(int fd, const void *buf, size_t len)
 size_t fs_lseek(int fd, size_t offset, int whence)
 {
 	switch (whence) {
-		case SEEK_SET: open_offset[fd] = offset; break;
+		case SEEK_SET: open_offset[fd] = file_table[fd].disk_offset + offset; break;
 		case SEEK_CUR: open_offset[fd] = open_offset[fd] + offset; break;
 		case SEEK_END: open_offset[fd] = file_table[fd].disk_offset + file_table[fd].size + offset; break;
 		default: panic("Invalid lseek whence!"); break;
