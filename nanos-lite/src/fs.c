@@ -14,7 +14,7 @@ typedef struct {
   WriteFn write;
 } Finfo;
 
-static size_t open_offset[10005] = {-1};
+static size_t open_offset[10005] = {0};
 static bool isOpen[10005] = {0};
 
 enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB};
@@ -51,13 +51,10 @@ void init_fs() {
 int fs_open(const char *pathname, int flags, int mode)
 {
 	printf("arrived! %s\n", pathname);
-	//panic("arrived!");
 	static size_t nowSize = sizeof(file_table) / sizeof(Finfo);
-	//printf("size: %u\n", nowSize);
-	//printf("%s\n", pathname);
 	for (int i = 0; i < nowSize; i++)
 		if (strcmp(pathname, file_table[i].name) == 0) {
-			if (!isOpen[i]) isOpen[i] = 1, open_offset[i] = file_table[i].disk_offset;
+			if (!isOpen[i]) isOpen[i] = 1, open_offset[i] = 0;
 			return i;
 		}
 	panic("No file is found");
@@ -65,35 +62,35 @@ int fs_open(const char *pathname, int flags, int mode)
 }
 size_t fs_read(int fd, void *buf, size_t len)
 {
-	len = len < file_table[fd].disk_offset + file_table[fd].size - open_offset[fd] ?
-			len : file_table[fd].disk_offset + file_table[fd].size - open_offset[fd];
-	ramdisk_read(buf, open_offset[fd], len);
+	len = len < file_table[fd].size - open_offset[fd] ?
+			len : file_table[fd].size - open_offset[fd];
+	ramdisk_read(buf, file_table[fd].disk_offset + open_offset[fd], len);
 	return len;
 }
 size_t fs_write(int fd, const void *buf, size_t len)
 {
 	if (fd == 1 || fd == 2) return system_write(buf, open_offset[fd], len);
-	len = len < file_table[fd].disk_offset + file_table[fd].size - open_offset[fd] ?
-			len : file_table[fd].disk_offset + file_table[fd].size - open_offset[fd];
-	ramdisk_write(buf, open_offset[fd], len);
+	len = len < file_table[fd].size - open_offset[fd] ?
+			len : file_table[fd].size - open_offset[fd];
+	ramdisk_write(buf, file_table[fd].disk_offset + open_offset[fd], len);
 	return len;
 }
 size_t fs_lseek(int fd, size_t offset, int whence)
 {
 	switch (whence) {
-		case SEEK_SET: open_offset[fd] = file_table[fd].disk_offset + offset; break;
+		case SEEK_SET: open_offset[fd] = offset; break;
 		case SEEK_CUR: open_offset[fd] = open_offset[fd] + offset; break;
-		case SEEK_END: open_offset[fd] = file_table[fd].disk_offset + file_table[fd].size + offset; break;
+		case SEEK_END: open_offset[fd] = file_table[fd].size + offset; break;
 		default: panic("Invalid lseek whence!"); break;
 	}
-	if (open_offset[fd] >= file_table[fd].disk_offset + file_table[fd].size)
-		open_offset[fd] = file_table[fd].disk_offset + file_table[fd].size;
-	if (open_offset[fd] < file_table[fd].disk_offset) 
-		open_offset[fd] = file_table[fd].disk_offset;
-	return open_offset[fd] - file_table[fd].disk_offset;
+	if (open_offset[fd] >= file_table[fd].size)
+		open_offset[fd] = file_table[fd].size;
+	if (open_offset[fd] < 0) 
+		open_offset[fd] = 0;
+	return open_offset[fd];
 }
 int fs_close(int fd)
 {
-	isOpen[fd] = 0; open_offset[fd] = -1;
+	isOpen[fd] = 0; open_offset[fd] = 0;
 	return 0;
 }
