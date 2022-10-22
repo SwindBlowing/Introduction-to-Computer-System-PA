@@ -49,7 +49,7 @@ int fs_open(const char *pathname, int flags, int mode)
 			if (!isOpen[i]) isOpen[i] = 1, open_offset[i] = file_table[i].disk_offset;
 			return i;
 		}
-	panic("No file found");
+	panic("No file is found");
 	return -1;
 }
 size_t fs_read(int fd, void *buf, size_t len)
@@ -78,5 +78,6 @@ size_t fs_lseek(int fd, size_t offset, int whence)
 }
 int fs_close(int fd)
 {
+	isOpen[fd] = 0; open_offset[fd] = -1;
 	return 0;
 }
