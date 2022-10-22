@@ -25,10 +25,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   int fd = fs_open(filename, 0, 0);
   fs_lseek(fd, 0, SEEK_SET);
   fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
-  printf("%x\n", ehdr.e_ident);
+  printf("%x\n", *(uint32_t *)ehdr.e_ident);
 
   //check part
-  assert(0);
   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);
   #if defined(__ISA_NATIVE__)
 	assert(ehdr.e_machine == EM_X86_64);
