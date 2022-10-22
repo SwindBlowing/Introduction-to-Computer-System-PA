@@ -18,6 +18,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
   bool zeroCplt = 0;
   int zeroCpltNum = 0;
   bool isLongLong = 0;
+  bool shouldPlus = 0;
   while (*fmt != '\0') {
     if (*fmt == '%') {
       fmt++;
@@ -33,9 +34,15 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
       switch(*fmt) {
 		case 'l' :
 		  isLongLong = 1;
+		  shouldPlus = 1;
 		  if (*(fmt + 1) == 'u') goto label_u;
-		  goto label_d;
+		  else if (*(fmt + 1) == 'd') goto label_d;
+		  else {
+			shouldPlus = 0;
+			goto label_d;
+		  }
 		  break;
+
         case 's' :
           s = va_arg(*ap, char *);
           memcpy(out + *len, s, strlen(s));
@@ -66,6 +73,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
             ld %= lf;
             lf /= 10;
           }
+		  if (shouldPlus) shouldPlus = 1, fmt++;
           break;
 
         case 'u' : label_u :
@@ -86,6 +94,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
             lud %= luf;
             luf /= 10;
           }
+		  if (shouldPlus) shouldPlus = 1, fmt++;
           break;
 
 		case 'x' :
