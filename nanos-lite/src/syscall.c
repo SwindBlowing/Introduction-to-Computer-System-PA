@@ -4,6 +4,10 @@
 
 //#define CONFIG_STRACE
 
+#ifdef CONFIG_STRACE
+static char nowFile[999] = {'\0'};
+#endif
+
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
@@ -12,6 +16,8 @@ void do_syscall(Context *c) {
   a[3] = c->GPR4;
 
 #ifdef CONFIG_STRACE
+  if (a[0] == SYS_open) strcpy(nowFile, (const char *)a[1]);
+  if (nowFile != NULL) printf("Visited from file %s\n", nowFile);
   printf("System call ID = %u\n", a[0]);
   printf("GPRS value: %x %x %x %x %x\n", c->GPR1, c->GPR2, c->GPR3, c->GPR4, c->GPRx);
 #endif
