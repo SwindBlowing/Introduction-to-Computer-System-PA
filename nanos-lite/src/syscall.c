@@ -16,7 +16,7 @@ void do_syscall(Context *c) {
 	case SYS_exit: halt(c->GPR2); break;
 	case SYS_yield: yield(); c->GPRx = 0; break;
 	case SYS_write: {
-		printf("???%u\n", c->GPRx);
+		printf("???%u %u\n", c->GPRx, c->GPR4);
 		if (c->GPR2 == 1 || c->GPR2 == 2) {
 			for (int i = 0; i < c->GPR4; i++)
 				putch(*(char *)(c->GPR3 + i));
