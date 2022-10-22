@@ -45,7 +45,6 @@ void init_fs() {
 
 int fs_open(const char *pathname, int flags, int mode)
 {
-	panic("fuck");
 	static size_t nowSize = sizeof(file_table) / sizeof(Finfo);
 	for (int i = 0; i < nowSize; i++)
 		if (strcmp(pathname, file_table[i].name) == 0) {
