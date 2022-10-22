@@ -21,12 +21,9 @@ int fs_close(int fd);
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
   Elf_Ehdr ehdr;
-  //Elf_Ehdr ehdr2;
-  //ramdisk_read(&ehdr2, 62436, sizeof(Elf_Ehdr));
   int fd = fs_open(filename, 0, 0);
   fs_lseek(fd, 0, SEEK_SET);
   fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
-  //printf("%x %x\n", ehdr.e_entry, ehdr2.e_entry);
 
   //check part
   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);
@@ -38,7 +35,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   //end check part
 
   Elf_Phdr phdr[ehdr.e_phnum];
-  //ramdisk_read(phdr, ehdr.e_phoff, ehdr.e_phnum * sizeof(Elf_Phdr));
   fs_lseek(fd, ehdr.e_phoff, SEEK_SET);
   fs_read(fd, phdr, ehdr.e_phnum * sizeof(Elf_Phdr));
   for (size_t i = 0; i < ehdr.e_phnum; i++) {
@@ -47,8 +43,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		size_t virtAddr = phdr[i].p_vaddr;
 		size_t fileSize = phdr[i].p_filesz;
 		size_t memSize = phdr[i].p_memsz;
-		//printf("%x %x %x %x\n", offset, virtAddr, fileSize, memSize);
-		//ramdisk_read((void *)virtAddr, offset, fileSize);
 		fs_lseek(fd, offset, SEEK_SET);
 		fs_read(fd, (void *)virtAddr, fileSize);
 		assert(memSize >= fileSize);

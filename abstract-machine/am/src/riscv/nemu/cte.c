@@ -8,7 +8,7 @@ Context* __am_irq_handle(Context *c) {
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
   if (user_handler) {
-	printf("%x %x\n",c->mcause, c->GPR1);
+	//printf("%x %x\n",c->mcause, c->GPR1);
     Event ev = {0};
     switch (c->mcause) {
 	  case 0xb: {
