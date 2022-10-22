@@ -36,8 +36,8 @@ void do_syscall(Context *c) {
 			printf("arrived! %lu\n", io_read(AM_TIMER_UPTIME).us);
 			*(size_t *)(a[1]) = io_read(AM_TIMER_UPTIME).us / 1000000;
 			*(size_t *)(a[1] + sizeof(size_t)) = io_read(AM_TIMER_UPTIME).us;
-			printf("%lu\n", *(size_t *)(a[1]));
-			printf("%lu\n", *(size_t *)(a[1] + sizeof(size_t)));
+			printf("%ld\n", *(size_t *)(a[1]));
+			printf("%ld\n", *(size_t *)(a[1] + sizeof(size_t)));
 		}
 		c->GPRx = 0;
 		break;
