@@ -68,7 +68,8 @@ int _write(int fd, void *buf, size_t count) {
 void *_sbrk(intptr_t increment) {
   extern _end;
   static intptr_t pb = &_end;
-  int isAccepted = _syscall_(SYS_brk, increment, 0, 0); // 0 accepted
+  intptr_t isAccepted = _syscall_(SYS_brk, increment, 0, 0); // 0 accepted
+  assert(isAccepted == 0);
   if (isAccepted != 0) return (void *)-1;
   pb += increment;
   return (void *)(pb - increment);
