@@ -1,6 +1,5 @@
 #include <unistd.h>
 #include <stdio.h>
-#include <assert.h> //
 
 int main() {
   write(1, "Hello World!\n", 13);
@@ -11,7 +10,6 @@ int main() {
     if (j == 10000) {
       printf("Hello World from Navy-apps for the %dth time!\n", i ++);
       j = 0;
-	  assert(0); //
     }
   }
   return 0;
