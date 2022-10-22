@@ -44,8 +44,8 @@ void init_fs() {
 int fs_open(const char *pathname, int flags, int mode)
 {
 	static size_t nowSize = sizeof(file_table) / sizeof(Finfo);
-	printf("size: %u\n", nowSize);
-	printf("%s\n", pathname);
+	//printf("size: %u\n", nowSize);
+	//printf("%s\n", pathname);
 	for (int i = 0; i < nowSize; i++)
 		if (strcmp(pathname, file_table[i].name) == 0) {
 			if (!isOpen[i]) isOpen[i] = 1, open_offset[i] = file_table[i].disk_offset;
