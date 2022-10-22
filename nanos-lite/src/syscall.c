@@ -4,7 +4,6 @@
 #define CONFIG_STRACE
 
 void do_syscall(Context *c) {
-  assert(0);
   uintptr_t a[4];
   a[0] = c->GPR1;
 
