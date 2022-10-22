@@ -35,8 +35,8 @@ void do_syscall(Context *c) {
 		if ((void *)a[1] != NULL) {
 			//printf("%lu\n", io_read(AM_TIMER_UPTIME).us / 1000000);
 			//memset((void *)a[1], 0, sizeof(size_t));
-			*(size_t *)(a[1]) = (size_t)io_read(AM_TIMER_UPTIME).us / 1000000;
-			*(size_t *)(a[1] + 1) = (size_t)io_read(AM_TIMER_UPTIME).us;
+			//*(size_t *)(a[1]) = (size_t)io_read(AM_TIMER_UPTIME).us / 1000000;
+			//*(size_t *)(a[1] + 1) = (size_t)io_read(AM_TIMER_UPTIME).us;
 			//printf("%lu\n", *(size_t *)(a[1] + 1));
 			//printf("%ld\n", *(size_t *)(a[1] + sizeof(size_t)));
 		}
