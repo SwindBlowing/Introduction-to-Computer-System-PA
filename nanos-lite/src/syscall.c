@@ -36,6 +36,7 @@ void do_syscall(Context *c) {
 			*(size_t *)(a[1]) = io_read(AM_TIMER_UPTIME).us / 1000000;
 			*(size_t *)(a[1] + sizeof(size_t)) = io_read(AM_TIMER_UPTIME).us;
 		}
+		c->GPRx = 0;
 		break;
     default: panic("Unhandled syscall ID = %u", a[0]);
   }
