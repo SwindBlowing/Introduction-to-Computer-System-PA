@@ -49,15 +49,16 @@ static char *diff_so_file = NULL;
 static char *img_file = NULL;
 static char *elf_file[MAX_ELF_NUM] = {NULL};
 
+static uint32_t elf_num = 0;
+
 static int difftest_port = 1234;
 
 #ifdef CONFIG_FTRACE
-uint32_t functs_address[MAX_ELF_NUM][999], functs_size[MAX_ELF_NUM];
-char functs_name[MAX_ELF_NUM][999][999];
-uint32_t ret_address[MAX_ELF_NUM][999], ret_size[MAX_ELF_NUM];
-int ret_id[MAX_ELF_NUM][999];
-uint32_t t_num = 0;
-uint32_t elf_num = 0;
+static uint32_t functs_address[MAX_ELF_NUM][999], functs_size[MAX_ELF_NUM];
+static char functs_name[MAX_ELF_NUM][999][999];
+static uint32_t ret_address[MAX_ELF_NUM][999], ret_size[MAX_ELF_NUM];
+static int ret_id[MAX_ELF_NUM][999];
+static uint32_t t_num = 0;
 #endif
 
 #ifdef CONFIG_ETRACE
