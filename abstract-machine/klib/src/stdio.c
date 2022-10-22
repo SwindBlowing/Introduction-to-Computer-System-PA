@@ -58,7 +58,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
             *(out + *len) = '-';
             *len += 1;
           }
-          while (lf * 10 <= ld) lf *= 10, numLen++;
+          while (lf * 10 <= ld && lf * 10 > lf) lf *= 10, numLen++;
           if (d < 0) numLen++;
           if (zeroCplt) {
             zeroCplt = 0;
@@ -80,7 +80,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
 		  if (!isLongLong) ud = va_arg(*ap, unsigned), lud = ud;
 		  else isLongLong = 0, lud = va_arg(*ap, unsigned long long);
           luf = 1; numLen = 1;
-          while (luf * 10 <= lud) luf *= 10, numLen++;
+          while (luf * 10 <= lud && luf * 10 > luf) luf *= 10, numLen++;
           if (zeroCplt) {
             zeroCplt = 0;
             for (int i = 1; i <= zeroCpltNum - numLen; i++) {
@@ -101,7 +101,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
 		  ud = va_arg(*ap, unsigned);
           lud = ud;
           luf = 1; numLen = 1;
-          while (luf * 16 <= lud) luf *= 16, numLen++;
+          while (luf * 16 <= lud && luf * 16 > luf) luf *= 16, numLen++;
           if (zeroCplt) {
             zeroCplt = 0;
             for (int i = 1; i <= zeroCpltNum - numLen; i++) {
@@ -121,7 +121,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
 		  if (!zeroCplt) zeroCplt = 1, zeroCpltNum = 16;
 		  lud = (unsigned)va_arg(*ap, const void *);
           luf = 1; numLen = 1;
-          while (luf * 16 <= lud) luf *= 16, numLen++;
+          while (luf * 16 <= lud && luf * 16 > luf) luf *= 16, numLen++;
           if (zeroCplt) {
             zeroCplt = 0;
             for (int i = 1; i <= zeroCpltNum - numLen; i++) {
