@@ -100,6 +100,12 @@ void check_funct(uint32_t nowpc, uint32_t jmp_add, uint32_t snpc)
 static void load_elf()
 {
 	char ch[99] = {'\0'};
+
+	if (elf_file == NULL) {
+		Log("No elf document is given.");
+		return ;
+	}
+
 	FILE *fp = fopen(elf_file, "rb");
 
 	Elf32_Ehdr ehdr;
