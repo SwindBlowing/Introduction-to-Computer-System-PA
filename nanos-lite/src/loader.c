@@ -28,6 +28,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   printf("%x\n", ehdr.e_ident);
 
   //check part
+  assert(0);
   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);
   #if defined(__ISA_NATIVE__)
 	assert(ehdr.e_machine == EM_X86_64);
