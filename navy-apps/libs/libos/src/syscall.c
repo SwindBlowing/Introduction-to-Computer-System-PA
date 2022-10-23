@@ -94,6 +94,7 @@ int _gettimeofday(struct timeval *tv, struct timezone *tz) {
   for (const char *p = pri; *p; p++)
 	putchar(*p);
 putchar('\n');
+assert(0);
   return flag;
 }
 
