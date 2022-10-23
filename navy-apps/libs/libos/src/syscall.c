@@ -86,10 +86,10 @@ off_t _lseek(int fd, off_t offset, int whence) {
 }
 
 int _gettimeofday(struct timeval *tv, struct timezone *tz) {
-	//assert(0);
-	//printf("tv address: %lu\n", tv);
   void *nowTV = tv, *nowTZ = tz;
-  return _syscall_(SYS_gettimeofday, (intptr_t)nowTV, (intptr_t)nowTZ, 0);
+  int flag =  _syscall_(SYS_gettimeofday, (intptr_t)nowTV, (intptr_t)nowTZ, 0);
+  printf("%lu\n", tv->tv_usec);
+  return flag;
 }
 
 int _execve(const char *fname, char * const argv[], char *const envp[]) {
