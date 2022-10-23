@@ -39,7 +39,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	*((char *)buf + nowLen) = keyname[ev.keycode][i];
 	nowLen++; if (nowLen == len) return nowLen;
   }
-  *(char *)(buf + nowLen) = '\0'; nowLen++;
+  //*(char *)(buf + nowLen) = '\0'; nowLen++;
   printf("%d %s\n", sizeof(keyname[ev.keycode]), (char *)buf);
   return nowLen;
 }
