@@ -59,6 +59,7 @@ int fs_open(const char *pathname, int flags, int mode)
 }
 size_t fs_read(int fd, void *buf, size_t len)
 {
+	if (file_table[fd].read != NULL) return (file_table[fd].read)(buf, open_offset[fd], len);
 	len = len < file_table[fd].size - open_offset[fd] ?
 			len : file_table[fd].size - open_offset[fd];
 	ramdisk_read(buf, file_table[fd].disk_offset + open_offset[fd], len);
@@ -67,7 +68,7 @@ size_t fs_read(int fd, void *buf, size_t len)
 }
 size_t fs_write(int fd, const void *buf, size_t len)
 {
-	if (fd == 1 || fd == 2) return serial_write(buf, open_offset[fd], len);
+	if (file_table[fd].write != NULL) return (file_table[fd].write)(buf, open_offset[fd], len);
 	len = len < file_table[fd].size - open_offset[fd] ?
 			len : file_table[fd].size - open_offset[fd];
 	ramdisk_write(buf, file_table[fd].disk_offset + open_offset[fd], len);
