@@ -33,7 +33,7 @@ void do_syscall(Context *c) {
 	case SYS_brk: c->GPRx = 0; break;
 	case SYS_gettimeofday:
 		if ((void *)a[1] != NULL) {
-			*(size_t *)a[1] = 1;
+			*(size_t *)a[1] = io_read(AM_TIMER_UPTIME).us;
 			*(size_t *)(a[1] + 1) = 0;
 			printf("%u %u\n", *(size_t *)a[1], *(size_t *)(a[1] + 1));
 		}
