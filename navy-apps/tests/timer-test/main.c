@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <sys/time.h>
-#include "../../libndl/include/NDL.h"
+#include <NDL.h>
 
 
 
