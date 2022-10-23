@@ -47,10 +47,10 @@ void init_fs() {
 
 int fs_open(const char *pathname, int flags, int mode)
 {
-	Log("%s", pathname);
 	size_t nowSize = sizeof(file_table) / sizeof(Finfo);
 	for (int i = 0; i < nowSize; i++)
 		if (strcmp(pathname, file_table[i].name) == 0) {
+			Log("%d", i);
 			if (!isOpen[i]) {
 				isOpen[i] = 1;
 				fs_lseek(i, 0, SEEK_SET);
