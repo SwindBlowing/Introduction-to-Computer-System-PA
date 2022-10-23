@@ -35,7 +35,7 @@ void do_syscall(Context *c) {
 		if ((void *)a[1] != NULL) {
 			*(size_t *)(a[1] + 1) = io_read(AM_TIMER_UPTIME).us;
 			*(size_t *)a[1] = *(size_t *)(a[1] + 1) / 1000000;
-			printf("%lu %lu\n", *(size_t *)a[1], *(size_t *)(a[1] + 1));
+			printf("%ld %ld\n", *(size_t *)a[1], *(size_t *)(a[1] + 1));
 		}
 		c->GPRx = 0;
 		break;
