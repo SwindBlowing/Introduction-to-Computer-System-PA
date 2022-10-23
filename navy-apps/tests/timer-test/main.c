@@ -6,8 +6,9 @@ struct timeval timeVal;
 
 int main()
 {
-	assert(0);
+	//assert(0);
 	gettimeofday(&timeVal, NULL);
+	assert(0);
 	unsigned long now = timeVal.tv_usec;
 	printf("%u\n", now);
 	int j = 0;
