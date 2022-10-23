@@ -35,11 +35,11 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	*((char *)buf + 1) = 'u'; nowLen++; if (nowLen == len) return nowLen;
 	*((char *)buf + 2) = ' '; nowLen++; if (nowLen == len) return nowLen;
   }
-  nowLen = 3;
   for (const char *p = keyname[ev.keycode]; *p; p++) {
 	*((char *)buf + nowLen) = *p;
 	nowLen++; if (nowLen == len) return nowLen;
   }
+  printf("%s\n", buf);
   return nowLen;
 }
 
