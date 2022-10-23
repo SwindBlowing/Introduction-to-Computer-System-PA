@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <sys/time.h>
+#include <assert.h>
 
 struct timeval timeVal;
 
 int main()
 {
+	assert(0);
 	gettimeofday(&timeVal, NULL);
 	unsigned long now = timeVal.tv_usec;
 	printf("%u\n", now);
