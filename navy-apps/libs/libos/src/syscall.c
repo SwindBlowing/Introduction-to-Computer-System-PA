@@ -4,6 +4,7 @@
 #include <sys/time.h>
 #include <assert.h>
 #include <time.h>
+#include <stdio.h>
 #include "syscall.h"
 
 // helper macros
@@ -90,7 +91,9 @@ int _gettimeofday(struct timeval *tv, struct timezone *tz) {
   int flag =  _syscall_(SYS_gettimeofday, (intptr_t)nowTV, (intptr_t)nowTZ, 0);
   char pri[99];
   sprintf(pri, "%lu\n", tv->tv_usec);
-  putstr(pri);
+  for (const char *p = pri; *p; p++)
+	putchar(*p);
+putchar('\n');
   return flag;
 }
 
