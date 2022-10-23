@@ -40,7 +40,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	nowLen++; if (nowLen == len) return nowLen;
   }
   *(char *)(buf + nowLen) = '\n'; nowLen++;
-  printf("%d %s\n", sizeof(keyname[ev.keycode]), (char *)buf);
+  //printf("%d %s\n", sizeof(keyname[ev.keycode]), (char *)buf);
   return nowLen;
 }
 
