@@ -34,9 +34,10 @@ void do_syscall(Context *c) {
 	case SYS_gettimeofday: {
 		if ((void *)a[1] != NULL) {
 			size_t now = io_read(AM_TIMER_UPTIME).us;
+			printf("%u\n", now);
 			*(size_t *)a[1] = now / 1000000;
 			*(size_t *)(a[1] + 1) = now;
-			printf("%d %d\n", *(size_t *)a[1], *(size_t *)(a[1] + 1));
+			printf("%u %u\n", *(size_t *)a[1], *(size_t *)(a[1] + 1));
 		}
 		c->GPRx = 0;
 		break;
