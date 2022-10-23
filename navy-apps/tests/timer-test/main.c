@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <sys/time.h>
+#include "../../libndl/include/NDL.h"
 
-struct timeval timeVal;
+
 
 int main()
 {
-	gettimeofday(&timeVal, NULL);
-	unsigned long now = timeVal.tv_usec;
+	NDL_Init(0);
+	unsigned long pre = NDL_GetTicks();
+	unsigned long now = pre;
 	//printf("fuck!!!\n");
 	//printf("%lu\n", now);
 	int j = 0;
@@ -14,10 +16,10 @@ int main()
 		j++;
 		if (j == 10000) {
 			j = 0;
-			gettimeofday(&timeVal, NULL);
+			now = NDL_GetTicks();
 			//printf("%lu\n", timeVal.tv_usec);
-			if (timeVal.tv_usec - now >= 500000) {
-				now = timeVal.tv_usec;
+			if (now - pre >= 500) {
+				pre = now;
 				printf("0.5s passed!\n");
 			}
 		}
