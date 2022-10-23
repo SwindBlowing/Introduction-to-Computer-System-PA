@@ -10,6 +10,7 @@ int main()
 	gettimeofday(&timeVal, NULL);
 	//assert(0);
 	unsigned long now = timeVal.tv_usec;
+	printf("????");
 	printf("%lu\n", now); assert(0);
 	int j = 0;
 	while (1) {
