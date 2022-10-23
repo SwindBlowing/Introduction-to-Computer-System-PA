@@ -37,7 +37,7 @@ void do_syscall(Context *c) {
 			//printf("%u\n", now);
 			*(size_t *)(a[1]) = io_read(AM_TIMER_UPTIME).us / 1000000u;
 			*((size_t *)(a[1]) + 1) = io_read(AM_TIMER_UPTIME).us;
-			printf("%u %u\n", *(size_t *)a[1], *((size_t *)(a[1]) + 1));
+			//printf("%u %u\n", *(size_t *)a[1], *((size_t *)(a[1]) + 1));
 		}
 		c->GPRx = 0;
 		break;

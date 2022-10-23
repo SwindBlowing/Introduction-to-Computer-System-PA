@@ -7,6 +7,7 @@ int main()
 {
 	gettimeofday(&timeVal, NULL);
 	unsigned long now = timeVal.tv_usec;
+	printf("%u\n", now);
 	int j = 0;
 	while (1) {
 		j++;
