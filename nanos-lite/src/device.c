@@ -40,13 +40,34 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	nowLen++; if (nowLen == len) return nowLen;
   }
   *(char *)(buf + nowLen) = '\n'; nowLen++;
-  //*(char *)(buf + nowLen) = '\0';
+  *(char *)(buf + nowLen) = '\0';
   //printf("%d %s\n", sizeof(keyname[ev.keycode]), (char *)buf);
   return nowLen;
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
-  return 0;
+  int nowLen = 0;
+  int w = io_read(AM_GPU_CONFIG).width;
+  int h = io_read(AM_GPU_CONFIG).height;
+  char temp1[99] = {'\0'}, temp2[99] = {'\0'};
+  sprintf(temp1, "%d", w);
+  char W[99] = "WIDTH:\0";
+  for (int i = 0; i < 6; i++) *((char *)buf + i) = W[i];
+  nowLen += 6;
+  for (int i = 0; temp1[i] != '\0'; i++) {
+	*((char *)buf + nowLen) = temp1[i];
+	nowLen++;
+  }
+  *((char *)buf + nowLen) = '\n'; nowLen++;
+  strcpy(W, "HEIGHT:\0");
+  sprintf(temp2, "%d", h);
+  for (int i = 0; i < 6; i++) *((char *)buf + nowLen) = W[i], nowLen++;
+  for (int i = 0; temp2[i] != '\0'; i++) {
+	*((char *)buf + nowLen) = temp2[i];
+	nowLen++;
+  }
+  *((char *)buf + nowLen) = '\0';
+  return nowLen;
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {

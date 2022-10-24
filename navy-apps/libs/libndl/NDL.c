@@ -17,9 +17,13 @@ uint32_t NDL_GetTicks() {
 }
 
 int NDL_PollEvent(char *buf, int len) {
-  int nowLen = read(4, buf, len);
+  int nowLen = read(9, buf, len);
   for (int i = 0; i < nowLen; i++)
-	if (*(buf + i) == '\n') return 1;
+	if (*(buf + i) == '\n') {
+		close(9);
+		return 1;
+	}
+  close(9);
   return 0;
 }
 
