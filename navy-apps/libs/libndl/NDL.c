@@ -8,6 +8,7 @@
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
+static int sys_w = 0, sys_h = 0;
 static uint32_t boot = 0; //usec
 struct timeval tv;
 
@@ -28,7 +29,7 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
-	printf("%d %d\n", *w, *h);
+  if (!(*w) && !(*h)) *w = sys_w, *h = sys_h;
   if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
@@ -70,8 +71,22 @@ int NDL_Init(uint32_t flags) {
   if (getenv("NWM_APP")) {
     evtdev = 3;
   }
+
   gettimeofday(&tv, NULL);
   boot = tv.tv_usec;
+
+  if (!sys_w) {
+	char sys_size[64];
+	read(5, sys_size, sizeof(sys_size) - 1);
+	int p = 0;
+	while (sys_size[p] < '0' || sys_size[p] > '9') p++;
+	while (sys_size[p] >= '0' && sys_size[p] <= '9') 
+		sys_w = sys_w * 10 + sys_size[p] - '0', p++;
+	while (sys_size[p] < '0' || sys_size[p] > '9') p++;
+	while (sys_size[p] >= '0' && sys_size[p] <= '9') 
+		sys_h = sys_h * 10 + sys_size[p] - '0', p++;
+  }
+  printf("!!%d %d!!\n", sys_w, sys_h);
   return 0;
 }
 
