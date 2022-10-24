@@ -61,7 +61,7 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   *((char *)buf + nowLen) = '\n'; nowLen++;
   strcpy(W, "HEIGHT:\0");
   sprintf(temp2, "%d", h);
-  for (int i = 0; i < 6; i++) *((char *)buf + nowLen) = W[i], nowLen++;
+  for (int i = 0; i < 7; i++) *((char *)buf + nowLen) = W[i], nowLen++;
   for (int i = 0; temp2[i] != '\0'; i++) {
 	*((char *)buf + nowLen) = temp2[i];
 	nowLen++;
