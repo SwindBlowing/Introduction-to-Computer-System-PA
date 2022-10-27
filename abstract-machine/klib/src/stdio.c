@@ -19,10 +19,12 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
   int zeroCpltNum = 0;
   bool isLongLong = 0;
   bool shouldPlus = 0;
+  char zeroChar = 0;
   while (*fmt != '\0') {
     if (*fmt == '%') {
       fmt++;
       if (*fmt == '0') {
+		zeroChar = '0';
         zeroCplt = 1;
         zeroCpltNum = 0;
         fmt++;
@@ -31,6 +33,16 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           fmt++;
         }
       }
+	  else if (*fmt >= '0' && *fmt <= '9') {
+		zeroChar = ' ';
+		zeroCplt = 1;
+        zeroCpltNum = 0;
+        fmt++;
+        while (*fmt >= '0' && *fmt <= '9') {
+          zeroCpltNum = zeroCpltNum * 10 + *fmt - '0';
+          fmt++;
+        }
+	  }
       switch(*fmt) {
 		case 'l' :
 		  isLongLong = 1;
@@ -63,7 +75,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           if (zeroCplt) {
             zeroCplt = 0;
             for (int i = 1; i <= zeroCpltNum - numLen; i++) {
-              *(out + *len) = '0';
+              *(out + *len) = zeroChar;
               *len += 1;
             }
           }
@@ -84,7 +96,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           if (zeroCplt) {
             zeroCplt = 0;
             for (int i = 1; i <= zeroCpltNum - numLen; i++) {
-              *(out + *len) = '0';
+              *(out + *len) = zeroChar;
               *len += 1;
             }
           }
@@ -105,7 +117,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           if (zeroCplt) {
             zeroCplt = 0;
             for (int i = 1; i <= zeroCpltNum - numLen; i++) {
-              *(out + *len) = '0';
+              *(out + *len) = zeroChar;
               *len += 1;
             }
           }
@@ -125,7 +137,7 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           if (zeroCplt) {
             zeroCplt = 0;
             for (int i = 1; i <= zeroCpltNum - numLen; i++) {
-              *(out + *len) = '0';
+              *(out + *len) = zeroChar;
               *len += 1;
             }
           }
