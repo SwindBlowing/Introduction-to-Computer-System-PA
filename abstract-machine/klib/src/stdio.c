@@ -62,10 +62,9 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           break;
 
         case 'd' : label_d :
-          if (!isLongLong) d = va_arg(*ap, int), ld = d;
+          if (!isLongLong) ld = va_arg(*ap, int);//, ld = d;
 		  else isLongLong = 0, ld = va_arg(*ap, long long);
           lf = 1; numLen = 1;
-		  putch('0' + ld);
           if (ld < 0) {
             ld *= -1;
             *(out + *len) = '-';
