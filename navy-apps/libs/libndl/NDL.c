@@ -62,7 +62,7 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 #endif
 	for (int j = 0; j < h; j++) {
 			lseek(4, ((j + y) * sys_w + x) * 4, SEEK_SET);
-			write(4, pixels + j * w, 4 * w);
+			write(4, pixels + j * w, w);
 		}
 }
 
