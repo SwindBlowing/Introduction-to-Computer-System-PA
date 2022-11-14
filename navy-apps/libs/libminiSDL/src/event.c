@@ -22,6 +22,7 @@ int SDL_WaitEvent(SDL_Event *event) {
   char buf[100] = {'\0'};
   char tmpBuf[100] = {'\0'};
   while (1) {                             //can be better!!!!!!!!!!
+  	printf("still here\n");
 	if (NDL_PollEvent(buf, 50)) {
 		if (*(buf + 1) == 'd') event->type = SDL_KEYDOWN, event->key.type = SDL_KEYDOWN;
 		else if (*(buf + 1) == 'u') event->type = SDL_KEYUP, event->key.type = SDL_KEYUP;
