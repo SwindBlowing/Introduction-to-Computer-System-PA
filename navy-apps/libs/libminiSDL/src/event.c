@@ -27,6 +27,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 		if (*(buf + 1) == 'd') event->type = SDL_KEYDOWN, event->key.type = SDL_KEYDOWN;
 		else if (*(buf + 1) == 'u') event->type = SDL_KEYUP, event->key.type = SDL_KEYUP;
 		strncpy(tmpBuf, buf + 3, 50);
+		tmpBuf[strlen(tmpBuf) - 1] = '\0';
 		for (int i = 0; i < sizeof(keyname) / sizeof(char *); i++)
 			if (strcmp(tmpBuf, keyname[i]) == 0) {
 				printf("%d\n", i);
