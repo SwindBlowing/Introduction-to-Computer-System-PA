@@ -75,7 +75,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   //int sys_h = io_read(AM_GPU_CONFIG).height;
   int h = offset / sys_w;
   int w = offset % sys_w;
-  printf("%d %d %d %d\n", sys_w, offset, w, h);
+  //printf("%d %d %d %d\n", sys_w, offset, w, h);
   io_write(AM_GPU_FBDRAW, w, h, (uint32_t *)buf, len, 1, false);
   io_write(AM_GPU_FBDRAW, 0, 0, NULL, 0, 0, true);
   return len;
