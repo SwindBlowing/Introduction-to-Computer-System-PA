@@ -12,6 +12,6 @@ extern int _syscall_(int, uintptr_t, uintptr_t, uintptr_t);
 int main() {
   //return _syscall_(SYS_yield, 0, 0, 0);
   fixedpt a = fixedpt_rconst(-1.7);
-  printf("%d", fixedpt_ceil(a));
+  printf("%d", fixedpt_floor(a));
   return 0;
 }
