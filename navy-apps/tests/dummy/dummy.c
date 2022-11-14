@@ -10,8 +10,8 @@
 extern int _syscall_(int, uintptr_t, uintptr_t, uintptr_t);
 
 int main() {
-  //return _syscall_(SYS_yield, 0, 0, 0);
-  fixedpt a = fixedpt_rconst(-1);
-  printf("%d", fixedpt_abs(a));
-  return 0;
+  return _syscall_(SYS_yield, 0, 0, 0);
+  //fixedpt a = fixedpt_rconst(-1);
+  //printf("%d", fixedpt_abs(a));
+  //return 0;
 }
