@@ -50,6 +50,11 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+	for (int j = 0; j < h; j++)
+		for (int i = 0; i < w; i++) {
+			lseek(4, (j + y) * screen_w + (i + x), SEEK_SET);
+			write(4, pixels + j * w + i, 1);
+		}
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
@@ -85,7 +90,7 @@ int NDL_Init(uint32_t flags) {
 	while (sys_size[p] >= '0' && sys_size[p] <= '9') 
 		sys_h = sys_h * 10 + sys_size[p] - '0', p++;
   }
-  printf("!!%d %d !!\n", sys_w, sys_h);
+  printf("!!%d %d!!\n", sys_w, sys_h);
   return 0;
 }
 
