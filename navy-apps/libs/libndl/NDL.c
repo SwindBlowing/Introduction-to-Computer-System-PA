@@ -85,7 +85,7 @@ int NDL_Init(uint32_t flags) {
 	while (sys_size[p] >= '0' && sys_size[p] <= '9') 
 		sys_h = sys_h * 10 + sys_size[p] - '0', p++;
   }
-  //printf("!!%d %d 2!!\n", sys_w, sys_h);
+  printf("!!%d %d !!\n", sys_w, sys_h);
   return 0;
 }
 
