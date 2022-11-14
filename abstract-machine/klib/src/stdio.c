@@ -129,10 +129,10 @@ void deal_with_args(char *out, const char *fmt, int *len, va_list *ap, bool *isE
           break;
 
 		case 'p' :
-		  if (!zeroCplt) {
+		  /*if (!zeroCplt) {
 			zeroCplt = 1, zeroCpltNum = 16;
 			zeroChar = ' ';
-		  }
+		  }*/
 		  lud = (unsigned)va_arg(*ap, const void *);
           luf = 1; numLen = 1;
           while (luf * 16 <= lud && luf * 16 > luf) luf *= 16, numLen++;
