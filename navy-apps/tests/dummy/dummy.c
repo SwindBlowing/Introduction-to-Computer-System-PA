@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include <fixedptc.h>
+#include <stdio.h>
 
 #ifdef __ISA_NATIVE__
 #error can not support ISA=native
@@ -8,5 +10,8 @@
 extern int _syscall_(int, uintptr_t, uintptr_t, uintptr_t);
 
 int main() {
-  return _syscall_(SYS_yield, 0, 0, 0);
+  //return _syscall_(SYS_yield, 0, 0, 0);
+  fixedpt a = fixedpt_rconst(1.2);
+  printf("%d", a);
+  return 0;
 }
