@@ -73,6 +73,7 @@
 #endif
 
 #include <stdint.h>
+#include <assert.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -132,6 +133,7 @@ static inline fixedpt fixedpt_muli(fixedpt A, int B) {
 
 /* Divides a fixedpt number with an integer, returns the result. */
 static inline fixedpt fixedpt_divi(fixedpt A, int B) {
+	assert(B);
 	return A / B;
 }
 
@@ -143,6 +145,7 @@ static inline fixedpt fixedpt_mul(fixedpt A, fixedpt B) {
 
 /* Divides two fixedpt numbers, returns the result. */
 static inline fixedpt fixedpt_div(fixedpt A, fixedpt B) {
+	assert(B);
 	return (A << 8) / B;
 }
 
