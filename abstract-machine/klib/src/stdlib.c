@@ -36,7 +36,6 @@ void *malloc(size_t size) {
 /*#if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
   panic("Not implemented");
 #endif*/
-  panic("Not imp");
   if (!size) return NULL;
   char *old = heap.start;
   heap.start += size;
