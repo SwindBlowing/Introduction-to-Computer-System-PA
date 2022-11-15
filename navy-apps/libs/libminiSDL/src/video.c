@@ -101,7 +101,10 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		uint32_t *nowPixels = malloc(4 * w * h);
 		for (int i = 0; i < h; i++)
 			for (int j = 0; j < w; j++) {
-				nowPixels[i * w + j] = s->format->palette->colors[s->pixels[(i + y) * (s->w) + (j + x)]].val;
+				uint8_t r = s->format->palette->colors[s->pixels[(i + y) * (s->w) + (j + x)]].r;
+				uint8_t g = s->format->palette->colors[s->pixels[(i + y) * (s->w) + (j + x)]].g;
+				uint8_t b = s->format->palette->colors[s->pixels[(i + y) * (s->w) + (j + x)]].b;
+				nowPixels[i * w + j] = ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
 			}
 		#ifdef ToMid
 			static int sys_w = 400, sys_h = 300;
