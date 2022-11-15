@@ -41,6 +41,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 			return 1;
 		}
   }
+  printf("end2\n");
   return 0;
 }
 
@@ -66,6 +67,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 		return 0;
   	}
   }
+  printf("end3\n");
   return 1;
 }
 
