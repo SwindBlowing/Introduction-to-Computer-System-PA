@@ -26,6 +26,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	}
   }
   else if (dst->format->BitsPerPixel == 8) {
+	printf("Should reach here\n");
 	int16_t x = 0, y = 0;
 	if (dstrect != NULL) x = dstrect->x, y = dstrect->y;
 	if (srcrect == NULL) {
@@ -59,6 +60,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 			return ;
 	}
 	else if (dst->format->BitsPerPixel == 8) {
+		printf("Should reach here\n");
 		uint8_t mapCol = 0;
 		for (int i = 0; i < 256; i++)
 			if (dst->format->palette->colors[i].val == color) {
@@ -88,6 +90,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		else NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
 	}
 	else if (s->format->BitsPerPixel == 8) {
+		printf("Should reach here\n");
 		uint32_t *nowPixels = malloc(4 * (s->w) * (s->h));
 		for (int i = 0; i < (s->h); i++)
 			for (int j = 0; j < (s->w); j++)
