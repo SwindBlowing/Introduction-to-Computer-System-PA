@@ -8,7 +8,6 @@
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
-  printf("Here1\n");
   if (dst->format->BitsPerPixel == 32) {
 	int16_t x = 0, y = 0;
 	if (dstrect != NULL) x = dstrect->x, y = dstrect->y;
@@ -26,7 +25,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	}
   }
   else if (dst->format->BitsPerPixel == 8) {
-	printf("Should reach here\n");
 	int16_t x = 0, y = 0;
 	if (dstrect != NULL) x = dstrect->x, y = dstrect->y;
 	if (srcrect == NULL) {
@@ -43,11 +41,9 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	}
   }
   else assert(0);
-  printf("End1\n");
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-	printf("Here2\n");
 	if (dst->format->BitsPerPixel == 32) {
 		if (dstrect == NULL) {
 			for (int i = 0; i < (dst->h); i++)
@@ -61,7 +57,6 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 			return ;
 	}
 	else if (dst->format->BitsPerPixel == 8) {
-		printf("Should reach here\n");
 		uint8_t mapCol = 0;
 		for (int i = 0; i < 256; i++)
 			if (dst->format->palette->colors[i].val == color) {
@@ -81,11 +76,9 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 			return ;
 	}
 	else assert(0);
-	printf("End2\n");
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-	printf("Here3\n");
 	if (s->format->BitsPerPixel == 32) {
 		if (!x && !y && !w && !h) w = s->w, h = s->h;
 		uint32_t *nowPixels = malloc(4 * w * h);
@@ -107,7 +100,6 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		free(nowPixels);
 	}
 	else assert(0);
-	printf("End3\n");
 }
 
 // APIs below are already implemented.
