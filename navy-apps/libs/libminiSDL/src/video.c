@@ -89,7 +89,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		uint32_t *nowPixels = malloc(4 * w * h);
 		for (int i = 0; i < h; i++)
 			for (int j = 0; j < w; j++) {
-				nowPixels[i * w + j] = s->pixels[(i + y) * (s->w) + (j + x)];
+				nowPixels[i * w + j] = ((uint32_t *)s->pixels)[(i + y) * (s->w) + (j + x)];
 			}
 		NDL_DrawRect(nowPixels, x, y, w, h);
 		free(nowPixels);
