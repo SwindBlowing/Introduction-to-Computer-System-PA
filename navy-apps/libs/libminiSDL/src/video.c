@@ -8,39 +8,91 @@
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
-  int16_t x = 0, y = 0;
-  if (dstrect != NULL) x = dstrect->x, y = dstrect->y;
-  if (srcrect == NULL) {
-	for (int i = 0; i < src->h; i++)
-		for (int j = 0; j < src->w; j++)
-			*((uint32_t *)(dst->pixels) + (i + y) * (dst->w) + (j + x))
-				= *((uint32_t *)(src->pixels) + i * (src->w) + j);
+  if (dst->format->BitsPerPixel == 32) {
+	int16_t x = 0, y = 0;
+	if (dstrect != NULL) x = dstrect->x, y = dstrect->y;
+	if (srcrect == NULL) {
+		for (int i = 0; i < src->h; i++)
+			for (int j = 0; j < src->w; j++)
+				*((uint32_t *)(dst->pixels) + (i + y) * (dst->w) + (j + x))
+					= *((uint32_t *)(src->pixels) + i * (src->w) + j);
+	}
+	else {
+		for (int i = 0; i < srcrect->h; i++)
+			for (int j = 0; j < srcrect->w; j++)
+				*((uint32_t *)(dst->pixels) + (i + y) * (dst->w) + (j + x))
+					= *((uint32_t *)(src->pixels) + (i + srcrect->y) * (src->w) + (j + srcrect->x));
+	}
   }
-  else {
-	for (int i = 0; i < srcrect->h; i++)
-		for (int j = 0; j < srcrect->w; j++)
-			*((uint32_t *)(dst->pixels) + (i + y) * (dst->w) + (j + x))
-				= *((uint32_t *)(src->pixels) + (i + srcrect->y) * (src->w) + (j + srcrect->x));
+  else if (dst->format->BitsPerPixel == 8) {
+	int16_t x = 0, y = 0;
+	if (dstrect != NULL) x = dstrect->x, y = dstrect->y;
+	if (srcrect == NULL) {
+		for (int i = 0; i < src->h; i++)
+			for (int j = 0; j < src->w; j++)
+				*((uint8_t *)(dst->pixels) + (i + y) * (dst->w) + (j + x))
+					= *((uint8_t *)(src->pixels) + i * (src->w) + j);
+	}
+	else {
+		for (int i = 0; i < srcrect->h; i++)
+			for (int j = 0; j < srcrect->w; j++)
+				*((uint8_t *)(dst->pixels) + (i + y) * (dst->w) + (j + x))
+					= *((uint8_t *)(src->pixels) + (i + srcrect->y) * (src->w) + (j + srcrect->x));
+	}
   }
+  else assert(0);
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-	if (dstrect == NULL) {
-		for (int i = 0; i < (dst->h); i++)
-			for (int j = 0; j < (dst->w); j++)
-				*((uint32_t *)(dst->pixels) + i * (dst->w) + j) = color;
-		return ;
+	if (dst->format->BitsPerPixel == 32) {
+		if (dstrect == NULL) {
+			for (int i = 0; i < (dst->h); i++)
+				for (int j = 0; j < (dst->w); j++)
+					*((uint32_t *)(dst->pixels) + i * (dst->w) + j) = color;
+			return ;
+		}
+		for (int i = 0; i < (dstrect->h); i++)
+				for (int j = 0; j < (dstrect->w); j++)
+					*((uint32_t *)(dst->pixels) + (i + dstrect->y) * (dst->w) + (j + dstrect->x)) = color;
+			return ;
 	}
-	for (int i = 0; i < (dstrect->h); i++)
-			for (int j = 0; j < (dstrect->w); j++)
-				*((uint32_t *)(dst->pixels) + (i + dstrect->y) * (dst->w) + (j + dstrect->x)) = color;
-		return ;
+	else if (dst->format->BitsPerPixel == 8) {
+		uint8_t mapCol = 0;
+		for (int i = 0; i < 256; i++)
+			if (dst->format->palette->colors[i].val == color) {
+				mapCol = i;
+				break;
+			}
+		if (dstrect == NULL) {
+			for (int i = 0; i < (dst->h); i++)
+				for (int j = 0; j < (dst->w); j++)
+					*((uint8_t *)(dst->pixels) + i * (dst->w) + j) = mapCol;
+			return ;
+		}
+		for (int i = 0; i < (dstrect->h); i++)
+				for (int j = 0; j < (dstrect->w); j++)
+					*((uint8_t *)(dst->pixels) + (i + dstrect->y) * (dst->w) + (j + dstrect->x)) = mapCol;
+			return ;
+	}
+	else assert(0);
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-	if (!x && !y && !w && !h) 
-		NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
-	else NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+	if (s->format->BitsPerPixel == 32) {
+		if (!x && !y && !w && !h) 
+			NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
+		else NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+	}
+	else if (s->format->BitsPerPixel == 8) {
+		uint32_t *nowPixels = malloc(4 * (s->w) * (s->h));
+		for (int i = 0; i < (s->h); i++)
+			for (int j = 0; j < (s->w); j++)
+				nowPixels[i * (s->w) + j] = s->format->palette->colors[s->pixels[i * (s->w) + j]].val;
+		if (!x && !y && !w && !h) 
+			NDL_DrawRect(nowPixels, 0, 0, s->w, s->h);
+		else NDL_DrawRect(nowPixels, x, y, w, h);
+	}
+	else assert(0);
 }
 
 // APIs below are already implemented.
