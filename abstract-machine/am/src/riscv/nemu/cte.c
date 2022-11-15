@@ -34,9 +34,10 @@ Context* __am_irq_handle(Context *c) {
 			case 0x12:
 			case 0x13:
 				ev.event = EVENT_SYSCALL; 
+				c->mepc += 4;
 				break;
 			case 0xffffffff:
-				ev.event = EVENT_YIELD; break;
+				ev.event = EVENT_YIELD; c->mepc += 4; break;
 			default: ev.event = EVENT_ERROR;  break;
 		}
 		break;
