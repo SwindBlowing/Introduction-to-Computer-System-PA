@@ -81,7 +81,7 @@ int numKEYs = 83;
 uint8_t* SDL_GetKeyState(int *numkeys) {
 	printf("begin4\n");
   numkeys = &numKEYs;
-  assert(0);
+  //assert(0);
   printf("end4\n");
   return keyState;
 }
