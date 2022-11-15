@@ -82,8 +82,6 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	else assert(0);
 }
 
-static uint32_t *nowPixels = NULL;
-
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	printf("Here3\n");
 	if (s->format->BitsPerPixel == 32) {
@@ -93,13 +91,9 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	}
 	else if (s->format->BitsPerPixel == 8) {
 		printf("Should reach here\n");
-		nowPixels = malloc(4 * (s->w) * (s->h));
+		uint32_t *nowPixels = malloc(4 * (s->w) * (s->h));
 		for (int i = 0; i < (s->h); i++)
 			for (int j = 0; j < (s->w); j++) {
-				/*uint8_t r = s->format->palette->colors[s->pixels[i * (s->w) + j]].r;
-				uint8_t g = s->format->palette->colors[s->pixels[i * (s->w) + j]].g;
-				uint8_t b = s->format->palette->colors[s->pixels[i * (s->w) + j]].b;
-				nowPixels[i * (s->w) + j] = ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;*/
 				nowPixels[i * (s->w) + j] = s->format->palette->colors[s->pixels[i * (s->w) + j]].val;
 				//printf("0x%x\n", nowPixels[i * (s->w) + j]);
 			}
