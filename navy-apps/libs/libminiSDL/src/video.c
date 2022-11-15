@@ -85,28 +85,23 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	printf("Here3\n");
 	if (s->format->BitsPerPixel == 32) {
-		if (!x && !y && !w && !h) 
-			NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
-		else NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+		if (!x && !y && !w && !h) w = s->w, h = s->h;
+		uint32_t *nowPixels = malloc(4 * w * h);
+		for (int i = 0; i < h; i++)
+			for (int j = 0; j < w; j++) {
+				nowPixels[i * w + j] = s->pixels[(i + y) * (s->w) + (j + x)];
+			}
+		NDL_DrawRect(nowPixels, x, y, w, h);
+		free(nowPixels);
 	}
 	else if (s->format->BitsPerPixel == 8) {
-		printf("Should reach here\n");
-		uint32_t *nowPixels = malloc(4 * (s->w) * (s->h));
-		for (int i = 0; i < (s->h); i++)
-			for (int j = 0; j < (s->w); j++) {
-				//uint8_t r = s->format->palette->colors[s->pixels[i * (s->w) + j]].r;
-				//uint8_t g = s->format->palette->colors[s->pixels[i * (s->w) + j]].g;
-				//uint8_t b = s->format->palette->colors[s->pixels[i * (s->w) + j]].b;
-				//nowPixels[i * (s->w) + j] = ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
-				//assert(nowPixels[i * (s->w) + j] == s->format->palette->colors[s->pixels[i * (s->w) + j]].val);
-				nowPixels[i * (s->w) + j] = s->format->palette->colors[s->pixels[i * (s->w) + j]].val;
-				//printf("0x%x 0x%x 0x%x 0x%x\n", r, g, b, nowPixels[i * (s->w) + j]);
+		if (!x && !y && !w && !h) w = s->w, h = s->h;
+		uint32_t *nowPixels = malloc(4 * w * h);
+		for (int i = 0; i < h; i++)
+			for (int j = 0; j < w; j++) {
+				nowPixels[i * w + j] = s->format->palette->colors[s->pixels[(i + y) * (s->w) + (j + x)]].val;
 			}
-		printf("End4\n");
-		if (!x && !y && !w && !h) 
-			NDL_DrawRect(nowPixels, 0, 0, s->w, s->h);
-		else NDL_DrawRect(nowPixels, x, y, w, h);
-		printf("End5\n");
+		NDL_DrawRect(nowPixels, x, y, w, h);
 		free(nowPixels);
 	}
 	else assert(0);
