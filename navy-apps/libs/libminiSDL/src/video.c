@@ -92,12 +92,15 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		for (int i = 0; i < (s->h); i++)
 			for (int j = 0; j < (s->w); j++)
 				nowPixels[i * (s->w) + j] = s->format->palette->colors[s->pixels[i * (s->w) + j]].val;
+		printf("End4\n");
 		if (!x && !y && !w && !h) 
 			NDL_DrawRect(nowPixels, 0, 0, s->w, s->h);
 		else NDL_DrawRect(nowPixels, x, y, w, h);
+		printf("End5\n");
 		free(nowPixels);
 	}
 	else assert(0);
+	printf("End3\n");
 }
 
 // APIs below are already implemented.
