@@ -11,7 +11,7 @@ static const char *keyname[] = {
   _KEYS(keyname)
 };
 
-static uint8_t keyState[255] = {0};
+uint8_t keyState[255] = {0};
 
 int SDL_PushEvent(SDL_Event *ev) {
   assert(ev->type == SDL_KEYDOWN || ev->type == SDL_KEYUP);
