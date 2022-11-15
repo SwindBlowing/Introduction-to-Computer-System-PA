@@ -14,7 +14,6 @@ int SDL_RemoveTimer(SDL_TimerID id) {
 }
 
 uint32_t SDL_GetTicks() {
-	assert(0);
   return NDL_GetTicks();
 }
 
