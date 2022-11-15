@@ -8,6 +8,7 @@
 SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
   assert(src->type == RW_TYPE_MEM);
   assert(freesrc == 0);
+  assert(0);
   return NULL;
 }
 
@@ -31,10 +32,12 @@ SDL_Surface* IMG_Load(const char *filename) {
 }
 
 int IMG_isPNG(SDL_RWops *src) {
+	assert(0);
   return 0;
 }
 
 SDL_Surface* IMG_LoadJPG_RW(SDL_RWops *src) {
+	assert(0);
   return IMG_Load_RW(src, 0);
 }
 
