@@ -5,8 +5,6 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-//#define ToMid 1
-
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
@@ -56,10 +54,6 @@ void NDL_OpenCanvas(int *w, int *h) {
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 	//printf("%d %d %d %d %d\n", screen_w, x, y, w, h);
-#ifdef ToMid
-	x = sys_w / 2 - w / 2;
-	y = sys_h / 2 - h / 2;
-#endif
 	for (int j = 0; j < h; j++) {
 		lseek(4, ((j + y) * sys_w + x) * 4, SEEK_SET);
 		write(4, pixels + j * w, 4 * w);
