@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-#define ToMid 1
+//#define ToMid 1
 
 static int evtdev = -1;
 static int fbdev = -1;
