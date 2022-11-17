@@ -26,10 +26,11 @@ static void sh_handle_cmd(const char *cmd) {
 	if (strcmp(cmd, "quit\n") == 0) exit(0);
 	if (cmd[0] == '.') {
 		static char tmp[99];
-		for (int i = 0; cmd[i]; i++) {
-			if (cmd[i] == '\n') tmp[i] = '\0';
-			else tmp[i] = cmd[i];
+		for (int i = 1; cmd[i]; i++) {
+			if (cmd[i] == '\n') tmp[i - 1] = '\0';
+			else tmp[i - 1] = cmd[i];
 		}
+		printf("%s\n", tmp);
 		execve(tmp, NULL, NULL);
 	}
 }
