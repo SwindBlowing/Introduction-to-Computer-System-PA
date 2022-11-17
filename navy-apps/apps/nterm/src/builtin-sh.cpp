@@ -4,6 +4,7 @@
 #include <SDL.h>
 
 char handle_key(SDL_Event *ev);
+void close_terminal();
 
 static void sh_printf(const char *format, ...) {
   static char buf[256] = {};
@@ -49,6 +50,7 @@ static void sh_handle_cmd(const char *cmd) {
 				flag = 1;
 				break;
 			}
+		close_terminal();
 		if (flag) execve(bufs[0], NULL, NULL);
 		else execvp(bufs[0], NULL);
 	}
