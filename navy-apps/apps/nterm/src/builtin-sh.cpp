@@ -23,7 +23,7 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
-	printf("%s\n", cmd);
+	if (strcmp(cmd, "quit\n") == 0) exit(0);
 }
 
 void builtin_sh_run() {
