@@ -251,6 +251,8 @@ void Terminal::write(const char *str, size_t count) {
           break;
         case '\t':
           // TODO: implement it.
+		  for (int i = 1; i <= 8; i++)
+		  	move_one();
           break;
         case '\r':
           cursor.x = 0;

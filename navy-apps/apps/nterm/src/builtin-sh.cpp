@@ -22,16 +22,35 @@ static void sh_prompt() {
   sh_printf("sh> ");
 }
 
+static char bufs[99][99];
+
 static void sh_handle_cmd(const char *cmd) {
-	if (strcmp(cmd, "quit\n") == 0) exit(0);
-	if (cmd[0] == '.') {
-		static char tmp[99];
-		for (int i = 1; cmd[i]; i++) {
-			if (cmd[i] == '\n') tmp[i - 1] = '\0';
-			else tmp[i - 1] = cmd[i];
+	int now = 0;
+	int bufNum = 0;
+	while (cmd[now]) {
+		if (cmd[now] == '\n') break;
+		while (cmd[now] == ' ') now++;
+		if (cmd[now] == '\n') break;
+		bufNum++;
+		int bufSize = 0;
+		while (cmd[now] != ' ' && cmd[now] != '\n') {
+			bufs[bufNum - 1][bufSize++] = cmd[now++];
 		}
-		printf("%s\n", tmp);
-		execve(tmp, NULL, NULL);
+	}
+
+	if (strcmp(bufs[0], "quit") == 0) exit(0);
+	else if (strcmp(bufs[0], "cd") == 0) {
+		setenv("PATH", bufs[1], 0);
+	}
+	else {
+		bool flag = 0;
+		for (int i = 0; bufs[0][i]; i++)
+			if (bufs[0][i] == '/') {
+				flag = 1;
+				break;
+			}
+		if (flag) execve(bufs[0], NULL, NULL);
+		else execvp(bufs[0], NULL);
 	}
 }
 

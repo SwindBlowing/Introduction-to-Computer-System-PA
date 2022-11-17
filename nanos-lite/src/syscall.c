@@ -36,7 +36,8 @@ void do_syscall(Context *c) {
 	case SYS_close: c->GPRx = fs_close(a[1]); break;
 	case SYS_lseek: c->GPRx = fs_lseek(a[1], a[2], a[3]); break;
 	case SYS_brk: c->GPRx = 0; break;
-	case SYS_execve: naive_uload(NULL, (const char *)a[1]); break;
+	case SYS_execve: 
+		naive_uload(NULL, (const char *)a[1]); break;
 	case SYS_gettimeofday: 
 		if ((void *)a[1] != NULL) {
 			*(size_t *)(a[1]) = io_read(AM_TIMER_UPTIME).us / 1000000u;
