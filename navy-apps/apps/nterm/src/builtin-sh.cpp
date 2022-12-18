@@ -54,11 +54,11 @@ static void sh_handle_cmd(const char *cmd) {
 			}*/
 		close_terminal();
 		if (bufs[0][0] == '.') {
-			printf("here1");
+			printf("here1\n");
 			execve(bufs[0] + 1, NULL, NULL);
 		}
 		else {
-			printf("here2");
+			printf("here2\n");
 			execvp(bufs[0], NULL);
 		}
 	}
