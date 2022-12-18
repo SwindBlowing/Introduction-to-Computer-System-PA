@@ -43,6 +43,7 @@ static void sh_handle_cmd(const char *cmd) {
 	else if (strcmp(bufs[0], "cd") == 0) {
 		if (bufs[1][0] != '.') setenv("PATH", bufs[1], 0);
 		else setenv("PATH", bufs[1] + 1, 0);
+		printf("Now PATH:%s\n", bufs[1] + 1);
 	}
 	else {
 
