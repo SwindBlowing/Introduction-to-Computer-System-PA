@@ -55,8 +55,10 @@ static void sh_handle_cmd(const char *cmd) {
 		close_terminal();
 		if (bufs[0][0] == '.') 
 			execve(bufs[0] + 1, NULL, NULL);
-		else 
+		else {
+			printf("here");
 			execvp(bufs[0], NULL);
+		}
 	}
 }
 
