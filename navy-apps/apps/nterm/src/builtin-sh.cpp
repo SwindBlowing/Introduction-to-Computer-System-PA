@@ -44,6 +44,7 @@ static void sh_handle_cmd(const char *cmd) {
 		setenv("PATH", bufs[1], 0);
 	}
 	else {
+
 		bool flag = 0;
 		for (int i = 0; bufs[0][i]; i++)
 			if (bufs[0][i] == '/') {
@@ -51,8 +52,14 @@ static void sh_handle_cmd(const char *cmd) {
 				break;
 			}
 		close_terminal();
-		if (flag) execve(bufs[0], NULL, NULL);
-		else execvp(bufs[0], NULL);
+		if (bufs[0][0] != '.') {
+			if (flag) execve(bufs[0], NULL, NULL);
+			else execvp(bufs[0], NULL);
+		}
+		else {
+			if (flag) execve(bufs[0] + 1, NULL, NULL);
+			else execvp(bufs[0] + 1, NULL);
+		}
 	}
 }
 
