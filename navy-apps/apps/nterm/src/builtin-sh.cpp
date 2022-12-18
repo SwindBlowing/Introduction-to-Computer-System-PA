@@ -46,22 +46,17 @@ static void sh_handle_cmd(const char *cmd) {
 		printf("Now PATH:%s\n", bufs[1] + 1);
 	}
 	else {
-
-		bool flag = 0;
+		/*bool flag = 0;
 		for (int i = 0; bufs[0][i]; i++)
 			if (bufs[0][i] == '/') {
 				flag = 1;
 				break;
-			}
+			}*/
 		close_terminal();
-		if (bufs[0][0] != '.') {
-			if (flag) execve(bufs[0], NULL, NULL);
-			else execvp(bufs[0], NULL);
-		}
-		else {
-			if (flag) execve(bufs[0] + 1, NULL, NULL);
-			else execvp(bufs[0] + 1, NULL);
-		}
+		if (bufs[0][0] == '.') 
+			execve(bufs[0] + 1, NULL, NULL);
+		else 
+			execvp(bufs[0], NULL);
 	}
 }
 
