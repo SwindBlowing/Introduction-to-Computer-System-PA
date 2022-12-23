@@ -66,5 +66,8 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
 
 void context_uload(PCB *pcb, const char *filename)
 {
-	
+	Area ustack;
+	ustack.start = pcb->stack;
+	ustack.end = (pcb->stack) + sizeof(pcb->stack);
+	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
 }
