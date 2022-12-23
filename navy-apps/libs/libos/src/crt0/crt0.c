@@ -13,7 +13,7 @@ void call_main(uintptr_t *args) {
   char *envp[99];
   char *empty[] =  {NULL };
   //environ = empty;
-  environ = envp;
+  environ = empty;
   exit(main(argc, empty, empty));
   assert(0);
 }
