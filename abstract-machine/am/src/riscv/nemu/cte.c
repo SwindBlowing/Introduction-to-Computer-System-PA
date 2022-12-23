@@ -69,8 +69,8 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->mepc = (uintptr_t)entry;
   cp->mstatus = 0x1800;
 
-  asm volatile("mv a0, %0" : : "g"(((uintptr_t)arg & 0xffff0000) >> 16));
-  asm volatile("mv a1, %0" : : "g"((uintptr_t)arg & 0x0000ffff));
+  asm volatile("mv a1, %0" : : "g"((uint32_t)(((uintptr_t)arg & 0xffff0000) >> 16)));
+  asm volatile("mv a0, %0" : : "g"((uint32_t)((uintptr_t)arg & 0x0000ffff)));
 
   return cp;
 }
