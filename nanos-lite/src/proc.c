@@ -34,6 +34,8 @@ void init_proc() {
 
   context_kload(&pcb[0], hello_fun, NULL);
 
+  context_kload(&pcb[1], hello_fun, "The second Hello-World");
+
   switch_boot_pcb();
 
   Log("Initializing processes...");
@@ -47,8 +49,9 @@ Context* schedule(Context *prev) {
   // save the context pointer
   current->cp = prev;
 
-   // always select pcb[0] as the new process
-  current = &pcb[0];
+   // (before) always select pcb[0] as the new process
+   // (current) transform between pcb[0] and pcb[1]
+  current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
 
   // then return the new context
   return current->cp;
