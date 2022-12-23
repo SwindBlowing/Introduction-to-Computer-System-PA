@@ -8,7 +8,7 @@ extern char **environ;
 void call_main(uintptr_t *args) {
   //printf("%p\n", args);
   int argc = *args;
-  //printf("%d\n", argc);
+  printf("%d\n", argc);
   char **argv; argv = (char **)(args + 1);
   char **envp; envp = (char **)(args + argc + 2);
   //environ = empty;
