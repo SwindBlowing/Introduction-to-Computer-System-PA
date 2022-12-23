@@ -59,14 +59,15 @@ void naive_uload(PCB *pcb, const char *filename) {
 void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
 {
 	Area kstack;
-	kstack.end = pcb->stack;
-	kstack.start = (pcb->stack) + sizeof(pcb->stack);
+	kstack.start = pcb->stack;
+	kstack.end = kstack.start + sizeof(pcb->stack);
 	pcb->cp = kcontext(kstack, entry, arg);
 }
 
 void context_uload(PCB *pcb, const char *filename)
 {
 	Area ustack;
+	printf("%x %x\n", (uintptr_t)heap.start, (uintptr_t)heap.end);
 	ustack.end = heap.end; //top of the stack
 	ustack.start = heap.end - sizeof(pcb->stack);
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
