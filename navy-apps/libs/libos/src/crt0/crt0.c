@@ -23,6 +23,6 @@ void call_main(uintptr_t *args) {
   	strcpy(envp[i], (char *)(args + argc + 2 + i));
   
   environ = empty;
-  exit(main(argc, argv, empty));
+  exit(main(argc, empty, empty));
   assert(0);
 }
