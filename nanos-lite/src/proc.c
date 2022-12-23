@@ -5,6 +5,7 @@
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 PCB *current = NULL;
+static char temp[99] = "The second Hello-World";
 
 void naive_uload(PCB *pcb, const char *filename);
 void context_kload(PCB *pcb, void (*entry)(void *), void *arg);
@@ -27,7 +28,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-  static char temp[99] = "The second Hello-World";
+
   context_kload(&pcb[0], hello_fun, (void *)temp);
 
   context_uload(&pcb[1], "/bin/pal");
