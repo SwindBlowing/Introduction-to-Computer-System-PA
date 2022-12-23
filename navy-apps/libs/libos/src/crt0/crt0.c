@@ -16,11 +16,11 @@ void call_main(uintptr_t *args) {
   for (int i = 0; i < argc; i++) 
 	strcpy(argv[i], (char *)(args + i + 1));
 
-  int sz_envp = 0;
+  /*int sz_envp = 0;
   while ((char *)(args + argc + 2 + sz_envp) != NULL) sz_envp++;
   char *envp[sz_envp];
   for (int i = 0; i < sz_envp; i++)
-  	strcpy(envp[i], (char *)(args + argc + 2 + i));
+  	strcpy(envp[i], (char *)(args + argc + 2 + i));*/
   
   environ = empty;
   exit(main(argc, empty, empty));
