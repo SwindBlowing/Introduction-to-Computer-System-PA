@@ -31,10 +31,10 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-
+  char temp[99] = "The second Hello-World";
   context_kload(&pcb[0], hello_fun, NULL);
 
-  context_kload(&pcb[1], hello_fun, "The second Hello-World");
+  context_kload(&pcb[1], hello_fun, temp);
 
   switch_boot_pcb();
 
