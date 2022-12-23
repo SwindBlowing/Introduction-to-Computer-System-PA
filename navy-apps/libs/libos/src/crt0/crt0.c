@@ -9,6 +9,7 @@ extern char **environ;
 void call_main(uintptr_t *args) {
   //printf("%p\n", args);
   int argc = *args;
+  printf("%d\n", argc);
 
   char *argv[argc];
   for (int i = 0; i < argc; i++) 
@@ -19,7 +20,6 @@ void call_main(uintptr_t *args) {
   char *envp[sz_envp];
   for (int i = 0; i < sz_envp; i++)
 	strcpy(envp[i], (char *)(args + argc + 2 + i));
-
 
   environ = envp;
   exit(main(argc, argv, envp));
