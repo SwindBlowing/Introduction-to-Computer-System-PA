@@ -21,7 +21,6 @@ void call_main(uintptr_t *args) {
   char *envp[sz_envp];
   for (int i = 0; i < sz_envp; i++)
   	strcpy(envp[i], (char *)(args + argc + 2 + i));*/
-  printf("%p %p %p\n", args, (char **)(args + 1), (char **)(args + argc + 2));
   environ = (char **)(args + argc + 2);
   exit(main(argc, (char **)(args + 1), (char **)(args + argc + 2)));
   assert(0);
