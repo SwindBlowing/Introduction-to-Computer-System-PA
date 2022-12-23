@@ -71,4 +71,5 @@ void context_uload(PCB *pcb, const char *filename)
 	ustack.end = heap.end;
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
 	pcb->cp->GPRx = (uintptr_t)ustack.start;
+	*(uintptr_t *)ustack.start = 0;
 }
