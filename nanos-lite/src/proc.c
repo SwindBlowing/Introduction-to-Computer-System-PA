@@ -18,12 +18,13 @@ void switch_boot_pcb() {
 void hello_fun(void *arg) {
   int j = 1;
   while (1) {
+	j++;
+	yield();
+	if (j % 1000) continue;
 	if (arg != NULL)
     	Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (char *)arg, j);
 	else 
 		Log("Hello World from Nanos-lite with no arg for the %dth time!", j);
-    j ++;
-    yield();
   }
 }
 
