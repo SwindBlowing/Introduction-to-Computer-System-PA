@@ -12,9 +12,9 @@ void call_main(uintptr_t *args) {
   int argc = *args;
   printf("%d\n", argc);
 
-  char *argv[argc];
+  /*char *argv[argc];
   for (int i = 0; i < argc; i++) 
-	strcpy(argv[i], (char *)(args + i + 1));
+	strcpy(argv[i], (char *)(args + i + 1));*/
 
   /*int sz_envp = 0;
   while ((char *)(args + argc + 2 + sz_envp) != NULL) sz_envp++;
@@ -23,6 +23,6 @@ void call_main(uintptr_t *args) {
   	strcpy(envp[i], (char *)(args + argc + 2 + i));*/
   
   environ = empty;
-  exit(main(argc, empty, empty));
+  exit(main(0, empty, empty));
   assert(0);
 }
