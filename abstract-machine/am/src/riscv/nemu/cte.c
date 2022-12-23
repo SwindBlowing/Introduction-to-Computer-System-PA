@@ -70,15 +70,18 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->mstatus = 0x1800;
 	printf("now %p\n", arg);
 
-  asm volatile("mv %0, a0" 
+  cp->gpr[10] = (uint32_t)(((uintptr_t)arg >> 16));
+  cp->gpr[11] = (uint32_t)((uintptr_t)arg & 0x0000ffff);
+
+  /*asm volatile("mv a0, %0" 
 		: 
 		: "g"((uint32_t)(((uintptr_t)arg >> 16)))
 		: "a0", "a1");
-
+		
   asm volatile("mv a1, %0" 
 		: 
 		: "g"((uint32_t)((uintptr_t)arg & 0x0000ffff))
-		: "a0", "a1");
+		: "a0", "a1");*/
 
   return cp;
 }
