@@ -11,9 +11,9 @@ void call_main(uintptr_t *args) {
   printf("%d\n", argc);
   char *argv[argc];
   char *envp[99];
-  //char *empty[] =  {NULL };
+  char *empty[] =  {NULL };
   //environ = empty;
   environ = envp;
-  exit(main(argc, argv, envp));
+  exit(main(argc, empty, empty));
   assert(0);
 }
