@@ -39,7 +39,7 @@ static void sh_handle_cmd(const char *cmd) {
 		}
 	}
 
-	if (strcmp(bufs[0], "quit") == 0) exit(1);
+	if (strcmp(bufs[0], "quit") == 0) exit(0);
 	else if (strcmp(bufs[0], "cd") == 0) {
 		if (bufs[1][0] != '.') setenv("PATH", bufs[1], 0);
 		else setenv("PATH", bufs[1] + 1, 0);
