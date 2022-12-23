@@ -25,7 +25,10 @@ void hello_fun(void *arg) {
 	printf("But now %p\n", arg);
   int j = 1;
   while (1) {
-    Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (char *)arg, j);
+	if (arg != NULL)
+    	Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (char *)arg, j);
+	else 
+		Log("Hello World from Nanos-lite with no arg for the %dth time!", j);
     j ++;
     yield();
   }
