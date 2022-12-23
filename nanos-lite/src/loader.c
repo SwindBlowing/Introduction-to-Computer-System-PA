@@ -75,7 +75,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//initializing argc, argv and envp.
 	int i = 0;
 	while (argv[i] != NULL) {
-		strcpy((char *)((uintptr_t *)ustack.start + i + 1), argv[i]);
+		*((uintptr_t *)ustack.start + i + 1) = (uintptr_t)argv[i];
 		i++;
 	}
 
@@ -86,7 +86,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 
 	i = 0;
 	while (envp[i] != NULL) {
-		strcpy((char *)((uintptr_t *)ustack.start + argc + 2 + i), envp[i]);
+		*((uintptr_t *)ustack.start + argc + 2 + i) = (uintptr_t)envp[i];
 		i++;
 	}
 	
