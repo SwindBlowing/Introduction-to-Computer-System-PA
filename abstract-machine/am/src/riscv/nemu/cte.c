@@ -71,8 +71,8 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 	printf("now %p\n", arg);
 
   cp->gpr[10] = (uintptr_t)arg;
-  
-	printf("%u %u\n", cp->gpr[10], cp->gpr[11]);
+
+	printf("%x\n", cp->gpr[10]);
   return cp;
 }
 
