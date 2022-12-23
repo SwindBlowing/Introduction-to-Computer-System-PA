@@ -70,7 +70,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->mstatus = 0x1800;
 	printf("now %p\n", arg);
 
-  *((uint64_t *)entry + 1) = (uintptr_t)arg;
+  *((uint64_t *)entry - 1) = (uintptr_t)arg;
   
   return cp;
 }
