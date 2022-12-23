@@ -7,6 +7,7 @@
 int main(int argc, char *argv[], char *envp[]);
 extern char **environ;
 void call_main(uintptr_t *args) {
+  char *empty[] = {NULL};
   //printf("%p\n", args);
   int argc = *args;
   printf("%d\n", argc);
@@ -19,9 +20,9 @@ void call_main(uintptr_t *args) {
   while ((char *)(args + argc + 2 + sz_envp) != NULL) sz_envp++;
   char *envp[sz_envp];
   for (int i = 0; i < sz_envp; i++)
-	strcpy(envp[i], (char *)(args + argc + 2 + i));
-
-  environ = envp;
-  exit(main(argc, argv, envp));
+  	strcpy(envp[i], (char *)(args + argc + 2 + i));
+  
+  environ = empty;
+  exit(main(argc, argv, empty));
   assert(0);
 }
