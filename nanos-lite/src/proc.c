@@ -31,9 +31,9 @@ void init_proc() {
 
   Log("Initializing processes...");
   
-  //static char temp[99] = "The second Hello-World";
-  //context_kload(&pcb[0], hello_fun, (void *)temp);
-  context_uload(&pcb[0], "/bin/dummy");
+  static char temp[99] = "The second Hello-World";
+  context_kload(&pcb[0], hello_fun, (void *)temp);
+  //context_uload(&pcb[0], "/bin/dummy");
 
   context_uload(&pcb[1], "/bin/pal");
 
