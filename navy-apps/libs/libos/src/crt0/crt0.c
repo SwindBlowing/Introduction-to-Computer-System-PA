@@ -10,7 +10,7 @@ void call_main(uintptr_t *args) {
   int argc = *args;
   printf("%d\n", argc);
   char **argv; argv = (char **)(args + 1);
-  printf("%s\n", (char *)argv[0]);
+  printf("%p\n", argv);
   char **envp; envp = (char **)(args + argc + 2);
   //environ = empty;
   environ = envp;

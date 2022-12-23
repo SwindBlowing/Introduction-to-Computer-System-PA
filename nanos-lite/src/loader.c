@@ -76,7 +76,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	int i = 0;
 	while (argv[i] != NULL) {
 		strcpy((char *)((uintptr_t *)ustack.start + i + 1), argv[i]);
-		printf("%s\n", (char *)((uintptr_t *)ustack.start + i + 1));
 		i++;
 	}
 
