@@ -33,7 +33,7 @@ void hello_fun(void *arg) {
 void init_proc() {
   static char temp[99] = "The second Hello-World";
   context_kload(&pcb[0], hello_fun, NULL);
-
+	printf("now %p\n", (void *)temp);
   context_kload(&pcb[1], hello_fun, (void *)temp);
 
   switch_boot_pcb();
