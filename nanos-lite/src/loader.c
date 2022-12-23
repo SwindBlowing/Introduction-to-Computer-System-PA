@@ -12,6 +12,8 @@
 
 //size_t ramdisk_read(void *buf, size_t offset, size_t len);
 //size_t ramdisk_write(const void *buf, size_t offset, size_t len);
+Context *kcontext(Area kstack, void (*entry)(void *), void *arg);
+Context *ucontext(AddrSpace *as, Area kstack, void *entry);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
@@ -54,3 +56,15 @@ void naive_uload(PCB *pcb, const char *filename) {
   ((void(*)())entry) ();
 }
 
+void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
+{
+	Area kstack;
+	kstack.start = pcb->stack;
+	kstack.end = (pcb->stack) + sizeof(pcb->stack);
+	pcb->cp = kcontext(kstack, entry, arg);
+}
+
+void context_uload(PCB *pcb, const char *filename)
+{
+	
+}

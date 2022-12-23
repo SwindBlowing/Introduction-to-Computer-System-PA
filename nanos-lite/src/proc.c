@@ -7,15 +7,8 @@ static PCB pcb_boot = {};
 PCB *current = NULL;
 
 void naive_uload(PCB *pcb, const char *filename);
-Context *kcontext(Area kstack, void (*entry)(void *), void *arg);
-
-void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
-{
-	Area kstack;
-	kstack.start = pcb->stack;
-	kstack.end = (pcb->stack) + sizeof(pcb->stack);
-	pcb->cp = kcontext(kstack, entry, arg);
-}
+void context_kload(PCB *pcb, void (*entry)(void *), void *arg);
+void context_uload(PCB *pcb, const char *filename);
 
 void switch_boot_pcb() {
   current = &pcb_boot;
