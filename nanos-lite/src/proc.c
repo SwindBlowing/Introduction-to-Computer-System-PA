@@ -20,7 +20,7 @@ void hello_fun(void *arg) {
   while (1) {
 	j++;
 	yield();
-	if (j % 1000) continue;
+	if (j % 10000) continue;
 	if (arg != NULL)
     	Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (char *)arg, j);
 	else 
@@ -30,16 +30,16 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 
+  Log("Initializing processes...");
+
   context_kload(&pcb[0], hello_fun, (void *)temp);
 
   context_uload(&pcb[1], "/bin/pal");
 
   switch_boot_pcb();
 
-  Log("Initializing processes...");
-
   // load program here
-  naive_uload(NULL, "/bin/nterm");
+  //naive_uload(NULL, "/bin/nterm");
 
 }
 
