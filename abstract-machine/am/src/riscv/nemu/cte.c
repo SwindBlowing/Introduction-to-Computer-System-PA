@@ -65,11 +65,8 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 
-  Context *cp = (Context *)kstack.end;
+  Context *cp = (Context *)kstack.end - 1;
   cp->mepc = (uintptr_t)entry;
-  //cp->mstatus = 0x1800;
-
-  //asm volatile("mv a0, %0" : : "r"((uintptr_t)arg));
 
   return cp;
 }

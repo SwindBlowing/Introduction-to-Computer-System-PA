@@ -10,7 +10,6 @@ static Context* do_event(Event e, Context* c) {
 		return schedule(c);
 		break;
 	case EVENT_SYSCALL: do_syscall(c); break;
-	//case EVENT_IRQ_TIMER: return c; break; // do nothing now
     default: panic("Unhandled event ID = %d", e.event);
   }
 
