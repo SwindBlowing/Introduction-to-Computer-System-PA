@@ -34,7 +34,7 @@ void init_proc() {
   static char temp[99] = "The second Hello-World";
   context_kload(&pcb[0], hello_fun, NULL);
 
-  context_kload(&pcb[1], hello_fun, temp);
+  context_kload(&pcb[1], hello_fun, (void *)temp);
 
   switch_boot_pcb();
 
