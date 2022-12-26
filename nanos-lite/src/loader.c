@@ -91,15 +91,17 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		now -= strlen(envp[j]);
 		stack_envp[j] = (uintptr_t)now;
 		strcpy(now, envp[j]);
+		printf("%s\n", now);
 		now--; *now = 0;
-		printf("%p\n", now);
+		//printf("%p\n", now);
 	}
 	for (int j = argc - 1; j >= 0; j--) {
 		now -= strlen(argv[j]);
 		stack_argv[j] = (uintptr_t)now;
 		strcpy(now, argv[j]);
+		printf("%s\n", now);
 		now--; *now = 0;
-		printf("%p\n", now);
+		//printf("%p\n", now);
 	}
 	
 	//store the envp, argv and argc
