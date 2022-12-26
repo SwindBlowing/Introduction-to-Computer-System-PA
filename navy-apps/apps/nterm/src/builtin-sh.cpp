@@ -37,6 +37,7 @@ static void sh_handle_cmd(const char *cmd) {
 		while (cmd[now] != ' ' && cmd[now] != '\n') {
 			bufs[bufNum - 1][bufSize++] = cmd[now++];
 		}
+		bufs[bufNum - 1][bufSize++] = 0;
 	}
 
 	if (strcmp(bufs[0], "quit") == 0) exit(0);
