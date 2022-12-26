@@ -27,7 +27,7 @@ static void sh_prompt() {
 static void sh_handle_cmd(const char *cmd) {
 	int now = 0;
 	int bufNum = 0;
-	char bufs[99][99];
+	char bufs[50][99];
 	while (cmd[now]) {
 		if (cmd[now] == '\n') break;
 		while (cmd[now] == ' ') now++;
@@ -51,6 +51,7 @@ static void sh_handle_cmd(const char *cmd) {
 		//printf("Now PATH:%s\n", bufs[1] + 1);
 	}
 	else if (strcmp(bufs[0], "printenv") == 0) {
+		printf("arrived here.\n");
 		for (int i = 0; i < bufNum; i++)
 			nterm_argv[i + 1] = (bufs[i]);
 		nterm_argv[bufNum + 1] = NULL;
