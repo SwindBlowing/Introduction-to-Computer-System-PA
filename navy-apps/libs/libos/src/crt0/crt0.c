@@ -10,8 +10,6 @@ void call_main(uintptr_t *args) {
   char *empty[] = {NULL};
   //printf("%p\n", args);
   int argc = *args;
-  assert(0);
-  printf("%d\n", argc);
 
   /*char *argv[argc];
   for (int i = 0; i < argc; i++) 
