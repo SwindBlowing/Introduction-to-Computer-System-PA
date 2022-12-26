@@ -80,7 +80,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		*((uintptr_t *)ustack.start + i + 1) = (uintptr_t)argv[i];
 		i++;
 	}
-
+	assert(0);
 	int argc = i;
 	*(uintptr_t *)ustack.start = argc;
 
