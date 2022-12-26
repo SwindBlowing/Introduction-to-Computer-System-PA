@@ -47,15 +47,15 @@ static void sh_handle_cmd(const char *cmd) {
 	}
 	else {
 		bool flag = 0;
-		static uintptr_t nterm_argv[10];
+		static char * nterm_argv[10];
 		for (int i = 0; bufs[0][i]; i++)
 			if (bufs[0][i] == '/') {
 				flag = 1;
 				break;
 			}
 		for (int i = 1; i < bufNum; i++)
-			nterm_argv[i - 1] = (uintptr_t)(bufs[i]);
-		nterm_argv[bufNum - 1] = 0;
+			nterm_argv[i - 1] = (bufs[i]);
+		nterm_argv[bufNum - 1] = NULL;
 		close_terminal();
 		printf("%p\n", nterm_argv);
 		if (flag) {
