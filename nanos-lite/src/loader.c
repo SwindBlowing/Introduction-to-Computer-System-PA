@@ -72,9 +72,9 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.start = heap.end - sizeof(pcb->stack);
 	ustack.end = heap.end;
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
-	printf("uload entry:%x\n", pcb->cp->mepc);
-	printf("ustack.start:%p\n", ustack.start);
-	printf("&cp:%p\n", pcb->cp);
+	//printf("uload entry:%x\n", pcb->cp->mepc);
+	//printf("ustack.start:%p\n", ustack.start);
+	//printf("&cp:%p\n", pcb->cp);
 
 	//initializing argc, argv and envp.
 
@@ -96,7 +96,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		now -= strlen(envp[j]);
 		stack_envp[j] = (uintptr_t)now;
 		strcpy(now, envp[j]);
-		printf("%s\n", now);
+		//printf("%s\n", now);
 		now--; *now = 0;
 		//printf("%p\n", now);
 	}
@@ -104,8 +104,8 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		now -= strlen(argv[j]);
 		stack_argv[j] = (uintptr_t)now;
 		strcpy(now, argv[j]);
-		printf("%s\n", now);
-		printf("%p\n", now);
+		//printf("%s\n", now);
+		//printf("%p\n", now);
 		now--; *now = 0;
 	}
 
@@ -120,18 +120,18 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	for (int j = sz_envp - 1; j >= 0; j--) {
 		p--;
 		*p = stack_envp[j];
-		printf("%p\n", p);
+		//printf("%p\n", p);
 	}
 	p--; *p = 0;
 	for (int j = argc - 1; j >= 0; j--) {
 		p--;
 		*p = stack_argv[j];
-		printf("%p\n", p);
+		//printf("%p\n", p);
 	}
 	p--; *p = argc;
 	
 	//update the cp->gprx
-	printf("%p\n", p);
+	//printf("%p\n", p);
 	pcb->cp->GPRx = (uintptr_t)p;
-	printf("uload entry:%x\n", pcb->cp->mepc);
+	//printf("uload entry:%x\n", pcb->cp->mepc);
 }
