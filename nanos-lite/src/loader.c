@@ -76,7 +76,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.start = new_page(8);
 	ustack.end = ustack.start + (size_t)8 * ((size_t)1 << 15);
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
-	assert(0);
 	//printf("uload entry:%x\n", pcb->cp->mepc);
 	//printf("ustack.start:%p\n", ustack.start);
 	//printf("&cp:%p\n", pcb->cp);
@@ -138,6 +137,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	
 	//update the cp->gprx
 	//printf("%p\n", p);
-	pcb->cp->GPRx = (uintptr_t)p;
+	pcb->cp->GPRx = (uintptr_t)p;assert(0);
 	//printf("uload entry:%x\n", pcb->cp->mepc);
 }
