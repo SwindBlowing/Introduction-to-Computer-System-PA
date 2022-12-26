@@ -47,18 +47,22 @@ static void sh_handle_cmd(const char *cmd) {
 	}
 	else {
 		bool flag = 0;
+		uintptr_t argv[bufNum];
 		for (int i = 0; bufs[0][i]; i++)
 			if (bufs[0][i] == '/') {
 				flag = 1;
 				break;
 			}
+		for (int i = 1; i < bufNum; i++)
+			argv[i - 1] = (uintptr_t)(bufs[i]);
+		argv[bufNum - 1] = 0;
 		close_terminal();
 		if (flag) {
-			if (bufs[0][0] == '.') execve(bufs[0] + 1, (char * const*)(bufs + 1), NULL);
-			else execve(bufs[0], (char * const*)(bufs + 1), NULL);
+			if (bufs[0][0] == '.') execve(bufs[0] + 1, (char * const*)argv, NULL);
+			else execve(bufs[0], (char * const*)argv, NULL);
 		}
 		else 
-			execvp(bufs[0], (char * const*)(bufs + 1));
+			execvp(bufs[0], (char * const*)argv);
 	}
 }
 
