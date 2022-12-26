@@ -85,7 +85,10 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//get the argc and sz_envp
 
 	int i = 0;
-	while (argv && argv[i] != NULL) i++;
+	while (argv && argv[i] != NULL) {
+		printf("%s\n", argv[i]);
+		i++;
+	}
 	int argc = i;
 	printf("%d\n", argc);
 	i = 0;
