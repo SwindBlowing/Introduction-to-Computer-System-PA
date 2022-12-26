@@ -121,12 +121,12 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	for (int j = argc - 1; j >= 0; j--) {
 		p--;
 		*p = stack_argv[j];
-		printf("%x\n", stack_argv[j]);
+		printf("%p\n", p);
 	}
 	p--; *p = argc;
 	
 	//update the cp->gprx
-
+	printf("%p\n", p);
 	pcb->cp->GPRx = (uintptr_t)p;
 
 }
