@@ -113,10 +113,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		//printf("%p\n", now);
 		now--; *now = 0;
 	}
-	now -= strlen(filename);
-	stack_argv[argc] = (uintptr_t)filename;
-	strcpy(now, filename);
-	now--; *now = 0;
 
 	while ((uintptr_t)now % 4) {
 		now--; *now = 0;
@@ -137,9 +133,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		*p = stack_argv[j];
 		//printf("%s\n", (char *)p);
 	}
-	p--;
-	*p = stack_argv[argc];
-	p--; *p = argc + 1; // argv[0] is the filename
+	p--; *p = argc; // argv[0] is the filename
 	
 	//update the cp->gprx
 	//printf("%p\n", p);

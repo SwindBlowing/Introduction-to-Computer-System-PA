@@ -31,13 +31,14 @@ void init_proc() {
 
   Log("Initializing processes...");
   
-  static char temp[99] = "The second Hello-World";
-  context_kload(&pcb[0], hello_fun, (void *)temp);
+  static char proc_temp[99] = "The second Hello-World";
+  context_kload(&pcb[0], hello_fun, (void *)proc_temp);
   //context_uload(&pcb[0], "/bin/dummy");
   static char *proc_empty[] = {NULL};
-  /*static char *pal_argv[2] = {"--skip", NULL};
+  /*static char *pal_argv[3] = {"/bin/pal", "--skip", NULL};
   context_uload(&pcb[1], "/bin/pal", pal_argv, proc_empty);*/
-  context_uload(&pcb[1], "/bin/exec-test", proc_empty, proc_empty);
+  static char *proc_argvs[1] = {"/bin/exec-test"};
+  context_uload(&pcb[1], "/bin/exec-test", proc_argvs, proc_empty);
 
   switch_boot_pcb();
 
