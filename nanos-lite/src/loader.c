@@ -99,7 +99,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		strcpy(now, argv[j]);
 		now--; *now = 0;
 	}
-	assert(0);
+	
 	//store the envp, argv and argc
 
 	uintptr_t *p = (uintptr_t *)now;
@@ -114,7 +114,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		*p = stack_argv[j];
 	}
 	p--; *p = argc;
-
+	assert(0);
 	//update the cp->gprx
 
 	pcb->cp->GPRx = (uintptr_t)p;
