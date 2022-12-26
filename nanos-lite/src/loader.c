@@ -94,7 +94,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 
 	//create the String area
 
-	uintptr_t stack_argv[argc], stack_envp[sz_envp];
+	uintptr_t stack_argv[argc + 1], stack_envp[sz_envp];
 	char *now = (char *)(pcb->cp - 2);
 	*now = 0;
 	for (int j = sz_envp - 1; j >= 0; j--) {
@@ -113,6 +113,10 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		//printf("%p\n", now);
 		now--; *now = 0;
 	}
+	now -= strlen(filename);
+	stack_argv[argc] = (uintptr_t)filename;
+	strcpy(now, filename);
+	now--; *now = 0;
 
 	while ((uintptr_t)now % 4) {
 		now--; *now = 0;
@@ -133,7 +137,9 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		*p = stack_argv[j];
 		//printf("%s\n", (char *)p);
 	}
-	p--; *p = argc;
+	p--;
+	*p = stack_argv[argc];
+	p--; *p = argc + 1; // argv[0] is the filename
 	
 	//update the cp->gprx
 	//printf("%p\n", p);

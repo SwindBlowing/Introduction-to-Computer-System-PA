@@ -46,9 +46,16 @@ static void sh_handle_cmd(const char *cmd) {
 		else setenv("PATH", bufs[1] + 1, 0);
 		//printf("Now PATH:%s\n", bufs[1] + 1);
 	}
+	else if (strcmp(bufs[0], "printenv") == 0) {
+		char * nterm_argv[50];
+		for (int i = 1; i < bufNum; i++)
+			nterm_argv[i - 1] = (bufs[i]);
+		nterm_argv[bufNum - 1] = NULL;
+		execve("/bin/busybox", (char * const*)nterm_argv, NULL);
+	}
 	else {
 		bool flag = 0;
-		char * nterm_argv[10];
+		char * nterm_argv[50];
 		for (int i = 0; bufs[0][i]; i++)
 			if (bufs[0][i] == '/') {
 				flag = 1;
