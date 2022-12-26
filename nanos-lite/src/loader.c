@@ -47,6 +47,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	}
   }
   fs_close(fd);
+  printf("entry of %s:%x\n", filename, ehdr.e_entry);
   return ehdr.e_entry;
 }
 
