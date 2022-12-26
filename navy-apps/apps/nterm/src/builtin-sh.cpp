@@ -23,11 +23,11 @@ static void sh_prompt() {
   sh_printf("sh> ");
 }
 
-static char bufs[99][99];
 
 static void sh_handle_cmd(const char *cmd) {
 	int now = 0;
 	int bufNum = 0;
+	char bufs[99][99];
 	while (cmd[now]) {
 		if (cmd[now] == '\n') break;
 		while (cmd[now] == ' ') now++;
@@ -48,7 +48,7 @@ static void sh_handle_cmd(const char *cmd) {
 	}
 	else {
 		bool flag = 0;
-		static char * nterm_argv[10];
+		char * nterm_argv[10];
 		for (int i = 0; bufs[0][i]; i++)
 			if (bufs[0][i] == '/') {
 				flag = 1;
@@ -67,6 +67,7 @@ static void sh_handle_cmd(const char *cmd) {
 		else 
 			execvp(bufs[0], (char * const*)nterm_argv);
 	}
+	free(bufs);
 }
 
 void builtin_sh_run() {
