@@ -99,7 +99,7 @@ static void sh_handle_cmd(const char *cmd) {
 					break;
 				}
 			//printf("%p\n", ((char * const*)nterm_argv)[0]);
-			//close_terminal();
+			close_terminal();
 			//printf("%p\n", nterm_argv);
 			if (flag) {
 				for (int i = 1; i < bufNum; i++)
