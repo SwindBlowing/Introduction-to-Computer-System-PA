@@ -121,7 +121,7 @@ static void sh_handle_cmd(const char *cmd) {
 				nterm_argv[0] = bufs[0];
 				execvp(bufs[0], (char * const*)nterm_argv);
 			}
-			refresh_terminal();
+			exit(0);
 		}
 	}
 	//free(bufs);
