@@ -83,10 +83,10 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//get the argc and sz_envp
 
 	int i = 0;
-	while (argv[i] != NULL) i++;
+	while (argv && argv[i] != NULL) i++;
 	int argc = i;
 	i = 0;
-	while (envp[i] != NULL) i++;
+	while (envp && envp[i] != NULL) i++;
 	int sz_envp = i;
 
 	//create the String area
