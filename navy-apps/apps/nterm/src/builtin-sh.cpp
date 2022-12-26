@@ -70,7 +70,7 @@ static void sh_handle_cmd(const char *cmd) {
 			strcpy(envPATHs[envPATHnum++], bufs[1]);
 			strcat(totPATH, bufs[1]);
 			strcat(totPATH, ":");
-			setenv("PATH", (const char *)totPATH, 0);
+			setenv("PATH", (const char *)totPATH, 1);
 		}
 		//printf("Here\n");
 		//printf("Now PATH:%s\n", bufs[1] + 1);
