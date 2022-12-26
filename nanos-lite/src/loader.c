@@ -86,7 +86,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 
 	int i = 0;
 	while (argv && argv[i] != NULL) {
-		//printf("%p\n", argv[i]);
+		if (!i) printf("%p\n", argv[i]);
 		i++;
 	}
 	int argc = i;
