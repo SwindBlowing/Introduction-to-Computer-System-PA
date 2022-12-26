@@ -26,7 +26,7 @@ static void sh_prompt() {
 static char totPATH[256] = "/usr/bin:";
 static char envPATHs[10][256];
 int envPATHnum = 0;
-static char *BusyBoxCommand[30] = {
+static char const *BusyBoxCommand[30] = {
 	"base64", "cat", "echo", "ed", "false",
 	"printenv", "sleep", "true", "basename", "cksum",
 	"cmp", "comm", "cut", "dirname", "expand",
