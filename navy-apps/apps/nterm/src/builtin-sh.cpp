@@ -57,6 +57,7 @@ static void sh_handle_cmd(const char *cmd) {
 		for (int i = 1; i < bufNum; i++)
 			nterm_argv[i - 1] = (bufs[i]);
 		nterm_argv[bufNum - 1] = NULL;
+		printf("%p\n", nterm_argv[0]);
 		close_terminal();
 		printf("%p\n", nterm_argv);
 		if (flag) {
