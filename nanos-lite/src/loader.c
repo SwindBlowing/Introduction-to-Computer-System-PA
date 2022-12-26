@@ -74,7 +74,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//printf("%s %p %p\n", filename, argv, envp);
 	Area ustack;
 	ustack.start = new_page(8);
-	ustack.end = ustack.start + (size_t)8 * ((size_t)1 << 15);
+	ustack.end = ustack.start + (size_t)8 * ((size_t)1 << 12);
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
 	//printf("uload entry:%x\n", pcb->cp->mepc);
 	//printf("ustack.start:%p\n", ustack.start);
