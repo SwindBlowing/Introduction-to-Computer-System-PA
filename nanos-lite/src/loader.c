@@ -71,7 +71,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 {
 	//assert(0);
 	//printf("entered!\n");
-	printf("%s %p %p\n", filename, argv, envp);
+	//printf("%s %p %p\n", filename, argv, envp);
 	Area ustack;
 	ustack.start = new_page(8);
 	ustack.end = ustack.start + (size_t)8 * ((size_t)1 << 15);
@@ -85,12 +85,9 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//get the argc and sz_envp
 
 	int i = 0;
-	while (argv && argv[i] != NULL) {
-		if (!i) printf("%p\n", argv[i]);
-		i++;
-	}
+	while (argv && argv[i] != NULL) i++;
 	int argc = i;
-	printf("%d\n", argc);
+	//printf("%d\n", argc);
 	i = 0;
 	while (envp && envp[i] != NULL) i++;
 	int sz_envp = i;
@@ -113,7 +110,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		stack_argv[j] = (uintptr_t)now;
 		strcpy(now, argv[j]);
 		//printf("%s\n", now);
-		printf("fuck %p\n", now);
+		//printf("%p\n", now);
 		now--; *now = 0;
 	}
 
@@ -134,7 +131,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	for (int j = argc - 1; j >= 0; j--) {
 		p--;
 		*p = stack_argv[j];
-		printf("%s\n", (char *)p);
+		//printf("%s\n", (char *)p);
 	}
 	p--; *p = argc;
 	
