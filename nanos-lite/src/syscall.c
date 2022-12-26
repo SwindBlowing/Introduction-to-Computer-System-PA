@@ -41,8 +41,8 @@ void do_syscall(Context *c) {
 	case SYS_brk: c->GPRx = 0; break;
 	case SYS_execve: 
 		//naive_uload(NULL, (const char *)a[1]); break;
-		assert(0);
 		context_uload(current, (const char *)a[1], (char *const*)a[2], (char *const*)a[3]);
+		assert(0);
 		switch_boot_pcb();
 		yield();
 		break;
