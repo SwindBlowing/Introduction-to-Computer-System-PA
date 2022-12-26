@@ -63,6 +63,7 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
 	kstack.start = pcb->stack;
 	kstack.end = kstack.start + sizeof(pcb->stack);
 	pcb->cp = kcontext(kstack, entry, arg);
+	printf("kload entry:%p\n", entry);
 }
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
@@ -71,7 +72,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.start = heap.end - sizeof(pcb->stack);
 	ustack.end = heap.end;
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
-	printf("entry:%x\n", pcb->cp->mepc);
+	printf("uload entry:%x\n", pcb->cp->mepc);
 
 	//initializing argc, argv and envp.
 
