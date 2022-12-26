@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
   int n = (argc >= 2 ? atoi(argv[1]) : 1);
-  printf("%d\n", argc);
+  //printf("%d\n", argc);
   printf("%s: argv[1] = %d\n", argv[0], n);
 
   char buf[16];
