@@ -93,7 +93,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	int sz_envp = i;
 
 	//create the String area
-
+	assert(0);
 	uintptr_t stack_argv[argc], stack_envp[sz_envp];
 	char *now = (char *)(pcb->cp - 2);
 	*now = 0;
@@ -137,6 +137,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	
 	//update the cp->gprx
 	//printf("%p\n", p);
-	pcb->cp->GPRx = (uintptr_t)p;assert(0);
+	pcb->cp->GPRx = (uintptr_t)p;
 	//printf("uload entry:%x\n", pcb->cp->mepc);
 }
