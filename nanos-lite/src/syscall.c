@@ -10,6 +10,9 @@ static char nowFile[999] = {'\0'};
 #endif
 
 void naive_uload(PCB *pcb, const char *filename);
+void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]);
+void switch_boot_pcb();
+extern PCB *current;
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -37,7 +40,11 @@ void do_syscall(Context *c) {
 	case SYS_lseek: c->GPRx = fs_lseek(a[1], a[2], a[3]); break;
 	case SYS_brk: c->GPRx = 0; break;
 	case SYS_execve: 
-		naive_uload(NULL, (const char *)a[1]); break;
+		//naive_uload(NULL, (const char *)a[1]); break;
+		context_uload(current, (const char *)a[1], (char *const*)a[2], (char *const*)a[3]);
+		switch_boot_pcb();
+		yield();
+		break;
 	case SYS_gettimeofday: 
 		if ((void *)a[1] != NULL) {
 			*(size_t *)(a[1]) = io_read(AM_TIMER_UPTIME).us / 1000000u;
