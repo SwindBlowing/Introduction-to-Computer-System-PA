@@ -54,11 +54,11 @@ static void sh_handle_cmd(const char *cmd) {
 			}
 		close_terminal();
 		if (flag) {
-			if (bufs[0][0] == '.') execve(bufs[0] + 1, NULL, NULL);
-			else execve(bufs[0], NULL, NULL);
+			if (bufs[0][0] == '.') execve(bufs[0] + 1, (char * const*)(bufs + 1), NULL);
+			else execve(bufs[0], (char * const*)(bufs + 1), NULL);
 		}
 		else 
-			execvp(bufs[0], NULL);
+			execvp(bufs[0], (char * const*)(bufs + 1));
 	}
 }
 
