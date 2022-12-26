@@ -42,7 +42,6 @@ void do_syscall(Context *c) {
 	case SYS_execve: 
 		//naive_uload(NULL, (const char *)a[1]); break;
 		context_uload(current, (const char *)a[1], (char *const*)a[2], (char *const*)a[3]);
-		assert(0);
 		switch_boot_pcb();
 		yield();
 		break;
