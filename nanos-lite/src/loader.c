@@ -69,6 +69,7 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
 {
+	printf("%s %p %p\n", filename, argv, envp);
 	Area ustack;
 	ustack.start = new_page(8);
 	ustack.end = ustack.start + (size_t)8 * ((size_t)1 << 15);
