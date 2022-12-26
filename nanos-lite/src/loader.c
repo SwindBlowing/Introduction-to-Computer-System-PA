@@ -14,6 +14,7 @@
 //size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg);
 Context *ucontext(AddrSpace *as, Area kstack, void *entry);
+void* new_page(size_t nr_page);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
@@ -69,8 +70,8 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
 {
 	Area ustack;
-	ustack.start = heap.end - sizeof(pcb->stack);
-	ustack.end = heap.end;
+	ustack.start = new_page(8);
+	ustack.end = ustack.start + (size_t)8 * ((size_t)1 << 15);
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
 	//printf("uload entry:%x\n", pcb->cp->mepc);
 	//printf("ustack.start:%p\n", ustack.start);
