@@ -57,7 +57,7 @@ static void sh_handle_cmd(const char *cmd) {
 			nterm_argv[i - 1] = (uintptr_t)(bufs[i]);
 		nterm_argv[bufNum - 1] = 0;
 		close_terminal();
-		printf("%s\n", ((char * const*)nterm_argv)[0]);
+		printf("%p\n", nterm_argv);
 		if (flag) {
 			if (bufs[0][0] == '.') execve(bufs[0] + 1, (char * const*)nterm_argv, NULL);
 			else execve(bufs[0], (char * const*)nterm_argv, NULL);
