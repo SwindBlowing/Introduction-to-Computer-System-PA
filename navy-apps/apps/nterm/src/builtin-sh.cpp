@@ -50,7 +50,7 @@ static void sh_handle_cmd(const char *cmd) {
 		//printf("Here\n");
 		//printf("Now PATH:%s\n", bufs[1] + 1);
 	}
-	else if (strcmp(bufs[0], "printenv") == 0) {
+	else if (strcmp(bufs[0], "printenv") == 0 || strcmp(bufs[0], "cat") == 0) {
 		printf("arrived here.\n");
 		for (int i = 0; i < bufNum; i++)
 			nterm_argv[i + 1] = (bufs[i]);
