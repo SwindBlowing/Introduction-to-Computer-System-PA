@@ -89,9 +89,16 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	int argc = i;
 	//printf("%d\n", argc);
 	i = 0;
-	while (envp && envp[i] != NULL) i++;
+	//while (envp && envp[i] != NULL) i++;
 	int sz_envp = i;
-	printf("%d\n", sz_envp);
+	// pay attention here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// there may not exist a "null" at the end of envp, so I don't know 
+	// how to end the number-count.
+	//In PA4.1, there is no need to actually realize the envp-String part.
+	//So currently I just abandon it.
+	//Don't forget it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	//printf("%d\n", sz_envp);
 
 	//create the String area
 

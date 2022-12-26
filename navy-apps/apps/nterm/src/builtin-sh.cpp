@@ -61,7 +61,7 @@ static void sh_handle_cmd(const char *cmd) {
 
 	if (strcmp(bufs[0], "quit") == 0) exit(0);
 	else if (strcmp(bufs[0], "cd") == 0) {
-		printf("Here\n");
+		//printf("Here\n");
 		//printf("%s %s\n", bufs[0], bufs[1]);
 		//if (bufs[1][0] != '.') setenv("PATH", (const char *)bufs[1], 0);
 		bool flag = 0;
@@ -71,7 +71,7 @@ static void sh_handle_cmd(const char *cmd) {
 			strcpy(envPATHs[envPATHnum++], bufs[1]);
 			strcat(totPATH, bufs[1]);
 			strcat(totPATH, ":");
-			printf("now PATH: %s\n", totPATH);
+			//printf("now PATH: %s\n", totPATH);
 			setenv("PATH", (const char *)totPATH, 1);
 		}
 		//printf("Here\n");
