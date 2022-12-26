@@ -84,7 +84,7 @@ static void sh_handle_cmd(const char *cmd) {
 		else 
 			execvp(bufs[0], NULL);
 	}
-	free(bufs);
+	//free(bufs);
 }
 
 void builtin_sh_run() {
