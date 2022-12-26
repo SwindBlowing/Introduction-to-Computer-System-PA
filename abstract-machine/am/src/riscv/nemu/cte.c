@@ -6,7 +6,7 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
-  assert(0);
+  //assert(0);
   if (user_handler) {
 	//printf("%x %x\n",c->mcause, c->GPR1);
     Event ev = {0};

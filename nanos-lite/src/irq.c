@@ -4,6 +4,7 @@ void do_syscall(Context *c);
 Context* schedule(Context *prev);
 
 static Context* do_event(Event e, Context* c) {
+	assert(0);
   switch (e.event) {
 	case EVENT_YIELD: 
 		//printf("Received yield event!\n"); 
