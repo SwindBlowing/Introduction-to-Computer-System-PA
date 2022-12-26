@@ -130,7 +130,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	for (int j = argc - 1; j >= 0; j--) {
 		p--;
 		*p = stack_argv[j];
-		//printf("%p\n", p);
+		printf("%s\n", (char *)p);
 	}
 	p--; *p = argc;
 	
