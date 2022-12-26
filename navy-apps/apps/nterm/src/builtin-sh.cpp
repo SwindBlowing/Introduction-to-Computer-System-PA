@@ -47,6 +47,7 @@ static void sh_handle_cmd(const char *cmd) {
 		printf("%s %s\n", bufs[0], bufs[1]);
 		if (bufs[1][0] != '.') setenv("PATH", (const char *)bufs[1], 0);
 		else setenv("PATH", (const char *)(bufs[1] + 1), 0);
+		printf("Here\n");
 		//printf("Now PATH:%s\n", bufs[1] + 1);
 	}
 	else if (strcmp(bufs[0], "printenv") == 0) {
