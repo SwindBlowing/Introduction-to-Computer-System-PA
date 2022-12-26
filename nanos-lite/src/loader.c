@@ -67,31 +67,57 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
 {
 	Area ustack;
-	//ustack.start = heap.end - sizeof(pcb->stack);
-	//ustack.end = heap.end;
-	ustack.start = heap.end;
-	ustack.end = ustack.start + sizeof(pcb->stack);
+	ustack.start = heap.end - sizeof(pcb->stack);
+	ustack.end = heap.end;
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
-	pcb->cp->GPRx = (uintptr_t)ustack.start;
+	//pcb->cp->GPRx = (uintptr_t)ustack.start;
 
 	//initializing argc, argv and envp.
+
+	//get the argc and sz_envp
+
 	int i = 0;
-	while (argv[i] != NULL) {
-		*((uintptr_t *)ustack.start + i + 1) = (uintptr_t)argv[i];
-		i++;
-	}
-	assert(0);
+	while (argv[i] != NULL) i++;
 	int argc = i;
-	*(uintptr_t *)ustack.start = argc;
-
-	*((uintptr_t *)ustack.start + argc + 1) = 0;
-
 	i = 0;
-	while (envp[i] != NULL) {
-		*((uintptr_t *)ustack.start + argc + 2 + i) = (uintptr_t)envp[i];
-		i++;
-	}
-	
+	while (envp[i] != NULL) i++;
 	int sz_envp = i;
-	*((uintptr_t *)ustack.start + argc + 2 + sz_envp) = 0;
+
+	//create the String area
+
+	uintptr_t stack_argv[argc], stack_envp[sz_envp];
+	char *now = (char *)(ustack.end - 2);
+	*now = 0;
+	for (int j = sz_envp - 1; j >= 0; j--) {
+		now -= strlen(envp[j]);
+		stack_envp[j] = (uintptr_t)now;
+		strcpy(now, envp[j]);
+		now--; *now = 0;
+	}
+	for (int j = argc - 1; j >= 0; j--) {
+		now -= strlen(argv[j]);
+		stack_argv[j] = (uintptr_t)now;
+		strcpy(now, argv[j]);
+		now--; *now = 0;
+	}
+
+	//store the envp, argv and argc
+
+	uintptr_t *p = (uintptr_t *)now;
+	p--; *p = 0;
+	for (int j = sz_envp - 1; j >= 0; j--) {
+		p--;
+		*p = stack_envp[j];
+	}
+	p--; *p = 0;
+	for (int j = argc - 1; j >= 0; j--) {
+		p--;
+		*p = stack_argv[j];
+	}
+	p--; *p = argc;
+
+	//update the cp->gprx
+
+	pcb->cp->GPRx = (uintptr_t)p;
+	
 }
