@@ -70,6 +70,8 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.start = heap.end - sizeof(pcb->stack);
 	ustack.end = heap.end;
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
+	uintptr_t *test = (uintptr_t *)ustack.start;
+	printf("%p %p\n", test, test + 1);
 
 	//initializing argc, argv and envp.
 
