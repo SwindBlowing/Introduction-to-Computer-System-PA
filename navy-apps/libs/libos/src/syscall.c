@@ -41,6 +41,8 @@
 #error _syscall_ is not implemented
 #endif
 
+extern int errno;
+
 intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
   register intptr_t _gpr1 asm (GPR1) = type;
   register intptr_t _gpr2 asm (GPR2) = a0;
@@ -93,7 +95,12 @@ int _gettimeofday(struct timeval *tv, struct timezone *tz) {
 int _execve(const char *fname, char * const argv[], char *const envp[]) {
 	//assert(0);
   //_exit(SYS_execve);
-  return _syscall_(SYS_execve, (intptr_t)fname, (intptr_t)argv, (intptr_t)envp);
+  int p = _syscall_(SYS_execve, (intptr_t)fname, (intptr_t)argv, (intptr_t)envp);
+  if (p < 0) {
+	errno = -p;
+	return -1;
+  }
+  return p;
 }
 
 // Syscalls below are not used in Nanos-lite.

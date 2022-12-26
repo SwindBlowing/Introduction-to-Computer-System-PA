@@ -23,8 +23,17 @@ static void sh_prompt() {
   sh_printf("sh> ");
 }
 
+static char totPATH[256] = "/usr/bin:";
+static char envPATHs[10][256];
+int envPATHnum = 0;
+
 
 static void sh_handle_cmd(const char *cmd) {
+	if (!envPATHnum) {
+		envPATHnum++;
+		strcpy(envPATHs[0], "/usr/bin");
+		setenv("PATH", (const char *)totPATH, 0);
+	}
 	int now = 0;
 	int bufNum = 0;
 	char bufs[50][99];
@@ -45,12 +54,20 @@ static void sh_handle_cmd(const char *cmd) {
 	if (strcmp(bufs[0], "quit") == 0) exit(0);
 	else if (strcmp(bufs[0], "cd") == 0) {
 		//printf("%s %s\n", bufs[0], bufs[1]);
-		if (bufs[1][0] != '.') setenv("PATH", (const char *)bufs[1], 0);
-		else setenv("PATH", (const char *)(bufs[1] + 1), 0);
+		//if (bufs[1][0] != '.') setenv("PATH", (const char *)bufs[1], 0);
+		bool flag = 0;
+		for (int i = 0; i < envPATHnum; i++)
+			if (strcmp(bufs[1], envPATHs[i]) == 0) flag = 1;
+		if (!flag) {
+			strcpy(envPATHs[envPATHnum++], bufs[1]);
+			strcat(totPATH, bufs[1]);
+			strcat(totPATH, ":");
+			setenv("PATH", (const char *)totPATH, 0);
+		}
 		//printf("Here\n");
 		//printf("Now PATH:%s\n", bufs[1] + 1);
 	}
-	else if (strcmp(bufs[0], "printenv") == 0 || strcmp(bufs[0], "cat") == 0) {
+	else if (strcmp(bufs[0], "printenv") == 0 || strcmp(bufs[0], "cat") == 0 || strcmp(bufs[0], "wc") == 0) {
 		printf("arrived here.\n");
 		for (int i = 0; i < bufNum; i++)
 			nterm_argv[i + 1] = (bufs[i]);
@@ -82,8 +99,13 @@ static void sh_handle_cmd(const char *cmd) {
 				execve(bufs[0], (char * const*)nterm_argv, NULL);
 			}
 		}
-		else 
-			execvp(bufs[0], NULL);
+		else {
+			for (int i = 1; i < bufNum; i++)
+				nterm_argv[i] = (bufs[i]);
+			nterm_argv[bufNum] = NULL;
+			nterm_argv[0] = bufs[0];
+			execvp(bufs[0], (char * const*)nterm_argv);
+		}
 	}
 	//free(bufs);
 	//printf("Here\n");
