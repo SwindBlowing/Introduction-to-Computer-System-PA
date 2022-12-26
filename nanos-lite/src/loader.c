@@ -114,9 +114,9 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		*p = stack_argv[j];
 	}
 	p--; *p = argc;
-	assert(0);
+	
 	//update the cp->gprx
 
 	pcb->cp->GPRx = (uintptr_t)p;
-
+	assert(0);
 }
