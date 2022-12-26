@@ -90,7 +90,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//create the String area
 
 	uintptr_t stack_argv[argc], stack_envp[sz_envp];
-	char *now = (char *)(ustack.end - 2);
+	char *now = (char *)(pcb->cp - 2);
 	*now = 0;
 	for (int j = sz_envp - 1; j >= 0; j--) {
 		now -= strlen(envp[j]);
