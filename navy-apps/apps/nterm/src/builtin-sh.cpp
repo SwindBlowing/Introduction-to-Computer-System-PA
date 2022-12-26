@@ -5,6 +5,7 @@
 
 char handle_key(SDL_Event *ev);
 void close_terminal();
+void refresh_terminal();
 
 static void sh_printf(const char *format, ...) {
   static char buf[256] = {};
@@ -120,6 +121,7 @@ static void sh_handle_cmd(const char *cmd) {
 				nterm_argv[0] = bufs[0];
 				execvp(bufs[0], (char * const*)nterm_argv);
 			}
+			refresh_terminal();
 		}
 	}
 	//free(bufs);
