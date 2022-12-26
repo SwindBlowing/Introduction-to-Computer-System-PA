@@ -105,7 +105,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	}
 
 	if ((uintptr_t)now % 4) {
-		now--; *now = 0;
+		//now--; *now = 0;
 	}
 	
 	//store the envp, argv and argc
