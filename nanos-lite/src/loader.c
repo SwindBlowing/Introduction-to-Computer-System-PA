@@ -47,7 +47,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	}
   }
   fs_close(fd);
-  printf("entry of %s:%x\n", filename, ehdr.e_entry);
+  //printf("entry of %s:%x\n", filename, ehdr.e_entry);
   return ehdr.e_entry;
 }
 
@@ -63,7 +63,7 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
 	kstack.start = pcb->stack;
 	kstack.end = kstack.start + sizeof(pcb->stack);
 	pcb->cp = kcontext(kstack, entry, arg);
-	printf("kload entry:%p\n", entry);
+	//printf("kload entry:%p\n", entry);
 }
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
