@@ -92,12 +92,14 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		stack_envp[j] = (uintptr_t)now;
 		strcpy(now, envp[j]);
 		now--; *now = 0;
+		printf("%p\n", now);
 	}
 	for (int j = argc - 1; j >= 0; j--) {
 		now -= strlen(argv[j]);
 		stack_argv[j] = (uintptr_t)now;
 		strcpy(now, argv[j]);
 		now--; *now = 0;
+		printf("%p\n", now);
 	}
 	
 	//store the envp, argv and argc
@@ -107,16 +109,18 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	for (int j = sz_envp - 1; j >= 0; j--) {
 		p--;
 		*p = stack_envp[j];
+		printf("%p\n", p);
 	}
 	p--; *p = 0;
 	for (int j = argc - 1; j >= 0; j--) {
 		p--;
 		*p = stack_argv[j];
+		printf("%p\n", p);
 	}
 	p--; *p = argc;
 	
 	//update the cp->gprx
 
 	pcb->cp->GPRx = (uintptr_t)p;
-	assert(0);
+
 }
