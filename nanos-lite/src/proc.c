@@ -55,6 +55,5 @@ Context* schedule(Context *prev) {
   current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
 
   // then return the new context
-  assert(0);
   return current->cp;
 }
