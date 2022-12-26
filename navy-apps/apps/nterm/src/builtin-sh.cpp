@@ -26,6 +26,14 @@ static void sh_prompt() {
 static char totPATH[256] = "/usr/bin:";
 static char envPATHs[10][256];
 int envPATHnum = 0;
+static char *BusyBoxCommand[30] = {
+	"base64", "cat", "echo", "ed", "false",
+	"printenv", "sleep", "true", "basename", "cksum",
+	"cmp", "comm", "cut", "dirname", "expand",
+	"expr", "fold", "head", "nl", "od", 
+	"paste", "shuf", "sum", "tac", "tee",
+	"tr", "unexpand", "uniq", "wc", "yes"
+};
 
 
 static void sh_handle_cmd(const char *cmd) {
@@ -67,44 +75,49 @@ static void sh_handle_cmd(const char *cmd) {
 		//printf("Here\n");
 		//printf("Now PATH:%s\n", bufs[1] + 1);
 	}
-	else if (strcmp(bufs[0], "printenv") == 0 || strcmp(bufs[0], "cat") == 0 || strcmp(bufs[0], "wc") == 0) {
-		printf("arrived here.\n");
-		for (int i = 0; i < bufNum; i++)
-			nterm_argv[i + 1] = (bufs[i]);
-		nterm_argv[bufNum + 1] = NULL;
-		strcpy(bufs[bufNum], "/bin/busybox");
-		nterm_argv[0] = bufs[bufNum];
-		execve("/bin/busybox", (char * const*)nterm_argv, NULL);
-	}
 	else {
-		bool flag = 0;
-		for (int i = 0; bufs[0][i]; i++)
-			if (bufs[0][i] == '/') {
-				flag = 1;
-				break;
-			}
-		//printf("%p\n", ((char * const*)nterm_argv)[0]);
-		close_terminal();
-		//printf("%p\n", nterm_argv);
-		if (flag) {
-			for (int i = 1; i < bufNum; i++)
-				nterm_argv[i] = (bufs[i]);
-			nterm_argv[bufNum] = NULL;
-			if (bufs[0][0] == '.') {
-				nterm_argv[0] = bufs[0] + 1;
-				execve(bufs[0] + 1, (char * const*)nterm_argv, NULL);
-			}
-			else {
-				nterm_argv[0] = bufs[0];
-				execve(bufs[0], (char * const*)nterm_argv, NULL);
-			}
+		bool isBBCommand = 0;
+		for (int i = 0; i < sizeof(BusyBoxCommand) / sizeof(char *); i++)
+			if (strcmp(bufs[0], BusyBoxCommand[i]) == 0) isBBCommand = 1;
+		if (isBBCommand) {
+			//printf("arrived here.\n");
+			for (int i = 0; i < bufNum; i++)
+				nterm_argv[i + 1] = (bufs[i]);
+			nterm_argv[bufNum + 1] = NULL;
+			strcpy(bufs[bufNum], "/bin/busybox");
+			nterm_argv[0] = bufs[bufNum];
+			execve("/bin/busybox", (char * const*)nterm_argv, NULL);
 		}
 		else {
-			for (int i = 1; i < bufNum; i++)
-				nterm_argv[i] = (bufs[i]);
-			nterm_argv[bufNum] = NULL;
-			nterm_argv[0] = bufs[0];
-			execvp(bufs[0], (char * const*)nterm_argv);
+			bool flag = 0;
+			for (int i = 0; bufs[0][i]; i++)
+				if (bufs[0][i] == '/') {
+					flag = 1;
+					break;
+				}
+			//printf("%p\n", ((char * const*)nterm_argv)[0]);
+			close_terminal();
+			//printf("%p\n", nterm_argv);
+			if (flag) {
+				for (int i = 1; i < bufNum; i++)
+					nterm_argv[i] = (bufs[i]);
+				nterm_argv[bufNum] = NULL;
+				if (bufs[0][0] == '.') {
+					nterm_argv[0] = bufs[0] + 1;
+					execve(bufs[0] + 1, (char * const*)nterm_argv, NULL);
+				}
+				else {
+					nterm_argv[0] = bufs[0];
+					execve(bufs[0], (char * const*)nterm_argv, NULL);
+				}
+			}
+			else {
+				for (int i = 1; i < bufNum; i++)
+					nterm_argv[i] = (bufs[i]);
+				nterm_argv[bufNum] = NULL;
+				nterm_argv[0] = bufs[0];
+				execvp(bufs[0], (char * const*)nterm_argv);
+			}
 		}
 	}
 	//free(bufs);
