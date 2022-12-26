@@ -41,9 +41,6 @@ static void sh_handle_cmd(const char *cmd) {
 	}
 
 	char * nterm_argv[50];
-	for (int i = 0; i < bufNum; i++)
-		nterm_argv[i] = (bufs[i]);
-	nterm_argv[bufNum] = NULL;
 
 	if (strcmp(bufs[0], "quit") == 0) exit(0);
 	else if (strcmp(bufs[0], "cd") == 0) {
@@ -52,6 +49,11 @@ static void sh_handle_cmd(const char *cmd) {
 		//printf("Now PATH:%s\n", bufs[1] + 1);
 	}
 	else if (strcmp(bufs[0], "printenv") == 0) {
+		for (int i = 0; i < bufNum; i++)
+			nterm_argv[i + 1] = (bufs[i]);
+		nterm_argv[bufNum + 1] = NULL;
+		strcpy(bufs[bufNum], "/bin/busybox");
+		nterm_argv[0] = bufs[bufNum];
 		execve("/bin/busybox", (char * const*)nterm_argv, NULL);
 	}
 	else {
@@ -65,11 +67,20 @@ static void sh_handle_cmd(const char *cmd) {
 		close_terminal();
 		//printf("%p\n", nterm_argv);
 		if (flag) {
-			if (bufs[0][0] == '.') execve(bufs[0] + 1, (char * const*)nterm_argv, NULL);
-			else execve(bufs[0], (char * const*)nterm_argv, NULL);
+			for (int i = 1; i < bufNum; i++)
+				nterm_argv[i] = (bufs[i]);
+			nterm_argv[bufNum] = NULL;
+			if (bufs[0][0] == '.') {
+				nterm_argv[0] = bufs[0] + 1;
+				execve(bufs[0] + 1, (char * const*)nterm_argv, NULL);
+			}
+			else {
+				nterm_argv[0] = bufs[0];
+				execve(bufs[0], (char * const*)nterm_argv, NULL);
+			}
 		}
 		else 
-			execvp(bufs[0], (char * const*)nterm_argv);
+			execvp(bufs[0], NULL);
 	}
 	free(bufs);
 }
