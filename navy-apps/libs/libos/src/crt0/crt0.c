@@ -22,5 +22,5 @@ void call_main(uintptr_t *args) {
   	strcpy(envp[i], (char *)(args + argc + 2 + i));*/
   environ = (char **)(args + argc + 2);
   exit(main(argc, (char **)(args + 1), (char **)(args + argc + 2)));
-  assert(0);
+  //assert(0);
 }
