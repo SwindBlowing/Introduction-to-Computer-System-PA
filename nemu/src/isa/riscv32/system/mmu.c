@@ -30,7 +30,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   //return MEM_RET_FAIL;
   //printf("%lx\n", sizeof(PTE));
   paddr_t PTE_loc = satp_PPN * 4096 + VPN1(vaddr) * 4;
-  //printf("PTE_loc:%x\n", PTE_loc);
+  printf("PTE_loc:%x\n", PTE_loc);
   PTE firstPTE = paddr_read(PTE_loc, sizeof(PTE));
   Assert(firstPTE & 0x1, "firstPTE %x is invalid", firstPTE);
 
