@@ -37,8 +37,8 @@ void init_proc() {
   static char *proc_empty[] = {NULL};
   /*static char *pal_argv[3] = {"/bin/pal", "--skip", NULL};
   context_uload(&pcb[1], "/bin/pal", pal_argv, proc_empty);*/
-  static char *proc_argvs[3] = {"/bin/pal", "--skip", NULL};
-  context_uload(&pcb[1], "/bin/pal", proc_argvs, proc_empty);
+  static char *proc_argvs[3] = {"/bin/nterm", "--skip", NULL};
+  context_uload(&pcb[1], "/bin/nterm", proc_argvs, proc_empty);
 
   switch_boot_pcb();
 
