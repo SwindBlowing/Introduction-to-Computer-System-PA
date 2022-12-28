@@ -17,6 +17,18 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg);
 Context *ucontext(AddrSpace *as, Area kstack, void *entry);
 void* new_page(size_t nr_page);
 void protect(AddrSpace *as);
+void map(AddrSpace *as, void *va, void *pa, int prot);
+
+void *loader_new_page(AddrSpace *as, size_t va, size_t sz)
+{
+	size_t pageNum = ((va + sz - 1) >> 12) - (va >> 12) + 1;
+	void *pa = new_page(pageNum);
+	for (int i = 0; i < pageNum; i++) {
+		map(as, (void *)((va & ~0xfff) + i * PGSIZE),
+			(void *)(pa + i * PGSIZE), 3);
+	}
+	return pa;
+}
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
@@ -43,10 +55,13 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		size_t virtAddr = phdr[i].p_vaddr;
 		size_t fileSize = phdr[i].p_filesz;
 		size_t memSize = phdr[i].p_memsz;
+		void *phy_page_start = loader_new_page(&pcb->as, virtAddr, memSize);
 		fs_lseek(fd, offset, SEEK_SET);
-		fs_read(fd, (void *)virtAddr, fileSize);
+		//fs_read(fd, (void *)virtAddr, fileSize);
+		fs_read(fd, phy_page_start + (virtAddr & 0xfff), fileSize);
 		assert(memSize >= fileSize);
-		memset((void *)(virtAddr + fileSize), 0, memSize - fileSize);
+		//memset((void *)(virtAddr + fileSize), 0, memSize - fileSize);
+		memset(phy_page_start + (virtAddr & 0xfff) + fileSize, 0, memSize - fileSize);
 	}
   }
   fs_close(fd);
@@ -74,7 +89,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//assert(0);
 	//printf("entered!\n");
 	//printf("%s %p %p\n", filename, argv, envp);
-	protect(&(pcb->as));
+	protect(&pcb->as);
 
 	Area ustack;
 	ustack.start = new_page(8);
