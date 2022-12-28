@@ -42,7 +42,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   if (type == 1) 
   	paddr_write(leaf_PTE_loc, sizeof(PTE), leafPTE | (1ul << 7));
 
-  paddr_t paddr = PTE_PPN(leafPTE) * 4096 + offset(vaddr) * 4;
+  paddr_t paddr = PTE_PPN(leafPTE) * 4096 + offset(vaddr);
   printf("%x %x\n", vaddr, paddr);
   Assert(paddr == vaddr, "Incorrect translation with va = %x and pa = %x", vaddr, paddr);
 	//assert(0);
