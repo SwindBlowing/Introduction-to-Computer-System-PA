@@ -28,7 +28,7 @@ typedef uint32_t PTE;
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   //return MEM_RET_FAIL;
   //printf("%lx\n", sizeof(PTE));
-  paddr_t PTE_loc = cpu.satp * 4096 + VPN1(vaddr) * 4;
+  paddr_t PTE_loc = PPN(cpu.satp) * 4096 + VPN1(vaddr) * 4;
   PTE firstPTE = paddr_read(PTE_loc, sizeof(PTE));
   Assert(firstPTE & 0x1, "firstPTE %x is invalid", firstPTE);
 
@@ -42,7 +42,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 
   paddr_t paddr = PPN(leafPTE) * 4096 + offset(vaddr) * 4;
 
-  Assert(paddr == vaddr, "Incorrect translate with va = %x and pa = %x", vaddr, paddr);
+  Assert(paddr == vaddr, "Incorrect translation with va = %x and pa = %x", vaddr, paddr);
 	//assert(0);
   return paddr;
 }
