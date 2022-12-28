@@ -1,16 +1,18 @@
 #include <memory.h>
 
 static void *pf = NULL;
-size_t single_page_size = ((size_t)1 << 12);
 
 void* new_page(size_t nr_page) {
-  pf += (nr_page * single_page_size);
-  return pf - nr_page * single_page_size;
+  pf += (nr_page * PGSIZE);
+  return pf - nr_page * PGSIZE;
 }
 
 #ifdef HAS_VME
 static void* pg_alloc(int n) {
-  return NULL;
+  //return NULL;
+  void *start = new_page(n / PGSIZE);
+  memset(start, 0, n);
+  return start;
 }
 #endif
 
