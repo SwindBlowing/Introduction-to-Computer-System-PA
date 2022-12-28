@@ -21,6 +21,7 @@
 #define VPN0(x) (((uintptr_t)(x) & 0x003ff000) >> 12)
 #define VPN1(x) (((uintptr_t)(x) & 0xffc00000) >> 22)
 #define PPN(x) (((uintptr_t)(x) & 0xfffffc00) >> 10)
+#define satp_PPN (cpu.satp & 0x3fffff)
 #define offset(x) ((uintptr_t)(x) & 0x3ff)
 
 typedef uint32_t PTE;
@@ -28,7 +29,7 @@ typedef uint32_t PTE;
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   //return MEM_RET_FAIL;
   //printf("%lx\n", sizeof(PTE));
-  paddr_t PTE_loc = PPN(cpu.satp) * 4096 + VPN1(vaddr) * 4;
+  paddr_t PTE_loc = satp_PPN * 4096 + VPN1(vaddr) * 4;
   printf("PTE_loc:%x\n", PTE_loc);
   PTE firstPTE = paddr_read(PTE_loc, sizeof(PTE));
   Assert(firstPTE & 0x1, "firstPTE %x is invalid", firstPTE);
