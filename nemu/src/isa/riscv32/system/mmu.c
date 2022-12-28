@@ -28,17 +28,17 @@ typedef uint32_t PTE;
 
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   //return MEM_RET_FAIL;
-  printf("\nvaddr:%x\n", vaddr);
+  //printf("\nvaddr:%x\n", vaddr);
   paddr_t PTE_loc = satp_PPN * 4096 + VPN1(vaddr) * 4;
-  printf("PTE_loc:%x\n", PTE_loc);
+  //printf("PTE_loc:%x\n", PTE_loc);
   PTE firstPTE = paddr_read(PTE_loc, sizeof(PTE));
-  printf("firstPTE:%x\n", firstPTE);
+  //printf("firstPTE:%x\n", firstPTE);
   Assert(firstPTE & 0x1, "firstPTE %x is invalid", firstPTE);
 
   paddr_t leaf_PTE_loc = PTE_PPN(firstPTE) * 4096 + VPN0(vaddr) * 4;
   //printf("leaf_PTE_loc:%x\n", leaf_PTE_loc);
   PTE leafPTE = paddr_read(leaf_PTE_loc, sizeof(PTE));
-  Assert(leafPTE  & 0x1, "leafPTE %x is invalid", leafPTE);
+  Assert(leafPTE & 0x1, "leafPTE %x is invalid", leafPTE);
   
   paddr_write(leaf_PTE_loc, sizeof(PTE), leafPTE | (1ul << 6));
   if (type == 1) 
