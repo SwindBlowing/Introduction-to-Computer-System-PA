@@ -27,7 +27,7 @@ extern PCB *current;
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
   uintptr_t max_pg_end = current->max_brk;
-  intptr_t max_pg = (max_pg_end >> 12) - 1;
+  intptr_t max_pg = ((intptr_t)(max_pg_end >> 12)) - 1;
   intptr_t brk_pg = (brk >> 12);
   //printf("Here\n");
   if (brk_pg > max_pg) {
