@@ -24,7 +24,6 @@ static inline word_t host_read(void *addr, int len) {
     case 2: return *(uint16_t *)addr;
     case 4: return *(uint32_t *)addr;
     IFDEF(CONFIG_ISA64, case 8: return *(uint64_t *)addr);
-	printf("%d\n", len);
     default: MUXDEF(CONFIG_RT_CHECK, assert(0), return 0);
   }
 }
