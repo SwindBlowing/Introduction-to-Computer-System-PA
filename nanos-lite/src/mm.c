@@ -29,7 +29,7 @@ int mm_brk(uintptr_t brk) {
   uintptr_t max_pg_end = current->max_brk;
   intptr_t max_pg = ((intptr_t)(max_pg_end >> 12)) - 1;
   intptr_t brk_pg = (brk >> 12);
-  printf("%x %x\n", max_pg_end, brk);
+  //printf("%x %x\n", max_pg_end, brk);
   //printf("Here\n");
   if (brk_pg > max_pg) {
 	
