@@ -71,7 +71,7 @@ void __am_switch(Context *c) {
 #define PPN(x) (((uintptr_t)(x) & 0xfffffc00) >> 10)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
-	va = (void *)((uintptr_t)(va) & (~0xfff));
+	/*va = (void *)((uintptr_t)(va) & (~0xfff));
 	pa = (void *)((uintptr_t)(pa) & (~0xfff));
 
 	PTE *PT_entry = as->ptr + VPN1(va) * 4;
@@ -81,7 +81,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		*PT_entry = (*PT_entry | 0x1);
 	}
 	PTE *leaf_PTE = (PTE *)(PPN(PT_entry) * 4098 + VPN0(va) * 4);
-	*leaf_PTE = (0xfffffc00 & PPN(pa)) | 0xf;
+	*leaf_PTE = (0xfffffc00 & PPN(pa)) | 0xf;*/
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
