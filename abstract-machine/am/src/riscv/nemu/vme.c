@@ -74,6 +74,7 @@ void __am_switch(Context *c) {
 void map(AddrSpace *as, void *va, void *pa, int prot) {
 	va = (void *)((uintptr_t)(va) & (~0xfff));
 	pa = (void *)((uintptr_t)(pa) & (~0xfff));
+	printf("%p <=> %p\n", va, pa);
 	//printf("@@@%d\n", sizeof(PTE));
 	//if ((uintptr_t)(va) == 0x80001000) printf("pa here:%x\n", (uintptr_t)(pa));
 
