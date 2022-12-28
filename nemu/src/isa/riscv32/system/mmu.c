@@ -44,7 +44,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 
   paddr_t paddr = PTE_PPN(leafPTE) * 4096 + offset(vaddr);
   //printf("%x %x\n", vaddr, paddr);
-  Assert(paddr == vaddr, "Incorrect translation with va = %x and pa = %x", vaddr, paddr);
+  //Assert(paddr == vaddr, "Incorrect translation with va = %x and pa = %x", vaddr, paddr);
 	//assert(0);
   return paddr;
 }
