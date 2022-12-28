@@ -28,7 +28,7 @@ typedef uint32_t PTE;
 
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   //return MEM_RET_FAIL;
-  //printf("%lx\n", sizeof(PTE));
+  printf("vaddr:%x\n", vaddr);
   paddr_t PTE_loc = satp_PPN * 4096 + VPN1(vaddr) * 4;
   printf("\nPTE_loc:%x\n", PTE_loc);
   PTE firstPTE = paddr_read(PTE_loc, sizeof(PTE));
