@@ -75,6 +75,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	pa = (void *)((uintptr_t)(pa) & (~0xfff));
 
 	PTE *PT_entry = as->ptr + VPN1(va) * 4;
+	printf("%x\n", *PT_entry);
 	if (!(*PT_entry & 0x1)) {
 		void *new_leaf_page = pgalloc_usr(PGSIZE);
 		printf("newpage:%p\n", new_leaf_page);
