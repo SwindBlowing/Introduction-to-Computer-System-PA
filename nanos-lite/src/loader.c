@@ -16,6 +16,7 @@
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg);
 Context *ucontext(AddrSpace *as, Area kstack, void *entry);
 void* new_page(size_t nr_page);
+void protect(AddrSpace *as);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
@@ -73,6 +74,8 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//assert(0);
 	//printf("entered!\n");
 	//printf("%s %p %p\n", filename, argv, envp);
+	protect(&(pcb->as));
+
 	Area ustack;
 	ustack.start = new_page(8);
 	ustack.end = ustack.start + PGSIZE;
