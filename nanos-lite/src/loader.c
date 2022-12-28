@@ -88,9 +88,6 @@ void context_kload(PCB *pcb, void (*entry)(void *), void *arg)
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
 {
-	//assert(0);
-	//printf("entered!\n");
-	//printf("%s %p %p\n", filename, argv, envp);
 	protect(&pcb->as);
 
 	Area ustack;
@@ -98,11 +95,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.end = ustack.start + PGSIZE;
 	for (int i = 8; i; i--)
 		map(&pcb->as, pcb->as.area.end - i * PGSIZE, ustack.end - i * PGSIZE, 3);
-	//pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
-	//printf("uload entry:%x\n", pcb->cp->mepc);
-	//printf("ustack.start:%p\n", ustack.start);
-	//printf("&cp:%p\n", pcb->cp);
-
+	pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
 	//initializing argc, argv and envp.
 
 	//get the argc and sz_envp
@@ -110,7 +103,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	int i = 0;
 	while (argv && argv[i] != NULL) i++;
 	int argc = i;
-	//printf("%d\n", argc);
 	i = 0;
 	//while (envp && envp[i] != NULL) i++;
 	int sz_envp = i;
@@ -121,8 +113,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//So currently I just abandon it.
 	//Don't forget it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-	//printf("%d\n", sz_envp);
-
 	//create the String area
 
 	uintptr_t stack_argv[argc], stack_envp[sz_envp];
@@ -132,16 +122,12 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		now -= strlen(envp[j]);
 		stack_envp[j] = (uintptr_t)now;
 		strcpy(now, envp[j]);
-		//printf("%s\n", now);
 		now--; *now = 0;
-		//printf("%p\n", now);
 	}
 	for (int j = argc - 1; j >= 0; j--) {
 		now -= strlen(argv[j]);
 		stack_argv[j] = (uintptr_t)now;
 		strcpy(now, argv[j]);
-		//printf("%s\n", now);
-		//printf("%p\n", now);
 		now--; *now = 0;
 	}
 
@@ -156,19 +142,13 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	for (int j = sz_envp - 1; j >= 0; j--) {
 		p--;
 		*p = stack_envp[j];
-		//printf("%p\n", p);
 	}
 	p--; *p = 0;
 	for (int j = argc - 1; j >= 0; j--) {
 		p--;
 		*p = stack_argv[j];
-		//printf("%s\n", (char *)p);
 	}
 	p--; *p = argc;
-	
-	pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
-	//update the cp->gprx
-	//printf("%p\n", p);
+
 	pcb->cp->GPRx = (uintptr_t)p;
-	//printf("uload entry:%x\n", pcb->cp->mepc);
 }
