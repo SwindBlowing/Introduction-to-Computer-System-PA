@@ -18,11 +18,11 @@
 #include <memory/vaddr.h>
 #include <cpu/cpu.h>
 
-#define VPN0(x) (((uintptr_t)(x) & 0x003ff000) >> 12)
-#define VPN1(x) (((uintptr_t)(x) & 0xffc00000) >> 22)
-#define PTE_PPN(x) ((uintptr_t)(x) >> 10)
+#define VPN0(x) (((vaddr_t)(x) & 0x003ff000) >> 12)
+#define VPN1(x) (((vaddr_t)(x) & 0xffc00000) >> 22)
+#define PTE_PPN(x) ((vaddr_t)(x) >> 10)
 #define satp_PPN (cpu.satp & 0x3fffff)
-#define offset(x) ((uintptr_t)(x) & 0x3ff)
+#define offset(x) ((vaddr_t)(x) & 0xfff)
 
 typedef uint32_t PTE;
 
