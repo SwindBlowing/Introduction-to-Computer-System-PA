@@ -29,6 +29,7 @@ int mm_brk(uintptr_t brk) {
   uintptr_t max_pg_end = current->max_brk;
   uintptr_t max_pg = (max_pg_end >> 12) - 1;
   uintptr_t brk_pg = (brk >> 12);
+  printf("%x %x\n", max_pg_end, brk);
   //printf("Here\n");
   if (brk_pg > max_pg) {
 	void *start = pg_alloc((brk_pg - max_pg) * PGSIZE);
