@@ -1,4 +1,7 @@
 #include <memory.h>
+#include <proc.h>
+
+void map(AddrSpace *as, void *va, void *pa, int prot);
 
 static void *pf = NULL;
 
@@ -20,8 +23,19 @@ void free_page(void *p) {
   panic("not implement yet");
 }
 
+extern PCB *current;
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
+  uintptr_t max_pg_end = current->max_brk;
+  uintptr_t max_pg = (max_pg_end >> 12) - 1;
+  uintptr_t brk_pg = (brk >> 12);
+  if (brk_pg > max_pg) {
+	void *start = new_page(brk_pg - max_pg);
+	for (int i = 0; i < brk_pg - max_pg; i++)
+		map(&current->as, (void *)((max_pg + 1 + i) * PGSIZE),
+			start + i * PGSIZE, 3);
+	current->max_brk = (brk_pg + 1) * PGSIZE;
+  }
   return 0;
 }
 
