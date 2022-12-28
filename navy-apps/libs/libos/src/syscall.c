@@ -67,11 +67,11 @@ int _write(int fd, void *buf, size_t count) {
   return _syscall_(SYS_write, fd, (intptr_t)buf, count);
 }
 
-extern char end;
+extern int _end;
 void *pb = NULL;
 
 void *_sbrk(intptr_t increment) {
-  if (pb == NULL) pb = &end;
+  if (pb == NULL) pb = &_end;
   intptr_t isAccepted = _syscall_(SYS_brk, (intptr_t)(pb + increment), 0, 0); // 0 accepted
   if (isAccepted != 0) return (void *)-1;
   pb += increment;
