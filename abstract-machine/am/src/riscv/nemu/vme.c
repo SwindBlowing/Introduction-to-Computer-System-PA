@@ -82,9 +82,9 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		*PT_entry = (*PT_entry | 0x1);
 		printf("%x\n", *PT_entry);
 	}
-	printf("%x\n", PPN(PT_entry));
-	printf("%x\n", PPN(PT_entry) * 4096 + VPN0(va) * 4);
-	PTE *leaf_PTE = (PTE *)(PPN(PT_entry) * 4096 + VPN0(va) * 4);
+	printf("%x\n", PPN(*PT_entry));
+	printf("%x\n", PPN(*PT_entry) * 4096 + VPN0(va) * 4);
+	PTE *leaf_PTE = (PTE *)(PPN(*PT_entry) * 4096 + VPN0(va) * 4);
 	*leaf_PTE = (0xfffffc00 & PPN(pa)) | 0xf;
 }
 
