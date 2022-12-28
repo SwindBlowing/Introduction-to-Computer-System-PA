@@ -30,7 +30,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   // if ((leaf_page_table_entry & PTE_V) == 0){
   //   Log("leaf_page_table_entry not valid, vaddr: %#x, pte_entry: %#x", vaddr, leaf_page_table_entry_addr);
   // }
-  Assert(leaf_page_table_entry & PTE_V, "leaf_page_table_entry not valid, vaddr: %#x, pte_entry: %#x", vaddr, leaf_page_table_entry_addr);
+  Assert(leaf_page_table_entry & PTE_V, "leaf_page_table_entry not valid, vaddr: %#x, pte_entry: %#x", vaddr, leaf_page_table_entry);
   if (type == 0){//读
     paddr_write(leaf_page_table_entry_addr, 4, leaf_page_table_entry | PTE_A);
   }else if (type == 1){//写
