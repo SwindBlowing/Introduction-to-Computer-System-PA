@@ -65,7 +65,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		//memset((void *)(virtAddr + fileSize), 0, memSize - fileSize);
 		memset(phy_page_start + (virtAddr & 0xfff) + fileSize, 0, memSize - fileSize);
 		if (fileSize < memSize) {
-			pcb->max_brk = ROUNDUP(virtAddr + memSize, 0x1000);
+			pcb->max_brk = ROUNDUP(virtAddr + memSize, 0xfff);
 		}
 	}
   }
