@@ -88,6 +88,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//printf("%x\n", PPN(*PT_entry) * 4096 + VPN0(va) * 4);
 	PTE *leaf_PTE = (PTE *)(PPN(*PT_entry) * 4096 + VPN0(va) * 4);
 	*leaf_PTE = (0xfffffc00 & PPN(pa)) | 0xf;
+	if ((uintptr_t)(va) == 0x80001000) printf("leafPTE here:%x\n", *leaf_PTE);
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
