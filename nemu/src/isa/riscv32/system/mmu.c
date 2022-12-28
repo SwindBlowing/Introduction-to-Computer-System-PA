@@ -20,7 +20,7 @@
 
 #define VPN0(x) (((uintptr_t)(x) & 0x003ff000) >> 12)
 #define VPN1(x) (((uintptr_t)(x) & 0xffc00000) >> 22)
-#define PPN(x) (((uintptr_t)(x) & 0xfffffc00) >> 10)
+#define PTE_PPN(x) ((uintptr_t)(x) >> 10)
 #define satp_PPN (cpu.satp & 0x3fffff)
 #define offset(x) ((uintptr_t)(x) & 0x3ff)
 
@@ -34,7 +34,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   PTE firstPTE = paddr_read(PTE_loc, sizeof(PTE));
   Assert(firstPTE & 0x1, "firstPTE %x is invalid", firstPTE);
 
-  paddr_t leaf_PTE_loc = PPN(firstPTE) * 4096 + VPN0(vaddr) * 4;
+  paddr_t leaf_PTE_loc = PTE_PPN(firstPTE) * 4096 + VPN0(vaddr) * 4;
   PTE leafPTE = paddr_read(leaf_PTE_loc, sizeof(PTE));
   Assert(leafPTE  & 0x1, "leafPTE %x is invalid", leafPTE);
   
@@ -42,7 +42,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   if (type == 1) 
   	paddr_write(leaf_PTE_loc, sizeof(PTE), leafPTE | (1ul << 7));
 
-  paddr_t paddr = PPN(leafPTE) * 4096 + offset(vaddr) * 4;
+  paddr_t paddr = PTE_PPN(leafPTE) * 4096 + offset(vaddr) * 4;
   printf("%x %x\n", vaddr, paddr);
   Assert(paddr == vaddr, "Incorrect translation with va = %x and pa = %x", vaddr, paddr);
 	//assert(0);

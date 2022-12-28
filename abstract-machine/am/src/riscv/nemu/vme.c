@@ -68,7 +68,8 @@ void __am_switch(Context *c) {
 
 #define VPN0(x) (((uintptr_t)(x) & 0x003ff000) >> 12)
 #define VPN1(x) (((uintptr_t)(x) & 0xffc00000) >> 22)
-#define PPN(x) (((uintptr_t)(x) & 0xfffffc00) >> 10)
+#define PTE_PPN(x) ((uintptr_t)(x) >> 10)
+#define LOC_PPN(x) ((uintptr_t)(x) >> 12)
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
 	va = (void *)((uintptr_t)(va) & (~0xfff));
@@ -86,8 +87,8 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	}
 	//printf("%x\n", PPN(*PT_entry));
 	//printf("%x\n", PPN(*PT_entry) * 4096 + VPN0(va) * 4);
-	PTE *leaf_PTE = (PTE *)(PPN(*PT_entry) * 4096 + VPN0(va) * 4);
-	*leaf_PTE = (0xfffffc00 & PPN(pa)) | 0xf;
+	PTE *leaf_PTE = (PTE *)(PTE_PPN(*PT_entry) * 4096 + VPN0(va) * 4);
+	*leaf_PTE = (LOC_PPN(pa) << 10) | 0xf;
 	if ((uintptr_t)(va) == 0x80001000) printf("leafPTE here:%x\n", *leaf_PTE);
 }
 
