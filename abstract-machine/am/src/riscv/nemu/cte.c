@@ -2,11 +2,15 @@
 #include <riscv/riscv.h>
 #include <klib.h>
 
+void __am_get_cur_as(Context *c);
+void __am_switch(Context *c);
+
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
+  __am_get_cur_as(c);
   if (user_handler) {
 	//printf("%x %x\n",c->mcause, c->GPR1);
     Event ev = {0};
@@ -48,6 +52,7 @@ Context* __am_irq_handle(Context *c) {
     assert(c != NULL);
   }
 //printf("mepc:%x\n", c->mepc);
+  __am_switch(c);
   return c;
 }
 
