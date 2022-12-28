@@ -80,6 +80,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		printf("newpage:%p\n", new_leaf_page);
 		*PT_entry = (*PT_entry & 0x3ff) | (((uintptr_t)(new_leaf_page) >> 12) << 10);
 		*PT_entry = (*PT_entry | 0x1);
+		printf("%x\n", *PT_entry);
 	}
 	printf("%x\n", PPN(PT_entry) * 4098 + VPN0(va) * 4);
 	PTE *leaf_PTE = (PTE *)(PPN(PT_entry) * 4098 + VPN0(va) * 4);
