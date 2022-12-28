@@ -174,7 +174,7 @@ int printf(const char *fmt, ...) {
   int len = 0;
   va_start(ap, fmt);
   bool isError = 0;
-  char out[512] = {'\0'};
+  char out[2048] = {'\0'};
   deal_with_args(out, fmt, &len, &ap, &isError);
   va_end(ap);
   putstr(out);
