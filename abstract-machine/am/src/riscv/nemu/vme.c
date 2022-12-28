@@ -73,6 +73,7 @@ void __am_switch(Context *c) {
 void map(AddrSpace *as, void *va, void *pa, int prot) {
 	va = (void *)((uintptr_t)(va) & (~0xfff));
 	pa = (void *)((uintptr_t)(pa) & (~0xfff));
+	printf("@@@%d\n", sizeof(PTE));
 
 	PTE *PT_entry = as->ptr + VPN1(va) * 4;
 	if (!(*PT_entry & 0x1)) {
