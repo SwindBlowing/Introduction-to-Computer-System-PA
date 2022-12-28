@@ -17,14 +17,14 @@
 #include <memory/paddr.h>
 
 word_t vaddr_ifetch(vaddr_t addr, int len) {
-  //if (isa_mmu_check(addr, len, 0) == MMU_TRANSLATE)
-//	addr = isa_mmu_translate(addr, len, 0);
+  if (isa_mmu_check(addr, len, 0) == MMU_TRANSLATE)
+	addr = isa_mmu_translate(addr, len, 0);
   return paddr_read(addr, len);
 }
 
 word_t vaddr_read(vaddr_t addr, int len) {
-  //if (isa_mmu_check(addr, len, 0) == MMU_TRANSLATE)
-//	addr = isa_mmu_translate(addr, len, 0);
+  if (isa_mmu_check(addr, len, 0) == MMU_TRANSLATE)
+	addr = isa_mmu_translate(addr, len, 0);
   return paddr_read(addr, len);
 }
 
