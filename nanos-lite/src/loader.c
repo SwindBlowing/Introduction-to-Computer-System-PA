@@ -21,7 +21,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot);
 
 void *loader_new_page(AddrSpace *as, size_t va, size_t sz)
 {
-	printf("%x %x\n", va, va + sz - 1);
+	//printf("%x %x\n", va, va + sz - 1);
 	size_t pageNum = ((va + sz - 1) >> 12) - (va >> 12) + 1;
 	void *pa = new_page(pageNum);
 	for (int i = 0; i < pageNum; i++) {
