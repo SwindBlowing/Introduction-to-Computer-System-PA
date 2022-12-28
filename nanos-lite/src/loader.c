@@ -24,6 +24,7 @@ void *loader_new_page(AddrSpace *as, size_t va, size_t sz)
 	size_t pageNum = ((va + sz - 1) >> 12) - (va >> 12) + 1;
 	void *pa = new_page(pageNum);
 	for (int i = 0; i < pageNum; i++) {
+		assert((va & ~0xfff) + i * PGSIZE != 0x40014000);
 		map(as, (void *)((va & ~0xfff) + i * PGSIZE),
 			(void *)(pa + i * PGSIZE), 3);
 	}
