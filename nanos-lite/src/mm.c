@@ -31,10 +31,12 @@ int mm_brk(uintptr_t brk) {
   uintptr_t brk_pg = (brk >> 12);
   //printf("Here\n");
   if (brk_pg > max_pg) {
-	void *start = new_page(brk_pg - max_pg);
-	for (int i = 0; i < brk_pg - max_pg; i++)
+	void *start = pg_alloc((brk_pg - max_pg) * PGSIZE);
+	for (int i = 0; i < brk_pg - max_pg; i++) {
+		printf("%p\n", max_pg_end + i * PGSIZE);
 		map(&current->as, (void *)(max_pg_end + i * PGSIZE),
 			start + i * PGSIZE, 3);
+	}
 	current->max_brk = (brk_pg + 1) * PGSIZE;
   }
   return 0;
