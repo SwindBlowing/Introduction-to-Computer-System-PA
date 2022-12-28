@@ -16,7 +16,30 @@
 #include <isa.h>
 #include <memory/paddr.h>
 #include <memory/vaddr.h>
+#include <cpu/cpu.h>
+
+#define VPN0(x) (((uintptr_t)(x) & 0x003ff000) >> 12)
+#define VPN1(x) (((uintptr_t)(x) & 0xffc00000) >> 22)
+#define PPN(x) (((uintptr_t)(x) & 0xfffffc00) >> 10)
+#define offset(x) ((uintptr_t)(x) & 0x3ff)
+
+typedef uintptr_t PTE;
 
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
-  return MEM_RET_FAIL;
+  //return MEM_RET_FAIL;
+  paddr_t PTE_loc = cpu.satp * 4096 + VPN1(vaddr) * 4;
+  PTE firstPTE = paddr_read(PTE_loc, sizeof(PTE));
+  Assert(firstPTE & 0x1, "firstPTE %lx is invalid", firstPTE);
+
+  paddr_t leaf_PTE_loc = PPN(firstPTE) * 4096 + VPN0(vaddr) * 4;
+  PTE leafPTE = paddr_read(leaf_PTE_loc, sizeof(PTE));
+  Assert(leafPTE  & 0x1, "leafPTE %lx is invalid", leafPTE);
+  
+  paddr_write(leaf_PTE_loc, sizeof(PTE), leafPTE | (1ul << 6));
+  if (type == 1) 
+  	paddr_write(leaf_PTE_loc, sizeof(PTE), leafPTE | (1ul << 7));
+
+  paddr_t paddr = PPN(leafPTE) * 4096 + offset(vaddr) * 4;
+
+  return paddr;
 }
