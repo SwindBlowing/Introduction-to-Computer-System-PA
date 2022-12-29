@@ -76,7 +76,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->mstatus = 0x1800 | 0x80;
 
   cp->gpr[10] = (uintptr_t)arg;
-  cp->pdir = NULL;
+  //cp->pdir = NULL;
 
   return cp;
 }
