@@ -47,7 +47,7 @@ void init_proc() {
 
 }
 
-const int rates = 2;
+const int rates = 1;
 int nowTimes = 0;
 
 Context* schedule(Context *prev) {
