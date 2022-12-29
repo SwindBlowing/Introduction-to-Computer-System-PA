@@ -46,6 +46,7 @@ Context* __am_irq_handle(Context *c) {
 		}
 		break;
 	  }
+	  case 0x80000007: ev.event = EVENT_IRQ_TIMER; break;
       default: ev.event = EVENT_ERROR;  break;
     }
     c = user_handler(ev, c);
@@ -72,7 +73,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 
   Context *cp = (Context *)kstack.end - 1;
   cp->mepc = (uintptr_t)entry;
-  cp->mstatus = 0x1800;
+  cp->mstatus = 0x1800 | 0x80;
 
   cp->gpr[10] = (uintptr_t)arg;
   cp->pdir = NULL;

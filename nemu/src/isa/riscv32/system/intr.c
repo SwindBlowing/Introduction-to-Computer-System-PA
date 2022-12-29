@@ -15,15 +15,26 @@
 
 #include <isa.h>
 
+#define IRQ_TIMER 0x80000007  // for riscv32
+
+#define MSTATUS_MIE (1ul << 3)
+#define MSTATUS_MPIE (1ul << 7)
+
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
    */
   cpu.mepc = epc;
   cpu.mcause = NO;
+  cpu.mstatus = (cpu.mstatus & ~MSTATUS_MPIE) | ((cpu.mstatus & MSTATUS_MIE) ? MSTATUS_MPIE : 0);
+  cpu.mstatus = cpu.mstatus & ~MSTATUS_MIE;
   return (cpu.mtvec & 1) ? ((cpu.mtvec & 0xFFFFFFFCu) + (NO << 2)) : (cpu.mtvec & 0xFFFFFFFCu);
 }
 
 word_t isa_query_intr() {
+  if (cpu.INTR) {
+    cpu.INTR = false;
+    return IRQ_TIMER;
+  }
   return INTR_EMPTY;
 }

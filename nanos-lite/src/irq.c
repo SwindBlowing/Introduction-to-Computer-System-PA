@@ -10,7 +10,7 @@ static Context* do_event(Event e, Context* c) {
 		return schedule(c);
 		break;
 	case EVENT_SYSCALL: do_syscall(c); break;
-	case EVENT_IRQ_TIMER: return c; break; // do nothing now
+	case EVENT_IRQ_TIMER: Log("Received timer interrupt event."); schedule(c); break;
     default: panic("Unhandled event ID = %d", e.event);
   }
 
