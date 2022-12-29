@@ -32,7 +32,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 }
 
 word_t isa_query_intr() {
-  if (cpu.INTR) {
+  if ((cpu.mstatus & MSTATUS_MIE) && cpu.INTR) {
     cpu.INTR = false;
     return IRQ_TIMER;
   }
