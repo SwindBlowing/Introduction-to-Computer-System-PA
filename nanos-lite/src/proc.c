@@ -51,14 +51,17 @@ const int rates = 10;
 int nowTimes = 0;
 
 Context* schedule(Context *prev) {
-  // save the context pointer
-  current->cp = prev;
+  
   if (current == NULL || current == &pcb[0]) {
+	// save the context pointer
+  	current->cp = prev;
 	current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
   }
   else {
 	nowTimes++;
 	if (nowTimes == rates) {
+		// save the context pointer
+  		current->cp = prev;
 		current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
 		nowTimes = 0;
 	}
