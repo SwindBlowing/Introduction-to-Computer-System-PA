@@ -28,7 +28,6 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   cpu.mcause = NO;
   cpu.mstatus = (cpu.mstatus & ~MSTATUS_MPIE) | ((cpu.mstatus & MSTATUS_MIE) ? MSTATUS_MPIE : 0);
   cpu.mstatus = cpu.mstatus & ~MSTATUS_MIE;
-  printf("%x\n", (cpu.mtvec & 1) ? ((cpu.mtvec & 0xFFFFFFFCu) + (NO << 2)) : (cpu.mtvec & 0xFFFFFFFCu));
   return (cpu.mtvec & 1) ? ((cpu.mtvec & 0xFFFFFFFCu) + (NO << 2)) : (cpu.mtvec & 0xFFFFFFFCu);
 }
 
