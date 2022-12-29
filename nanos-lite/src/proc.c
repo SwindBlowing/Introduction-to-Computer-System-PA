@@ -65,10 +65,13 @@ Context* schedule(Context *prev) {
 		current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
 		nowTimes = 0;
 	}
+	else {
+		current->cp = prev;
+	}
   }
   // then return the new context
-  printf("%p %p\n", &pcb[0], &pcb[1]);
-  printf("%p\n", current);
-  printf("%p %p\n", prev, current->cp);
+  //printf("%p %p\n", &pcb[0], &pcb[1]);
+  //printf("%p\n", current);
+  //printf("%p %p\n", prev, current->cp);
   return current->cp;
 }
