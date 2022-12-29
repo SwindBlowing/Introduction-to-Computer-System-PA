@@ -67,5 +67,6 @@ Context* schedule(Context *prev) {
 	}
   }
   // then return the new context
+  printf("%p\n", current->cp);
   return current->cp;
 }
