@@ -12,7 +12,7 @@ Context* __am_irq_handle(Context *c) {
   //assert(0);
   __am_get_cur_as(c);
   if (user_handler) {
-	//printf("%x %x\n",c->mcause, c->GPR1);
+	printf("%x %x\n",c->mcause, c->GPR1);
     Event ev = {0};
     switch (c->mcause) {
 	  case 0xb: {
