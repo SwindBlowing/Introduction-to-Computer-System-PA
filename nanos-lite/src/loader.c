@@ -94,7 +94,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 
 	Area ustack;
 	ustack.start = new_page(8);
-	ustack.end = ustack.start + PGSIZE;
+	ustack.end = ustack.start + PGSIZE * 8;
 	for (int i = 8; i; i--)
 		map(&pcb->as, pcb->as.area.end - i * PGSIZE, ustack.end - i * PGSIZE, 3);
 	pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
