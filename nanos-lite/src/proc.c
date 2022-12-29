@@ -47,15 +47,24 @@ void init_proc() {
 
 }
 
+const int rates = 10;
+int nowTimes = 0;
+
 Context* schedule(Context *prev) {
-  // save the context pointer
-  current->cp = prev;
+  if (current == &pcb[0]) {
+	// save the context pointer
+	current->cp = prev;
 
-   // (before) always select pcb[0] as the new process
-  //current = &pcb[0];
-  // (current) transform between pcb[0] and pcb[1]
-  current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
-
+	current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
+  }
+  else {
+	nowTimes++;
+	if (nowTimes == rates) {
+		current->cp = prev;
+		current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
+		nowTimes = 0;
+	}
+  }
   // then return the new context
   return current->cp;
 }
