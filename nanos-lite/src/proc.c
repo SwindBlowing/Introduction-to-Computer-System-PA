@@ -70,8 +70,8 @@ Context* schedule(Context *prev) {
 	}
   }
   // then return the new context
-  //printf("%p %p\n", &pcb[0], &pcb[1]);
-  //printf("%p\n", current);
-  //printf("%p %p\n", prev, current->cp);
+  printf("%p %p\n", &pcb[0], &pcb[1]);
+  printf("%p\n", current);
+  printf("%p %p\n", prev, current->cp);
   return current->cp;
 }
