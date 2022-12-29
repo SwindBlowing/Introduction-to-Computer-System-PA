@@ -51,7 +51,8 @@ const int rates = 10;
 int nowTimes = 0;
 
 Context* schedule(Context *prev) {
-  if (current == &pcb[0]) {
+
+  if (current == NULL || current == &pcb[0]) {
 	// save the context pointer
 	current->cp = prev;
 
