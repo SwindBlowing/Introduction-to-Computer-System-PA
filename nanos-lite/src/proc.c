@@ -47,7 +47,7 @@ void init_proc() {
 
 }
 
-const int rates = 2;
+const int rates = 10;
 int nowTimes = 0;
 
 Context* schedule(Context *prev) {
@@ -71,10 +71,7 @@ Context* schedule(Context *prev) {
 	}
   }
   // then return the new context
-  printf("%p %p\n", &pcb[0], &pcb[1]);
-  printf("%p\n", current);
-  printf("%p %p\n", prev, current->cp);
-  return current->cp; // not correct
+  return current->cp;
   /*current->cp = prev;
   current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
   return current->cp;*/
