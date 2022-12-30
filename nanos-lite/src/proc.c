@@ -52,7 +52,7 @@ int nowTimes = 0;
 
 Context* schedule(Context *prev) {
   
-  if (current == NULL || current == &pcb[0]) {
+  /*if (current == NULL || current == &pcb[0]) {
 	// save the context pointer
   	current->cp = prev;
 	current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
@@ -71,8 +71,8 @@ Context* schedule(Context *prev) {
 	}
   }
   // then return the new context
-  return current->cp;
-  /*current->cp = prev;
-  current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
   return current->cp;*/
+  current->cp = prev;
+  current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
+  return current->cp;
 }
