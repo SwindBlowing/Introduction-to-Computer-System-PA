@@ -37,21 +37,21 @@ __am_asm_trap:
 
   mv t3, sp                   // c->sp = $sp                 
 
-  //csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
-  //bnez sp, pre_save_context   // (2) take the branch if we trapped from user
-  //csrrw sp, mscratch, sp      // (3) if we trapped from kernel, restore the original sp
+  csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
+  bnez sp, pre_save_context   // (2) take the branch if we trapped from user
+  csrrw sp, mscratch, sp      // (3) if we trapped from kernel, restore the original sp
 
   save_context:
 
   addi sp, sp, -CONTEXT_SIZE
 
-  //STORE t3, OFFSET_SP(sp)
+  STORE t3, OFFSET_SP(sp)
 
   MAP(REGS, PUSH)
 
-  //csrr t3, mscratch
-  //STORE t3, OFFSET_NP(sp)     // c->np = ksp
-  //csrwi mscratch, 0           // ksp = 0
+  csrr t3, mscratch
+  STORE t3, OFFSET_NP(sp)     // c->np = ksp
+  csrwi mscratch, 0           // ksp = 0
 
   csrr t0, mcause
   csrr t1, mstatus
@@ -72,12 +72,12 @@ __am_asm_trap:
   # modified here
   mv sp, a0
 
-  //LOAD t3, OFFSET_NP(sp)      // $t3 = c->np
-  //beqz t3, is_user            // if c->np == 0(kernel), jump
-  //addi t3, sp, CONTEXT_SIZE
-  //csrw mscratch, t3           // ksp = $sp
+  LOAD t3, OFFSET_NP(sp)      // $t3 = c->np
+  beqz t3, is_user            // if c->np == 0(kernel), jump
+  addi t3, sp, CONTEXT_SIZE
+  csrw mscratch, t3           // ksp = $sp
 
-  //is_user:
+  is_user:
   LOAD t1, OFFSET_STATUS(sp)
   LOAD t2, OFFSET_EPC(sp)
   csrw mstatus, t1
@@ -85,7 +85,7 @@ __am_asm_trap:
 
   MAP(REGS, POP)
 
-  //LOAD t3, OFFSET_SP(sp)
+  LOAD t3, OFFSET_SP(sp)
 
   addi sp, sp, CONTEXT_SIZE
   
