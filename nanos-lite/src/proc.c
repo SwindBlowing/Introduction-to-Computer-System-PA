@@ -47,12 +47,12 @@ void init_proc() {
 
 }
 
-//const int rates = 10;
-//int nowTimes = 0;
+const int rates = 10;
+int nowTimes = 0;
 
 Context* schedule(Context *prev) {
   
-  /*if (current == NULL || current == &pcb[0]) {
+  if (current == NULL || current == &pcb[0]) {
 	// save the context pointer
   	current->cp = prev;
 	current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
@@ -71,10 +71,10 @@ Context* schedule(Context *prev) {
 	}
   }
   // then return the new context
-  return current->cp;*/
+  return current->cp;
   //printf("pcb0 & 1: %p %p\n", &pcb[0], &pcb[1]);
-  current->cp = prev;
+  /*current->cp = prev;
   current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
   //printf("current cp & current: %p %p\n", current->cp, current);
-  return current->cp;
+  return current->cp;*/
 }
