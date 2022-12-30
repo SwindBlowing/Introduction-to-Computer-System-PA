@@ -26,11 +26,25 @@ f(30) f(31)
 #define OFFSET_CAUSE  (32 * XLEN)
 #define OFFSET_STATUS (33 * XLEN)
 #define OFFSET_EPC    (34 * XLEN)
+#define OFFSET_NP     (36 * XLEN)
 
 .align 3
 .globl __am_asm_trap
 __am_asm_trap:
+
   addi sp, sp, -CONTEXT_SIZE
+
+  csrr t3, mscratch
+  STORE t3, OFFSET_NP(sp)
+  mv t3, sp
+
+  csrrw sp, mscratch, sp   // (1) atomically exchange sp and mscratch
+  bnez sp, save_context    // (2) take the branch if we trapped from user
+  csrr sp, mscratch        // (3) if we trapped from kernel, restore the original sp
+
+  save_context:
+
+  csrwi mscratch, 0
 
   MAP(REGS, PUSH)
 
@@ -60,10 +74,11 @@ __am_asm_trap:
 
   MAP(REGS, POP)
   
-  # modified
-  # LOAD t2, OFFSET_EPC(sp)
-  # addi t2, t2, 4
-  # csrw mepc, t2
+  LOAD t4, OFFSET_NP(sp)
+  beqz t4, is_user
+  csrw mscratch, sp
+  is_user:
+  mv sp, t3
 
   addi sp, sp, CONTEXT_SIZE
   mret

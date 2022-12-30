@@ -61,10 +61,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		size_t page_addr = virtAddr & 0xfff;
 		fs_lseek(fd, offset, SEEK_SET);
 		//fs_read(fd, (void *)virtAddr, fileSize);
-		fs_read(fd, phyAddr  + page_addr, fileSize);
+		fs_read(fd, phyAddr + page_addr, fileSize);
 		assert(memSize >= fileSize);
 		//memset((void *)(virtAddr + fileSize), 0, memSize - fileSize);
-		memset(phyAddr  + page_addr + fileSize, 0, memSize - fileSize);
+		memset(phyAddr + page_addr + fileSize, 0, memSize - fileSize);
 	}
   }
   fs_close(fd);
@@ -110,9 +110,9 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	// pay attention here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	// there may not exist a "null" at the end of envp, so I don't know 
 	// how to end the number-count.
-	//In PA4.1, there is no need to actually realize the envp-String part.
-	//So currently I just abandon it.
-	//Don't forget it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// In PA4.1, there is no need to actually realize the envp-String part.
+	// So currently I just abandon it.
+	// Don't forget it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	//create the String area
 
