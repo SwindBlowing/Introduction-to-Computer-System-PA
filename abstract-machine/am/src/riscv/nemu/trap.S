@@ -38,7 +38,7 @@ __am_asm_trap:
   mv t4, sp                   // c->sp = $sp                 
 
   csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
-  bnez sp, save_context   // (2) take the branch if we trapped from user
+  bnez sp, pre_save_context   // (2) take the branch if we trapped from user
   csrrw sp, mscratch, sp      // (3) if we trapped from kernel, restore the original sp
 
   save_context:
@@ -49,9 +49,9 @@ __am_asm_trap:
 
   MAP(REGS, PUSH)
 
-  # csrr t4, mscratch
-  # STORE t4, OFFSET_NP(sp)     // c->np = ksp
-  # csrwi mscratch, 0           // ksp = 0
+  csrr t4, mscratch
+  STORE t4, OFFSET_NP(sp)     // c->np = ksp
+  csrwi mscratch, 0           // ksp = 0
 
   csrr t0, mcause
   csrr t1, mstatus

@@ -11,10 +11,6 @@ Context* __am_irq_handle(Context *c) {
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
   //printf("%x\n", c->gpr[2]);
-  uintptr_t mscratch;
-  asm volatile("csrr %0, mscratch" : "=r"(mscratch));
-  c->np = (mscratch == 0 ? 3 : 0);
-  asm volatile("csrw mscratch, %0" : : "g"(0));
   __am_get_cur_as(c);
   if (user_handler) {
 	//printf("%x %x\n",c->mcause, c->GPR1);
