@@ -55,6 +55,7 @@ Context* __am_irq_handle(Context *c) {
   }
 //printf("mepc:%x\n", c->mepc);
   __am_switch(c);
+  printf("%x\n", c->gpr[28]);
   return c;
 }
 
