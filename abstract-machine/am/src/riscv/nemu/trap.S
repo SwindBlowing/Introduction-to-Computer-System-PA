@@ -35,21 +35,21 @@ __am_asm_trap:
   addi sp, sp, -XLEN          // I'll use $t3
   STORE t3, (sp)              // store $t3
 
-  mv t3, sp                   // c->sp = $sp
+  csrr t3, mscratch                 
 
   csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
   bnez sp, save_context       // (2) take the branch if we trapped from user
-  csrrw sp, mscratch, sp      // (3) if we trapped from kernel, restore the original sp
+  csrr sp, mscratch           // (3) if we trapped from kernel, restore the original sp
 
   save_context:
 
   addi sp, sp, -CONTEXT_SIZE
 
-  MAP(REGS, PUSH)
-
-  csrr t3, mscratch
   STORE t3, OFFSET_NP(sp)     // c->np = ksp
   csrwi mscratch, 0           // ksp = 0
+  addi t3, sp, CONTEXT_SIZE   // c->sp = $sp
+
+  MAP(REGS, PUSH)
 
   csrr t0, mcause
   csrr t1, mstatus
