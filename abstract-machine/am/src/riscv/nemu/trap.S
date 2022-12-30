@@ -35,7 +35,7 @@ __am_asm_trap:
   addi sp, sp, -XLEN          // I'll use $t3
   STORE t3, (sp)              // store $t3
 
-  csrr t3, mscratch                 
+  mv t3, sp                   // c->sp = $sp                 
 
   csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
   bnez sp, save_context       // (2) take the branch if we trapped from user
@@ -45,11 +45,12 @@ __am_asm_trap:
 
   addi sp, sp, -CONTEXT_SIZE
 
+  MAP(REGS, PUSH)
+
+  STORE t3, OFFSET_SP(sp)
+  csrr t3, mscratch
   STORE t3, OFFSET_NP(sp)     // c->np = ksp
   csrwi mscratch, 0           // ksp = 0
-  addi t3, sp, CONTEXT_SIZE   // c->sp = $sp
-
-  MAP(REGS, PUSH)
 
   csrr t0, mcause
   csrr t1, mstatus
@@ -80,6 +81,7 @@ __am_asm_trap:
   LOAD t2, OFFSET_EPC(sp)
   csrw mstatus, t1
   csrw mepc, t2
+  LOAD t3, OFFSET_SP(sp)
 
   MAP(REGS, POP)
 
