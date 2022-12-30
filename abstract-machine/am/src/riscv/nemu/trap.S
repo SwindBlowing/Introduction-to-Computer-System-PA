@@ -35,7 +35,7 @@ __am_asm_trap:
   addi sp, sp, -XLEN          // I'll use $t3 and $t4
   STORE t3, (sp)              // store $t3
 
-  //csrr t3, mscratch
+  csrr t3, mscratch
   //STORE t3, OFFSET_NP(sp)     // c->np = ksp
   //mv t3, sp                   // c->sp = $sp
 
