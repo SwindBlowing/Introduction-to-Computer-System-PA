@@ -32,7 +32,7 @@ f(30) f(31)
 .globl __am_asm_trap
 __am_asm_trap:
 
-  addi sp, sp, -XLEN          // I'll use $t3 and $t4
+  addi sp, sp, -XLEN * 2         // I'll use $t3 and $t4
   //STORE t3, (sp)              // store $t3
 
   //csrr t3, mscratch
@@ -87,6 +87,6 @@ __am_asm_trap:
   //mv sp, t3                   // $sp = c->sp
 
   //LOAD t3, (sp)               // load $t3
-  addi sp, sp, XLEN
+  addi sp, sp, XLEN * 2
 
   mret
