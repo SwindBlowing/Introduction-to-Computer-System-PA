@@ -77,7 +77,6 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 
   uintptr_t *now = (uintptr_t *)(kstack.end - 4);
-  //*now = 0;
   Context *cp = (Context *)now - 1;
   cp->mepc = (uintptr_t)entry;
   cp->mstatus = 0x1800 | 0x80;
@@ -86,7 +85,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->pdir = NULL;
 
   cp->np = 3;
-  cp->gpr[28] = (uintptr_t)now;
+  cp->gpr[28] = (uintptr_t)cp;
 
   return cp;
 }
