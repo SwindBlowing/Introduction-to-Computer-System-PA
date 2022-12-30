@@ -19,20 +19,6 @@ void* new_page(size_t nr_page);
 void protect(AddrSpace *as);
 void map(AddrSpace *as, void *va, void *pa, int prot);
 
-void *loader_new_page(PCB *pcb, AddrSpace *as, size_t va, size_t sz)
-{
-	//printf("%x %x\n", va, va + sz - 1);
-	size_t pageNum = ((va + sz - 1) >> 12) - (va >> 12) + 1;
-	void *pa = new_page(pageNum);
-	for (int i = 0; i < pageNum; i++) {
-		//printf("%x\n", (va & ~0xfff) + i * PGSIZE);
-		map(as, (void *)((va & ~0xfff) + i * PGSIZE),
-			(void *)(pa + i * PGSIZE), 3);
-	}
-	pcb->max_brk = pcb->max_brk > (va & ~0xfff) + pageNum * PGSIZE
-					? pcb->max_brk : (va & ~0xfff) + pageNum * PGSIZE;
-	return pa;
-}
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
@@ -59,14 +45,26 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		size_t virtAddr = phdr[i].p_vaddr;
 		size_t fileSize = phdr[i].p_filesz;
 		size_t memSize = phdr[i].p_memsz;
-		void *phy_page_start = loader_new_page(pcb, &pcb->as, virtAddr, memSize);
+
+		// new the pages.
+		size_t pageNum = ((virtAddr + memSize - 1) >> 12) - (virtAddr >> 12) + 1;
+		void *phyAddr = new_page(pageNum);
+		for (int i = 0; i < pageNum; i++) {
+			//printf("%x\n", (va & ~0xfff) + i * PGSIZE);
+			map(&pcb->as, (void *)((virtAddr & ~0xfff) + i * PGSIZE),
+				(void *)(phyAddr + i * PGSIZE), 3);
+		}
+		pcb->max_brk = pcb->max_brk > (virtAddr & ~0xfff) + pageNum * PGSIZE
+						? pcb->max_brk : (virtAddr & ~0xfff) + pageNum * PGSIZE;
+		//ends here
+
 		size_t page_addr = virtAddr & 0xfff;
 		fs_lseek(fd, offset, SEEK_SET);
 		//fs_read(fd, (void *)virtAddr, fileSize);
-		fs_read(fd, phy_page_start + page_addr, fileSize);
+		fs_read(fd, phyAddr  + page_addr, fileSize);
 		assert(memSize >= fileSize);
 		//memset((void *)(virtAddr + fileSize), 0, memSize - fileSize);
-		memset(phy_page_start + page_addr + fileSize, 0, memSize - fileSize);
+		memset(phyAddr  + page_addr + fileSize, 0, memSize - fileSize);
 	}
   }
   fs_close(fd);
