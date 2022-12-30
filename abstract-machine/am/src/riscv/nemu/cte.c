@@ -11,7 +11,7 @@ Context* __am_irq_handle(Context *c) {
   //printf("%x\n", c->np);
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
-  //printf("%x\n", c->gpr[2]);
+  //printf("%x\n", c->gpr[28]);
   __am_get_cur_as(c);
   if (user_handler) {
 	//printf("%x %x\n",c->mcause, c->GPR1);
@@ -59,7 +59,7 @@ Context* __am_irq_handle(Context *c) {
 //printf("mepc:%x\n", c->mepc);
   //printf("%x\n", c->gpr[28]);
   __am_switch(c);
-  //printf("%x\n", c->gpr[2]);
+  //printf("%x\n", c->gpr[28]);
   return c;
 }
 
@@ -85,7 +85,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->pdir = NULL;
 
   cp->np = 0;
-  cp->gpr[28] = (uintptr_t)cp;
+  cp->gpr[28] = (uintptr_t)cp; // $t3
 
   return cp;
 }
