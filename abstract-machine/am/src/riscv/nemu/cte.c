@@ -13,7 +13,7 @@ Context* __am_irq_handle(Context *c) {
   printf("%x\n", c->gpr[28]);
   __am_get_cur_as(c);
   if (user_handler) {
-	printf("%x %x\n",c->mcause, c->GPR1);
+	//printf("%x %x\n",c->mcause, c->GPR1);
     Event ev = {0};
     switch (c->mcause) {
 	  case 0xb: {
@@ -50,6 +50,7 @@ Context* __am_irq_handle(Context *c) {
 	  case 0x80000007: ev.event = EVENT_IRQ_TIMER; break;
       default: ev.event = EVENT_ERROR;  break;
     }
+	printf("%x\n", c->gpr[28]);
     c = user_handler(ev, c);
     assert(c != NULL);
   }
