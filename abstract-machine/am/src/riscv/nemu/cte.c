@@ -83,7 +83,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->gpr[10] = (uintptr_t)arg;
   cp->pdir = NULL;
 
-  cp->np = 3;
+  cp->np = 0;
   cp->gpr[28] = (uintptr_t)cp;
 
   return cp;
