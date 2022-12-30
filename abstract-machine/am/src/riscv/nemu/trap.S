@@ -32,9 +32,8 @@ f(30) f(31)
 .globl __am_asm_trap
 __am_asm_trap:
 
-  addi sp, sp, -8    // I'll use $t3 and $t4
-  // STORE t3, XLEN(sp)       // store $t3
-  // STORE t4, (sp)           // store $t4
+  addi sp, sp, -XLEN          // I'll use $t3 and $t4
+  STORE t3, (sp)              // store $t3
 
   // csrr t3, mscratch
   // STORE t3, OFFSET_NP(sp)  // c->np = ksp
@@ -86,8 +85,7 @@ __am_asm_trap:
   // is_user:
   // mv sp, t3                // $sp = c->sp
 
-  // LOAD t3, XLEN(sp)        // load $t3
-  // LOAD t4, (sp)            // load $t4
-  addi sp, sp, 8
+  LOAD t3, (sp)               // load $t3
+  addi sp, sp, XLEN
 
   mret
