@@ -38,7 +38,7 @@ __am_asm_trap:
   mv t3, sp                   // c->sp = $sp                 
 
   csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
-  bnez sp, save_context   // (2) take the branch if we trapped from user
+  bnez sp, pre_save_context   // (2) take the branch if we trapped from user
   csrrw sp, mscratch, sp      // (3) if we trapped from kernel, restore the original sp
 
   save_context:
@@ -73,7 +73,7 @@ __am_asm_trap:
   mv sp, a0
 
   LOAD t3, OFFSET_NP(sp)      // $t3 = c->np
-  beqz t3, is_user            // if c->np == 0(kernel), jump
+  bnez t3, is_user            // if c->np == 0(kernel), jump
   addi t3, sp, CONTEXT_SIZE
   csrw mscratch, t3           // ksp = $sp
 
