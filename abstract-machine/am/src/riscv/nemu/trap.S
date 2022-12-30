@@ -21,37 +21,33 @@ f(30) f(31)
 #define PUSH(n) STORE concat(x, n), (n * XLEN)(sp);
 #define POP(n)  LOAD  concat(x, n), (n * XLEN)(sp);
 
-#define CONTEXT_SIZE  ((32 + 3 + 1) * XLEN)
+#define CONTEXT_SIZE  ((32 + 3 + 1 + 1) * XLEN)
 #define OFFSET_SP     ( 2 * XLEN)
 #define OFFSET_CAUSE  (32 * XLEN)
 #define OFFSET_STATUS (33 * XLEN)
 #define OFFSET_EPC    (34 * XLEN)
+//中间有一个pdir没有地址
 #define OFFSET_NP     (35 * XLEN)
 
 .align 3
 .globl __am_asm_trap
 __am_asm_trap:
+//还在用户栈底
+  addi sp, sp, -XLEN
+  STORE t4, (sp)
+  mv t4, sp
 
-  addi sp, sp, -XLEN          // I'll use $t4
-  STORE t4, (sp)              // store $t4
+  csrrw sp, mscratch, sp   // (1) atomically exchange sp and mscratch
+  bnez sp, save_context    // (2) take the branch if we trapped from user
+  csrrw sp, mscratch, sp   // (3) if we trapped from kernel, 恢复之前的状态
 
-  mv t4, sp                   // c->sp = $sp                 
-
-  csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
-  bnez sp, save_context   // (2) take the branch if we trapped from user
-  csrrw sp, mscratch, sp      // (3) if we trapped from kernel, restore the original sp
-
+//进入内核栈
   save_context:
-
   addi sp, sp, -CONTEXT_SIZE
 
   STORE t4, OFFSET_SP(sp)
 
   MAP(REGS, PUSH)
-
-  # csrr t4, mscratch
-  # STORE t4, OFFSET_NP(sp)     // c->np = ksp
-  # csrwi mscratch, 0           // ksp = 0
 
   csrr t0, mcause
   csrr t1, mstatus
@@ -68,7 +64,7 @@ __am_asm_trap:
 
   mv a0, sp
   jal __am_irq_handle
-mv sp, a0
+  mv sp, a0
 //切换到新的内核栈空间
 
 //判断c->np == USER
