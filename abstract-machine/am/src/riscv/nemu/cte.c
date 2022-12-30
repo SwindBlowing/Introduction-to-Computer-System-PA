@@ -5,15 +5,23 @@
 void __am_get_cur_as(Context *c);
 void __am_switch(Context *c);
 
+#define KERNEL 3
+#define USER 0
+
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
-  printf("%x\n", c->gpr[2]);
+  //printf("%x\n", c->gpr[2]);
+  uintptr_t mscratch;
+  uintptr_t kas = 0;
+  asm volatile("csrr %0, mscratch" : "=r"(mscratch));
+  c->np = (mscratch == 0 ? KERNEL : USER);
+  asm volatile("csrw mscratch, %0" : : "r"(kas));
   __am_get_cur_as(c);
   if (user_handler) {
-	printf("%x %x\n",c->mcause, c->GPR1);
+	//printf("%x %x\n",c->mcause, c->GPR1);
     Event ev = {0};
     switch (c->mcause) {
 	  case 0xb: {
@@ -58,7 +66,7 @@ Context* __am_irq_handle(Context *c) {
 //printf("mepc:%x\n", c->mepc);
   //printf("%x\n", c->gpr[28]);
   __am_switch(c);
-  printf("%x\n", c->gpr[2]);
+  //printf("%x\n", c->gpr[2]);
   return c;
 }
 
