@@ -103,7 +103,7 @@ Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
   cp->pdir = as->ptr;
 
   cp->np = 1;
-  cp->gpr[2] = (uintptr_t)cp;
+  //cp->gpr[2] = (uintptr_t)cp;
 
   return cp;
 }
