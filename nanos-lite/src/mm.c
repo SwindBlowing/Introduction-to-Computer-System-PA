@@ -33,7 +33,7 @@ int mm_brk(uintptr_t brk) {
   //printf("%x %x\n", max_pg_end, brk);
   //printf("Here\n");
   if (brk_pg > max_pg) {
-	
+	printf("Here\n");
 	void *start = pg_alloc((brk_pg - max_pg) * PGSIZE);
 	for (int i = 0; i < brk_pg - max_pg; i++) {
 		//printf("%p %p\n", max_pg_end + i * PGSIZE, start + i * PGSIZE);
