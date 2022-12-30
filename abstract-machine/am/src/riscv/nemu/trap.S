@@ -45,11 +45,11 @@ __am_asm_trap:
 
   addi sp, sp, -CONTEXT_SIZE
 
-  MAP(REGS, PUSH)
-
   csrr t3, mscratch
   STORE t3, OFFSET_NP(sp)     // c->np = ksp
   csrwi mscratch, 0           // ksp = 0
+
+  MAP(REGS, PUSH)
 
   csrr t0, mcause
   csrr t1, mstatus
