@@ -32,19 +32,23 @@ f(30) f(31)
 .globl __am_asm_trap
 __am_asm_trap:
 
-  addi sp, sp, -CONTEXT_SIZE
+  addi sp, sp, -XLEN * 2   // I'll use $t3 and $t4
+  STORE t3, XLEN(sp)       // store $t3
+  STORE t4, (sp)           // store $t4
 
   csrr t3, mscratch
-  STORE t3, OFFSET_NP(sp)
-  mv t3, sp
+  STORE t3, OFFSET_NP(sp)  // c->np = ksp
+  mv t3, sp                // c->sp = $sp
 
   csrrw sp, mscratch, sp   // (1) atomically exchange sp and mscratch
   bnez sp, save_context    // (2) take the branch if we trapped from user
   csrr sp, mscratch        // (3) if we trapped from kernel, restore the original sp
 
+  csrwi mscratch, 0        // ksp = 0
+
   save_context:
 
-  csrwi mscratch, 0
+  addi sp, sp, -CONTEXT_SIZE
 
   MAP(REGS, PUSH)
 
@@ -73,12 +77,17 @@ __am_asm_trap:
   csrw mepc, t2
 
   MAP(REGS, POP)
-  
-  LOAD t4, OFFSET_NP(sp)
-  beqz t4, is_user
-  csrw mscratch, sp
-  is_user:
-  mv sp, t3
 
   addi sp, sp, CONTEXT_SIZE
+  
+  LOAD t4, OFFSET_NP(sp)
+  beqz t4, is_user         // if c->np == 0(kernel), jump
+  csrw mscratch, sp        // ksp = $sp
+  is_user:
+  mv sp, t3                // $sp = c->sp
+
+  LOAD t3, XLEN(sp)       // load $t3
+  LOAD t4, (sp)           // load $t4
+  addi sp, sp, XLEN * 2 
+
   mret
