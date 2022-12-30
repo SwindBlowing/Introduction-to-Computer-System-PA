@@ -8,7 +8,7 @@ void __am_switch(Context *c);
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
-  printf("%x\n", c->np);
+  printf("%p\n", c->pdir);
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
   //printf("%x\n", c->gpr[2]);
