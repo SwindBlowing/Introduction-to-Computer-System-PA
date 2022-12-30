@@ -85,7 +85,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   context->gpr[10] = (uintptr_t)arg;
   context->pdir    = NULL;
   //为了Real VME
-  context->np      = 0;
+  context->np      = 3;
   context->gpr[2]  = (uintptr_t)kstack.end - 4;
   //TODO: 还需要添加一些
   return context;
