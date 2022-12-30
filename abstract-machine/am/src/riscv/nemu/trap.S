@@ -32,7 +32,7 @@ f(30) f(31)
 .globl __am_asm_trap
 __am_asm_trap:
 
-  addi sp, sp, -XLEN          // I'll use $t3
+  addi sp, sp, -XLEN          // I'll use $t3, cannot use more than one reg here.
   STORE t3, (sp)              // store $t3
 
   mv t3, sp                   // c->sp = $sp                 
@@ -71,7 +71,7 @@ __am_asm_trap:
   mv sp, a0
 
   LOAD t3, OFFSET_NP(sp)      // $t3 = c->np
-  beqz t3, is_user            // if c->np == 0(kernel), jump
+  bnez t3, is_user            // if c->np == 0(kernel), jump
   addi t3, sp, CONTEXT_SIZE
   csrw mscratch, t3           // ksp = $sp
 
