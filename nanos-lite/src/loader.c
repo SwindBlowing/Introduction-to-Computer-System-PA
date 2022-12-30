@@ -152,5 +152,5 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	p--; *p = argc;
 
 	pcb->cp->GPRx = (uintptr_t)p;
-	pcb->cp->gpr[2] = (uintptr_t)p;
+	//pcb->cp->gpr[2] = (uintptr_t)p;
 }
