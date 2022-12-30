@@ -83,7 +83,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		void *new_leaf_page = pgalloc_usr(PGSIZE);
 		//printf("newpage:%p\n", new_leaf_page);
 		*PT_entry = (*PT_entry & 0x3ff) | (((uintptr_t)(new_leaf_page) >> 12) << 10);
-		*PT_entry = (*PT_entry | 0x1); // can be used.
+		*PT_entry = *PT_entry | 0x1; // can be used.
 		//printf("%x\n", *PT_entry);
 	}
 	//printf("%x\n", PPN(*PT_entry));
