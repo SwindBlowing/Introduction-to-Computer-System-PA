@@ -4,19 +4,13 @@
 
 void __am_get_cur_as(Context *c);
 void __am_switch(Context *c);
-#define KERNEL 3
-#define USER 0
+
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
   //printf("%x\n", c->gpr[2]);
-  uintptr_t mscratch;
-  uintptr_t kas = 0;
-  asm volatile("csrr %0, mscratch" : "=r"(mscratch));
-  c->np = (mscratch == 0 ? KERNEL : USER);
-  asm volatile("csrw mscratch, %0" : : "r"(kas));
   __am_get_cur_as(c);
   if (user_handler) {
 	//printf("%x %x\n",c->mcause, c->GPR1);
@@ -91,7 +85,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   context->gpr[10] = (uintptr_t)arg;
   context->pdir    = NULL;
   //为了Real VME
-  context->np      = 3;
+  context->np      = 0;
   context->gpr[2]  = (uintptr_t)kstack.end - 4;
   //TODO: 还需要添加一些
   return context;
