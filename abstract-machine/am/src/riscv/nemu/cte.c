@@ -10,7 +10,7 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 Context* __am_irq_handle(Context *c) {
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
-  printf("%x\n", c->gpr[28]);
+  printf("%x\n", c->gpr[2]);
   __am_get_cur_as(c);
   if (user_handler) {
 	//printf("%x %x\n",c->mcause, c->GPR1);
@@ -58,7 +58,7 @@ Context* __am_irq_handle(Context *c) {
 //printf("mepc:%x\n", c->mepc);
   //printf("%x\n", c->gpr[28]);
   __am_switch(c);
-  printf("%x\n", c->gpr[28]);
+  printf("%x\n", c->gpr[2]);
   return c;
 }
 
