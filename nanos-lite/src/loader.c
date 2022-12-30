@@ -48,7 +48,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		size_t fileSize = phdr[i].p_filesz;
 		size_t memSize = phdr[i].p_memsz;
 
-		printf("%x %x\n", virtAddr, virtAddr + memSize - 1);
+		//printf("%x %x\n", virtAddr, virtAddr + memSize - 1);
 
 		// new the pages.
 		size_t pageNum = ((virtAddr + memSize - 1) >> 12) - (virtAddr >> 12) + 1;
