@@ -6,12 +6,19 @@ void __am_get_cur_as(Context *c);
 void __am_switch(Context *c);
 
 static Context* (*user_handler)(Event, Context*) = NULL;
+#define KERNEL 3
+#define USER 0
 
 Context* __am_irq_handle(Context *c) {
   //printf("%x\n", c->np);
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
   //printf("%x\n", c->gpr[2]);
+  uintptr_t mscratch;
+  uintptr_t kas = 0;
+  asm volatile("csrr %0, mscratch" : "=r"(mscratch));
+  c->np = (mscratch == 0 ? KERNEL : USER);
+  asm volatile("csrw mscratch, %0" : : "r"(kas));
   __am_get_cur_as(c);
   if (user_handler) {
 	//printf("%x %x\n",c->mcause, c->GPR1);
@@ -84,7 +91,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->gpr[10] = (uintptr_t)arg;
   cp->pdir = NULL;
 
-  cp->np = 0;
+  cp->np = 3;
   cp->gpr[28] = (uintptr_t)cp;
 
   return cp;
