@@ -32,10 +32,10 @@ f(30) f(31)
 .globl __am_asm_trap
 __am_asm_trap:
 
-  addi sp, sp, -XLEN          // I'll use $a3
-  STORE a3, (sp)              // store $a3
+  addi sp, sp, -XLEN          // I'll use $ra
+  STORE ra, (sp)              // store $ra
 
-  mv a3, sp                   // c->sp = $sp                 
+  mv ra, sp                   // c->sp = $sp                 
 
   csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
   bnez sp, pre_save_context   // (2) take the branch if we trapped from user
@@ -47,8 +47,8 @@ __am_asm_trap:
 
   MAP(REGS, PUSH)
 
-  csrr a3, mscratch
-  STORE a3, OFFSET_NP(sp)     // c->np = ksp
+  csrr ra, mscratch
+  STORE ra, OFFSET_NP(sp)     // c->np = ksp
   csrwi mscratch, 0           // ksp = 0
 
   csrr t0, mcause
@@ -70,10 +70,10 @@ __am_asm_trap:
   # modified here
   mv sp, a0
 
-  LOAD a3, OFFSET_NP(sp)      // $a3 = c->np
-  beqz a3, is_user            // if c->np == 0(kernel), jump
-  addi a3, sp, CONTEXT_SIZE
-  csrw mscratch, a3           // ksp = $sp
+  LOAD ra, OFFSET_NP(sp)      // $ra = c->np
+  beqz ra, is_user            // if c->np == 0(kernel), jump
+  addi ra, sp, CONTEXT_SIZE
+  csrw mscratch, ra           // ksp = $sp
 
   is_user:
   LOAD t1, OFFSET_STATUS(sp)
@@ -85,9 +85,9 @@ __am_asm_trap:
 
   addi sp, sp, CONTEXT_SIZE
   
-  mv sp, a3                   // $sp = c->sp
+  mv sp, ra                   // $sp = c->sp
 
-  LOAD a3, (sp)               // load $a3
+  LOAD ra, (sp)               // load $ra
   addi sp, sp, XLEN
 
   mret
