@@ -30,7 +30,8 @@ void do_syscall(Context *c) {
 #endif
 
   switch (a[0]) {
-	case SYS_exit: 
+	case SYS_exit:
+		halt(a[1]); 
 		if (a[1]) halt(a[1]);
 		//naive_uload(NULL, "/bin/nterm"); break;
 		context_uload(current, "/bin/nterm", NULL, NULL);
