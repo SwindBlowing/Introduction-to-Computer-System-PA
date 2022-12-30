@@ -72,9 +72,9 @@ Context* schedule(Context *prev) {
   }
   // then return the new context
   return current->cp;*/
-  printf("pcb0 & 1: %p %p\n", &pcb[0], &pcb[1]);
+  //printf("pcb0 & 1: %p %p\n", &pcb[0], &pcb[1]);
   current->cp = prev;
   current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
-  printf("current cp & current: %p %p\n", current->cp, current);
+  //printf("current cp & current: %p %p\n", current->cp, current);
   return current->cp;
 }
