@@ -26,7 +26,7 @@ void free_page(void *p) {
 extern PCB *current;
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
-	printf("%d\n", brk);
+	printf("%x\n", brk);
   uintptr_t max_pg_end = current->max_brk; // must ensure that max_brk = n * PGSIZE
   intptr_t max_pg = ((intptr_t)(max_pg_end >> 12)) - 1; // can be "-1", and max_pg_end must be the multiply of PGSIZE to make it correct
   intptr_t brk_pg = (brk >> 12);
