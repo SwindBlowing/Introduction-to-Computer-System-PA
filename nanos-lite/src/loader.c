@@ -35,6 +35,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	assert(ehdr.e_machine == EM_RISCV);
   #endif
   //end check part
+  
+  pcb->max_brk = 0;
 
   Elf_Phdr phdr[ehdr.e_phnum];
   fs_lseek(fd, ehdr.e_phoff, SEEK_SET);
