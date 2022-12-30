@@ -70,9 +70,10 @@ __am_asm_trap:
   # modified here
   mv sp, a0
 
-  LOAD t3, OFFSET_NP(sp)      // $t4 = c->np
+  LOAD t3, OFFSET_NP(sp)      // $t3 = c->np
   beqz t3, is_user            // if c->np == 0(kernel), jump
-  csrw mscratch, sp           // ksp = $sp
+  addi t3, sp, CONTEXT_SIZE
+  csrw mscratch, t3           // ksp = $sp
 
   is_user:
   LOAD t1, OFFSET_STATUS(sp)
