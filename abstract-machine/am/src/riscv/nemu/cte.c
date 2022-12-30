@@ -50,14 +50,15 @@ Context* __am_irq_handle(Context *c) {
 	  case 0x80000007: ev.event = EVENT_IRQ_TIMER; break;
       default: ev.event = EVENT_ERROR;  break;
     }
-	printf("%x\n", c->gpr[28]);
+	//printf("%x\n", c->gpr[28]);
     c = user_handler(ev, c);
+	//printf("%x\n", c->gpr[28]);
     assert(c != NULL);
   }
 //printf("mepc:%x\n", c->mepc);
-  printf("%x\n", c->gpr[28]);
+  //printf("%x\n", c->gpr[28]);
   __am_switch(c);
-  printf("%x\n", c->gpr[28]);
+  //printf("%x\n", c->gpr[28]);
   return c;
 }
 
@@ -83,6 +84,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->pdir = NULL;
 
   cp->np = 0;
+  cp->gpr[28] = (uintptr_t)cp;
 
   return cp;
 }
