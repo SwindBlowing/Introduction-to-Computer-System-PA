@@ -36,7 +36,7 @@ __am_asm_trap:
   STORE t3, (sp)              // store $t3
 
   csrr t3, mscratch
-  //STORE t3, OFFSET_NP(sp)     // c->np = ksp
+  STORE t3, OFFSET_NP(sp)     // c->np = ksp
   //mv t3, sp                   // c->sp = $sp
 
   //csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
