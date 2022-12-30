@@ -24,6 +24,7 @@ typedef struct {
   word_t mepc, mstatus, mcause, mtvec;
   word_t satp;
   bool INTR;
+  word_t mscratch;
 } riscv32_CPU_state;
 
 // decode
