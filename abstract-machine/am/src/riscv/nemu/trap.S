@@ -45,6 +45,8 @@ __am_asm_trap:
 
   addi sp, sp, -CONTEXT_SIZE
 
+  STORE t3, OFFSET_SP(sp)
+
   MAP(REGS, PUSH)
 
   csrr t3, mscratch
@@ -82,6 +84,8 @@ __am_asm_trap:
   csrw mepc, t2
 
   MAP(REGS, POP)
+
+  LOAD t3, OFFSET_SP(sp)
 
   addi sp, sp, CONTEXT_SIZE
   
