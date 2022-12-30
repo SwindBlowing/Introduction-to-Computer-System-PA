@@ -27,7 +27,7 @@ f(30) f(31)
 #define OFFSET_STATUS (33 * XLEN)
 #define OFFSET_EPC    (34 * XLEN)
 //中间有一个pdir没有地址
-#define OFFSET_NP     (36 * XLEN)
+#define OFFSET_NP     (35 * XLEN)
 
 .align 3
 .globl __am_asm_trap
