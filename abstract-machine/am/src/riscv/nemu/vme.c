@@ -90,7 +90,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//printf("%x\n", PPN(*PT_entry) * 4096 + VPN0(va) * 4);
 	PTE *leaf_PTE = (PTE *)(PTE_PPN(*PT_entry) * 4096 + VPN0(va) * 4);
 	*leaf_PTE = (LOC_PPN(pa) << 10);
-	*leaf_PTE = *leaf_PTE | 0xf;
+	//*leaf_PTE = *leaf_PTE | 0xf;
 	//if ((uintptr_t)(va) == 0x80001000) printf("leafPTE here:%x\n", *leaf_PTE);
 }
 
