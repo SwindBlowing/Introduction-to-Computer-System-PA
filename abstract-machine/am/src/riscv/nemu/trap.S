@@ -39,9 +39,9 @@ __am_asm_trap:
   STORE t3, OFFSET_NP(sp)     // c->np = ksp
   mv t3, sp                   // c->sp = $sp
 
-  csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
-  bnez sp, save_context       // (2) take the branch if we trapped from user
-  csrr sp, mscratch           // (3) if we trapped from kernel, restore the original sp
+  //csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
+  //bnez sp, save_context       // (2) take the branch if we trapped from user
+  //csrr sp, mscratch           // (3) if we trapped from kernel, restore the original sp
 
   csrwi mscratch, 0           // ksp = 0
 
@@ -84,7 +84,7 @@ __am_asm_trap:
   csrw mscratch, sp           // ksp = $sp
   is_user:
   lw t4,116(sp)
-  mv sp, t3                   // $sp = c->sp
+  //mv sp, t3                   // $sp = c->sp
 
   LOAD t3, (sp)               // load $t3
   addi sp, sp, XLEN
