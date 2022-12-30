@@ -89,7 +89,7 @@ __am_asm_trap:
 
   addi sp, sp, CONTEXT_SIZE
   
-  mv sp, t3                   // $sp = c->sp
+  //mv sp, t3                   // $sp = c->sp
 
   LOAD t3, (sp)               // load $t3
   addi sp, sp, XLEN
