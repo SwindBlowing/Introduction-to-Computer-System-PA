@@ -49,9 +49,9 @@ __am_asm_trap:
 
   MAP(REGS, PUSH)
 
-  csrr t3, mscratch
-  STORE t3, OFFSET_NP(sp)     // c->np = ksp
-  csrwi mscratch, 0           // ksp = 0
+  //csrr t3, mscratch
+  //STORE t3, OFFSET_NP(sp)     // c->np = ksp
+  //csrwi mscratch, 0           // ksp = 0
 
   csrr t0, mcause
   csrr t1, mstatus
@@ -97,5 +97,5 @@ __am_asm_trap:
   mret
 
   pre_save_context:
-  //csrw mscratch, sp
+  csrw mscratch, sp
   j save_context
