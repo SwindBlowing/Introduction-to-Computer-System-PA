@@ -35,7 +35,6 @@ void do_syscall(Context *c) {
 		//naive_uload(NULL, "/bin/nterm"); break;
 		context_uload(current, "/bin/nterm", NULL, NULL);
 		switch_boot_pcb();
-		halt(a[1]);
 		yield();
 		break;
 	case SYS_yield: yield(); c->GPRx = 0; break;
