@@ -86,8 +86,8 @@ __am_asm_trap:
   is_user:
   mv sp, t3                // $sp = c->sp
 
-  LOAD t3, XLEN(sp)       // load $t3
-  LOAD t4, (sp)           // load $t4
+  LOAD t3, XLEN(sp)        // load $t3
+  LOAD t4, (sp)            // load $t4
   addi sp, sp, XLEN * 2 
 
   mret
