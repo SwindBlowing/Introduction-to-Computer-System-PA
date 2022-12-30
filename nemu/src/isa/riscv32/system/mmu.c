@@ -39,10 +39,6 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   //printf("leaf_PTE_loc:%x\n", leaf_PTE_loc);
   PTE leafPTE = paddr_read(leaf_PTE_loc, sizeof(PTE));
   Assert(leafPTE & 0x1, "leafPTE %x with vaddr %x is invalid", leafPTE, vaddr);
-  
-  /*paddr_write(leaf_PTE_loc, sizeof(PTE), leafPTE | (1ul << 6)); // A
-  if (type == 1) 
-  	paddr_write(leaf_PTE_loc, sizeof(PTE), leafPTE | (1ul << 7)); // D*/
 
   paddr_t paddr = PTE_PPN(leafPTE) * 4096 + offset(vaddr);
   //printf("%x %x\n", vaddr, paddr);
