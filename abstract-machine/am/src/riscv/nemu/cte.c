@@ -9,6 +9,7 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
   printf("%p %p %x\n", c, &c->np, ((uintptr_t)&c->np - (uintptr_t)c));
+  printf("%x\n", c->np);
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
   //printf("%x\n", c->gpr[28]);

@@ -47,7 +47,8 @@ __am_asm_trap:
 
   MAP(REGS, PUSH)
 
-  csrr t3, mscratch
+  //csrr t3, mscratch
+  lui t3, 114514
   STORE t3, OFFSET_NP(sp)     // c->np = ksp
   csrwi mscratch, 0           // ksp = 0
 
