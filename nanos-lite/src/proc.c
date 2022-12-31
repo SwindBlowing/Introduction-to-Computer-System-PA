@@ -31,12 +31,12 @@ void init_proc() {
 
   Log("Initializing processes...");
   
-  static char proc_temp[99] = "The second Hello-World";
+  //static char proc_temp[99] = "The second Hello-World";
   static char *proc_empty[] = {NULL};
-  context_kload(&pcb[0], hello_fun, proc_temp);
+  //context_kload(&pcb[0], hello_fun, proc_temp);
 
-  //static char *proc_argvs_0[2] = {"/bin/hello", NULL};
-  //context_uload(&pcb[0], "/bin/hello", proc_argvs_0, proc_empty);
+  static char *proc_argvs_0[2] = {"/bin/hello", NULL};
+  context_uload(&pcb[0], "/bin/hello", proc_argvs_0, proc_empty);
   static char *proc_argvs_1[2] = {"/bin/nterm", NULL};
   context_uload(&pcb[1], "/bin/nterm", proc_argvs_1, proc_empty);
   static char *proc_argvs_2[2] = {"/bin/bird", NULL};
