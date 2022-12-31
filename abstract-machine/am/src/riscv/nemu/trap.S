@@ -26,7 +26,7 @@ f(30) f(31)
 #define OFFSET_CAUSE  (32 * XLEN)
 #define OFFSET_STATUS (33 * XLEN)
 #define OFFSET_EPC    (34 * XLEN)
-#define OFFSET_NP     (36 * XLEN)
+#define OFFSET_NP     (35 * XLEN)
 
 .align 3
 .globl __am_asm_trap
@@ -52,7 +52,7 @@ __am_asm_trap:
   csrr t3, mscratch
   //lui t3, 114514
   //STORE t3, OFFSET_NP(sp)     // c->np = ksp
-  //csrwi mscratch, 0           // ksp = 0
+  csrwi mscratch, 0           // ksp = 0
 
   csrr t0, mcause
   csrr t1, mstatus
