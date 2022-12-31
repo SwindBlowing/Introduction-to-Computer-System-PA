@@ -23,7 +23,7 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 
 extern int fg_pcb;
 static int pre_pcb = 0;
-static uint16_t clear_screen[400 * 300] = {0};
+static uint32_t clear_screen[400 * 300] = {0};
 
 size_t events_read(void *buf, size_t offset, size_t len) {
   yield();
