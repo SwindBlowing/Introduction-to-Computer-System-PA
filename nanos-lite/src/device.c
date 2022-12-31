@@ -22,15 +22,22 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 }
 
 extern int fg_pcb;
+static int pre_pcb = 0;
 
 size_t events_read(void *buf, size_t offset, size_t len) {
   yield();
   AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
   if (ev.keycode == AM_KEY_NONE) return 0;
 
-  if (strcmp(keyname[ev.keycode], "F1") == 0) fg_pcb = 1;
-  if (strcmp(keyname[ev.keycode], "F2") == 0) fg_pcb = 2;
-  if (strcmp(keyname[ev.keycode], "F3") == 0) fg_pcb = 3;
+  if (strcmp(keyname[ev.keycode], "F1") == 0) pre_pcb = fg_pcb, fg_pcb = 1;
+  if (strcmp(keyname[ev.keycode], "F2") == 0) pre_pcb = fg_pcb, fg_pcb = 2;
+  if (strcmp(keyname[ev.keycode], "F3") == 0) pre_pcb = fg_pcb, fg_pcb = 3;
+  if (pre_pcb != fg_pcb) {
+	int sys_w = io_read(AM_GPU_CONFIG).width;
+    int sys_h = io_read(AM_GPU_CONFIG).height;
+	io_write(AM_GPU_FBDRAW, 0, 0, NULL, sys_w, sys_h, false);
+	io_write(AM_GPU_FBDRAW, 0, 0, NULL, 0, 0, true);
+  }
 
   size_t nowLen = 0;
   if (nowLen == len) return nowLen;
