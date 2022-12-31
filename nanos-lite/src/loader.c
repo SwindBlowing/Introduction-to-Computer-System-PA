@@ -101,6 +101,11 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	for (int i = 8; i; i--)
 		map(&pcb->as, pcb->as.area.end - i * PGSIZE, ustack.end - i * PGSIZE, 3);
 	//pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
+	Area kstack;
+	kstack.start = &pcb->stack;
+	kstack.end = kstack.start + sizeof(pcb->stack);
+	pcb->cp = ucontext(&pcb->as, kstack, (void *)loader(pcb, filename));
+	
 	//initializing argc, argv and envp.
 
 	//get the argc and sz_envp
@@ -156,10 +161,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	p--; *p = argc;
 
 	//ustack.end = (void *)p;
-	Area kstack;
-	kstack.start = &pcb->stack;
-	kstack.end = kstack.start + sizeof(pcb->stack);
-	pcb->cp = ucontext(&pcb->as, kstack, (void *)loader(pcb, filename));
 	//ustack.end = ustack.start + PGSIZE * 8;
 
 	pcb->cp->GPRx = (uintptr_t)p;
