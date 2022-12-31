@@ -70,8 +70,6 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
   // initialize exception entry
   asm volatile("csrw mtvec, %0" : : "r"(__am_asm_trap));
 
-  asm volatile("csrwi mscratch, 1");
-
   // register event handler
   user_handler = handler;
 
@@ -88,7 +86,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->pdir = NULL;
 
   cp->np = 0;
-  cp->gpr[28] = (uintptr_t)cp; // $t3
+  cp->gpr[2] = (uintptr_t)cp; // $sp
 
   return cp;
 }

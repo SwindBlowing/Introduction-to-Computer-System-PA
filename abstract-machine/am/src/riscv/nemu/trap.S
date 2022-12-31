@@ -35,7 +35,7 @@ __am_asm_trap:
   addi sp, sp, -XLEN          // I'll use $t3, cannot use more than one reg here.
   STORE t3, (sp)              // store $t3
 
-  mv t3, sp                   // c->sp = $sp                 
+  mv t3, sp                   // $t3 = $sp                 
 
   csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
   bnez sp, pre_save_context   // (2) take the branch if we trapped from user
@@ -44,6 +44,8 @@ __am_asm_trap:
   save_context:
 
   addi sp, sp, -CONTEXT_SIZE
+
+  STORE t3, OFFSET_SP(sp)     // c->sp = $t3 = $sp
 
   MAP(REGS, PUSH)
 
@@ -84,9 +86,11 @@ __am_asm_trap:
 
   MAP(REGS, POP)
 
+  LOAD t3, OFFSET_SP(sp)      // $t3 = c->sp
+
   addi sp, sp, CONTEXT_SIZE
   
-  mv sp, t3                   // $sp = c->sp
+  mv sp, t3                   // $sp = $t3 = c->sp
 
   LOAD t3, (sp)               // load $t3
   addi sp, sp, XLEN
