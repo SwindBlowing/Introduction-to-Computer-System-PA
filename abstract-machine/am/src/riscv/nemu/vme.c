@@ -97,8 +97,9 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
 
-  void *leave_emp = kstack.end;
-  Context *cp = (Context *)leave_emp - 1;
+  //void *leave_emp = kstack.end;
+  //Context *cp = (Context *)leave_emp - 1;
+  Context *cp = (Context *)kstack.end - 1;
   cp->mepc = (uintptr_t)entry;
   cp->mstatus = 0x1800 | 0x80;
   cp->pdir = as->ptr;
