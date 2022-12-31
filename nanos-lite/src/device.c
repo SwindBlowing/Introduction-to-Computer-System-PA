@@ -23,6 +23,7 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 
 extern int fg_pcb;
 static int pre_pcb = 0;
+static char clear_screen[400 * 300] = {0};
 
 size_t events_read(void *buf, size_t offset, size_t len) {
   yield();
@@ -35,8 +36,6 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   if (pre_pcb != fg_pcb) {
 	int sys_w = io_read(AM_GPU_CONFIG).width;
     int sys_h = io_read(AM_GPU_CONFIG).height;
-	char clear_screen[(sys_w + 1) * (sys_h + 1)];
-	memset(clear_screen, 0, sizeof(clear_screen));
 	io_write(AM_GPU_FBDRAW, 0, 0, clear_screen, sys_w, sys_h, false);
 	io_write(AM_GPU_FBDRAW, 0, 0, NULL, 0, 0, true);
   }
