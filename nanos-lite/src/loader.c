@@ -103,9 +103,9 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
 	Area kstack;
 	kstack.start = &pcb->stack;
-	kstack.end = kstack.start + sizeof(pcb->stack);
+	kstack.end = kstack.start + sizeof(pcb->stack) - 4;
 	pcb->cp = ucontext(&pcb->as, kstack, (void *)loader(pcb, filename));
-	
+
 	//initializing argc, argv and envp.
 
 	//get the argc and sz_envp
