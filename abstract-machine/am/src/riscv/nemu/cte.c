@@ -12,7 +12,7 @@ Context* __am_irq_handle(Context *c) {
   asm volatile("csrr %0, mscratch" : "=r"(mscratch));
   printf("\n%p %p %x\n", c, &c->np, ((uintptr_t)&c->np - (uintptr_t)c));
   printf("c->np: %x\n", c->np);
-  //printf("c->sp: %x\n", c->gpr[2]);
+  printf("c->sp: %x\n", c->gpr[2]);
   //printf("mscratch:%x\n", mscratch);
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
