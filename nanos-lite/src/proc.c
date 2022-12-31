@@ -50,7 +50,7 @@ void init_proc() {
 
 }
 
-const int rates = 10;
+const int rates = 1000;
 int nowTimes = 0;
 
 Context* schedule(Context *prev) {
