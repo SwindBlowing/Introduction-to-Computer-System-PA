@@ -44,6 +44,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   *(char *)(buf + nowLen) = '\n'; nowLen++;
   *(char *)(buf + nowLen) = '\0';
   //printf("%d %s\n", sizeof(keyname[ev.keycode]), (char *)buf);
+  printf("%s\n", (char *)buf);
   return nowLen;
 }
 
