@@ -26,7 +26,8 @@ f(30) f(31)
 #define OFFSET_CAUSE  (32 * XLEN)
 #define OFFSET_STATUS (33 * XLEN)
 #define OFFSET_EPC    (34 * XLEN)
-#define OFFSET_NP     (36 * XLEN)
+#define OFFSET_NP     (35 * XLEN) // ???????????? why it works?
+//#define OFFSET_NP     (36 * XLEN) // ????????????why it doesn't work???????
 
 .align 3
 .globl __am_asm_trap
@@ -52,7 +53,7 @@ __am_asm_trap:
   csrr t3, mscratch
   //lui t3, 114514
   STORE t3, OFFSET_NP(sp)     // c->np = ksp
-  //csrwi mscratch, 0           // ksp = 0
+  csrwi mscratch, 0           // ksp = 0
 
   csrr t0, mcause
   csrr t1, mstatus
@@ -74,7 +75,8 @@ __am_asm_trap:
   mv sp, a0
 
   LOAD t3, OFFSET_NP(sp)      // $t3 = c->np
-  beqz t3, is_user            // if c->np == 0(kernel), jump
+  bnez t3, is_user            // if c->np == 0(kernel), jump ??????????????
+  //beqz t3, is_user            // ?????????????????why it does not work???????
   addi t3, sp, CONTEXT_SIZE
   csrw mscratch, t3           // ksp = $sp
 
