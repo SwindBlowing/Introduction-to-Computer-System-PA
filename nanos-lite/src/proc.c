@@ -39,10 +39,10 @@ void init_proc() {
   //context_uload(&pcb[0], "/bin/hello", proc_argvs_0, proc_empty);
   static char *proc_argvs_1[2] = {"/bin/nterm", NULL};
   context_uload(&pcb[1], "/bin/nterm", proc_argvs_1, proc_empty);
-  //static char *proc_argvs_2[2] = {"/bin/bird", NULL};
-  //context_uload(&pcb[2], "/bin/bird", proc_argvs_2, proc_empty);
-  //static char *proc_argvs_3[3] = {"/bin/pal", "--skip", NULL};
-  //context_uload(&pcb[3], "/bin/pal", proc_argvs_3, proc_empty);
+  static char *proc_argvs_2[2] = {"/bin/bird", NULL};
+  context_uload(&pcb[2], "/bin/bird", proc_argvs_2, proc_empty);
+  static char *proc_argvs_3[3] = {"/bin/pal", "--skip", NULL};
+  context_uload(&pcb[3], "/bin/pal", proc_argvs_3, proc_empty);
 
   switch_boot_pcb();
 
