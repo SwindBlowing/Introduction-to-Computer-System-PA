@@ -8,8 +8,8 @@ void __am_switch(Context *c);
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
-  //uintptr_t mscratch = 0;
-  //asm volatile("csrr %0, mscratch" : "=r"(mscratch));
+  uintptr_t mscratch = 0;
+  asm volatile("csrr %0, mscratch" : "=r"(mscratch));
   //printf("\n%p %p %x\n", c, &c->np, ((uintptr_t)&c->np - (uintptr_t)c));
   //printf("c->np: %x\n", c->np);
   //printf("c->sp: %x\n", c->gpr[2]);
