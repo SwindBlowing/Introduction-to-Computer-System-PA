@@ -89,6 +89,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->gpr[10] = (uintptr_t)arg;
   cp->pdir = NULL;
 
+  printf("!!!%x\n", (uintptr_t)&cp->np - (uintptr_t)cp);
   cp->np = 0;
   cp->gpr[2] = (uintptr_t)cp; // $sp
 
