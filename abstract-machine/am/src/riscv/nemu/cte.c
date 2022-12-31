@@ -10,10 +10,10 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 Context* __am_irq_handle(Context *c) {
   uintptr_t mscratch = 0;
   asm volatile("csrr %0, mscratch" : "=r"(mscratch));
-  printf("\n%p %p %x\n", c, &c->np, ((uintptr_t)&c->np - (uintptr_t)c));
-  printf("c->np: %x\n", c->np);
-  printf("c->sp: %x\n", c->gpr[2]);
-  printf("mscratch:%x\n", mscratch);
+  //printf("\n%p %p %x\n", c, &c->np, ((uintptr_t)&c->np - (uintptr_t)c));
+  //printf("c->np: %x\n", c->np);
+  //printf("c->sp: %x\n", c->gpr[2]);
+  //printf("mscratch:%x\n", mscratch);
   //printf("%x %x %x\n", c->mcause, c->mepc, c->mstatus);
   //assert(0);
   //printf("%x\n", c->gpr[28]);
@@ -89,7 +89,6 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   cp->gpr[10] = (uintptr_t)arg;
   cp->pdir = NULL;
 
-  printf("!!!%x\n", (uintptr_t)&cp->np - (uintptr_t)cp);
   cp->np = 0;
   cp->gpr[2] = (uintptr_t)cp; // $sp
 
