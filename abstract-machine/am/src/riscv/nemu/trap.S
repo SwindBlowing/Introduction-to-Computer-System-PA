@@ -26,7 +26,7 @@ f(30) f(31)
 #define OFFSET_CAUSE  (32 * XLEN)
 #define OFFSET_STATUS (33 * XLEN)
 #define OFFSET_EPC    (34 * XLEN)
-#define OFFSET_NP     (36 * XLEN) 
+#define OFFSET_NP     (35 * XLEN) 
 
 .align 3
 .globl __am_asm_trap
