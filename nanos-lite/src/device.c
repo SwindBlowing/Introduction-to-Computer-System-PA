@@ -23,6 +23,7 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 
 extern int fg_pcb;
 static int pre_pcb = 1;
+static bool ischanged = 0;
 static uint32_t clear_screen[400 * 300] = {0};
 
 size_t events_read(void *buf, size_t offset, size_t len) {
@@ -30,16 +31,17 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
   if (ev.keycode == AM_KEY_NONE) return 0;
 
-  if (strcmp(keyname[ev.keycode], "F1") == 0) pre_pcb = fg_pcb, fg_pcb = 1;
-  if (strcmp(keyname[ev.keycode], "F2") == 0) pre_pcb = fg_pcb, fg_pcb = 2;
-  if (strcmp(keyname[ev.keycode], "F3") == 0) pre_pcb = fg_pcb, fg_pcb = 3;
-  if (pre_pcb != fg_pcb) {
+  if (strcmp(keyname[ev.keycode], "F1") == 0) ischanged = 1, pre_pcb = fg_pcb, fg_pcb = 1;
+  if (strcmp(keyname[ev.keycode], "F2") == 0) ischanged = 1, pre_pcb = fg_pcb, fg_pcb = 2;
+  if (strcmp(keyname[ev.keycode], "F3") == 0) ischanged = 1, pre_pcb = fg_pcb, fg_pcb = 3;
+  if (ischanged && pre_pcb != fg_pcb) {
 	int sys_w = io_read(AM_GPU_CONFIG).width;
     int sys_h = io_read(AM_GPU_CONFIG).height;
 	//printf("%d %d\n", sys_w, sys_h);
 	io_write(AM_GPU_FBDRAW, 0, 0, clear_screen, sys_w, sys_h, false);
 	io_write(AM_GPU_FBDRAW, 0, 0, NULL, 0, 0, true);
   }
+  ischanged = 0;
 
   size_t nowLen = 0;
   if (nowLen == len) return nowLen;
