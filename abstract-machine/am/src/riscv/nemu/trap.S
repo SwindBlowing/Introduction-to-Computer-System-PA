@@ -93,5 +93,5 @@ __am_asm_trap:
   mret
 
   pre_save_context:
-  csrw mscratch, sp
+  //csrw mscratch, sp
   j save_context
