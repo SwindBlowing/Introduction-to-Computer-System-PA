@@ -26,7 +26,7 @@ f(30) f(31)
 #define OFFSET_CAUSE  (32 * XLEN)
 #define OFFSET_STATUS (33 * XLEN)
 #define OFFSET_EPC    (34 * XLEN)
-#define OFFSET_NP     (35 * XLEN)
+#define OFFSET_NP     (36 * XLEN)
 
 .align 3
 .globl __am_asm_trap
@@ -71,7 +71,7 @@ __am_asm_trap:
   mv sp, a0
 
   LOAD t3, OFFSET_NP(sp)      // $t3 = c->np
-  bnez t3, is_user            // if c->np == 0(kernel), jump
+  beqz t3, is_user            // if c->np == 0(kernel), jump
   addi t3, sp, CONTEXT_SIZE
   csrw mscratch, t3           // ksp = $sp
 
@@ -93,5 +93,5 @@ __am_asm_trap:
   mret
 
   pre_save_context:
-  //csrw mscratch, sp
+  csrw mscratch, sp
   j save_context
