@@ -50,27 +50,28 @@ void init_proc() {
 
 }
 
-const int rates = 1000;
-int nowTimes = 0;
+static const int rates = 1000;
+static int nowTimes = 0;
+int fg_pcb = 1;
 
 Context* schedule(Context *prev) {
   
   if (current == NULL || current == &pcb[0]) {
 	// save the context pointer
   	current->cp = prev;
-	current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
+	current = ((current == &pcb[0]) ? &pcb[fg_pcb] : &pcb[0]);
   }
   else {
 	nowTimes++;
 	if (nowTimes == rates) {
 		// save the context pointer
   		current->cp = prev;
-		current = ((current == &pcb[0]) ? &pcb[1] : &pcb[0]);
+		current = ((current == &pcb[0]) ? &pcb[fg_pcb] : &pcb[0]);
 		nowTimes = 0;
 	}
 	else {
 		current->cp = prev;
-		current = &pcb[1];
+		current = &pcb[fg_pcb];
 	}
   }
   // then return the new context

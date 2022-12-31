@@ -21,10 +21,17 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
   return len;
 }
 
+extern int fg_pcb;
+
 size_t events_read(void *buf, size_t offset, size_t len) {
   yield();
   AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
   if (ev.keycode == AM_KEY_NONE) return 0;
+
+  if (strcmp(keyname[ev.keycode], "F1") == 0) fg_pcb = 1;
+  if (strcmp(keyname[ev.keycode], "F2") == 0) fg_pcb = 2;
+  if (strcmp(keyname[ev.keycode], "F3") == 0) fg_pcb = 3;
+
   size_t nowLen = 0;
   if (nowLen == len) return nowLen;
   if (ev.keydown) {
@@ -44,7 +51,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   *(char *)(buf + nowLen) = '\n'; nowLen++;
   *(char *)(buf + nowLen) = '\0';
   //printf("%d %s\n", sizeof(keyname[ev.keycode]), (char *)buf);
-  printf("%s\n", (char *)buf);
+  //printf("%s\n", (char *)buf);
   return nowLen;
 }
 
