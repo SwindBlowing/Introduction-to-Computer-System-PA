@@ -100,7 +100,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.end = ustack.start + PGSIZE * 8;
 	for (int i = 8; i; i--)
 		map(&pcb->as, pcb->as.area.end - i * PGSIZE, ustack.end - i * PGSIZE, 3);
-	pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
+	//pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
 	//initializing argc, argv and envp.
 
 	//get the argc and sz_envp
@@ -121,7 +121,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//create the String area
 
 	uintptr_t stack_argv[argc], stack_envp[sz_envp];
-	char *now = (char *)(pcb->cp - 4);
+	char *now = (char *)(ustack.end - 4);
 	*now = 0;
 	for (int j = sz_envp - 1; j >= 0; j--) {
 		now -= strlen(envp[j]);
@@ -155,7 +155,11 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	}
 	p--; *p = argc;
 
+	ustack.end = (void *)p;
+	pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
+	ustack.end = ustack.start + PGSIZE * 8;
+
 	pcb->cp->GPRx = (uintptr_t)p;
-	pcb->cp->gpr[2] = (uintptr_t)p;
+	//pcb->cp->gpr[2] = (uintptr_t)p;
 	//printf("%x\n", (uintptr_t)p);
 }

@@ -97,12 +97,14 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
 
-  Context *cp = (Context *)kstack.end - 1;
+  void *leave_emp = kstack.end - 4;
+  Context *cp = (Context *)leave_emp - 1;
   cp->mepc = (uintptr_t)entry;
   cp->mstatus = 0x1800 | 0x80;
   cp->pdir = as->ptr;
 
   cp->np = 1;
+  cp->gpr[2] = (uintptr_t)kstack.end;
   //printf("!!!%x\n", (uintptr_t)&cp->np - (uintptr_t)cp);
 
   return cp;
