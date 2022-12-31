@@ -32,26 +32,26 @@ f(30) f(31)
 .globl __am_asm_trap
 __am_asm_trap:
 
-  addi sp, sp, -XLEN          // I'll use $t3, cannot use more than one reg here.
-  STORE t3, (sp)              // store $t3
+  //addi sp, sp, -XLEN          // I'll use $t3, cannot use more than one reg here.
+  //STORE t3, (sp)              // store $t3
 
-  mv t3, sp                   // $t3 = $sp                 
+  //mv t3, sp                   // $t3 = $sp                 
 
-  csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
-  bnez sp, pre_save_context   // (2) take the branch if we trapped from user
-  csrrw sp, mscratch, sp      // (3) if we trapped from kernel, restore the original sp
+  //csrrw sp, mscratch, sp      // (1) atomically exchange sp and mscratch
+  //bnez sp, pre_save_context   // (2) take the branch if we trapped from user
+  //csrrw sp, mscratch, sp      // (3) if we trapped from kernel, restore the original sp
 
   save_context:
 
   addi sp, sp, -CONTEXT_SIZE
 
-  STORE t3, OFFSET_SP(sp)     // c->sp = $t3 = $sp
+  //STORE t3, OFFSET_SP(sp)     // c->sp = $t3 = $sp
 
   MAP(REGS, PUSH)
 
-  csrr t3, mscratch
-  STORE t3, OFFSET_NP(sp)     // c->np = ksp
-  csrwi mscratch, 0           // ksp = 0
+  //csrr t3, mscratch
+  //STORE t3, OFFSET_NP(sp)     // c->np = ksp
+  //csrwi mscratch, 0           // ksp = 0
 
   csrr t0, mcause
   csrr t1, mstatus
@@ -72,10 +72,10 @@ __am_asm_trap:
   # modified here
   mv sp, a0
 
-  LOAD t3, OFFSET_NP(sp)      // $t3 = c->np
-  beqz t3, is_user            // ?????????????????why it does not work???????
-  addi t3, sp, CONTEXT_SIZE
-  csrw mscratch, t3           // ksp = $sp
+  //LOAD t3, OFFSET_NP(sp)      // $t3 = c->np
+  //beqz t3, is_user            // ?????????????????why it does not work???????
+  //addi t3, sp, CONTEXT_SIZE
+  //csrw mscratch, t3           // ksp = $sp
 
   is_user:
   LOAD t1, OFFSET_STATUS(sp)
@@ -85,14 +85,14 @@ __am_asm_trap:
 
   MAP(REGS, POP)
 
-  LOAD t3, OFFSET_SP(sp)      // $t3 = c->sp
+  //LOAD t3, OFFSET_SP(sp)      // $t3 = c->sp
 
   addi sp, sp, CONTEXT_SIZE
   
-  mv sp, t3                   // $sp = $t3 = c->sp
+  //mv sp, t3                   // $sp = $t3 = c->sp
 
-  LOAD t3, (sp)               // load $t3
-  addi sp, sp, XLEN
+  //LOAD t3, (sp)               // load $t3
+  //addi sp, sp, XLEN
 
   mret
 
