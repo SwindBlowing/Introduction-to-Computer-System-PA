@@ -50,7 +50,7 @@ void init_proc() {
 
 }
 
-static const int rates = 5000;
+static const int rates = 1;
 static int nowTimes = 0;
 int fg_pcb = 1;
 
