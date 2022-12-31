@@ -156,7 +156,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	p--; *p = argc;
 
 	ustack.end = (void *)p;
-	//pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
+	pcb->cp = ucontext(&pcb->as, ustack, (void *)loader(pcb, filename));
 	ustack.end = ustack.start + PGSIZE * 8;
 
 	pcb->cp->GPRx = (uintptr_t)p;
